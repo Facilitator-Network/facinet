@@ -5,8 +5,7 @@
 
 import { NextResponse } from 'next/server';
 
-// Use environment variable for facilitator URL
-const FACILITATOR_URL = process.env.FACILITATOR_URL || process.env.NEXT_PUBLIC_FACILITATOR_URL || 'http://localhost:8080';
+const FACILITATOR_URL = process.env.FACILITATOR_URL || process.env.NEXT_PUBLIC_FACILITATOR_URL || 'https://facinet.vercel.app';
 
 export async function GET() {
   try {

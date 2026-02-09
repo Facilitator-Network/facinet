@@ -9,19 +9,19 @@ export const USDC_CONTRACTS = {
     name: 'USD Coin',
   },
   'ethereum-sepolia': {
-    address: (process.env.NEXT_PUBLIC_USDC_ADDRESS_SEPOLIA || '0x') as `0x${string}`,
+    address: (process.env.NEXT_PUBLIC_USDC_ADDRESS_SEPOLIA || '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238') as `0x${string}`,
     decimals: 6,
     symbol: 'USDC',
     name: 'USD Coin',
   },
   'base-sepolia': {
-    address: (process.env.NEXT_PUBLIC_USDC_ADDRESS_BASE_SEPOLIA || '0x') as `0x${string}`,
+    address: (process.env.NEXT_PUBLIC_USDC_ADDRESS_BASE_SEPOLIA || '0x036CbD53842c5426634e7929541eC2318f3dCF7e') as `0x${string}`,
     decimals: 6,
     symbol: 'USDC',
     name: 'USD Coin',
   },
   'polygon-amoy': {
-    address: (process.env.NEXT_PUBLIC_USDC_ADDRESS_POLYGON_AMOY || '0x') as `0x${string}`,
+    address: (process.env.NEXT_PUBLIC_USDC_ADDRESS_POLYGON_AMOY || '0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582') as `0x${string}`,
     decimals: 6,
     symbol: 'USDC',
     name: 'USD Coin',
@@ -40,7 +40,7 @@ export function getUSDCContract(network: string) {
   if (!contract.address || contract.address === '0x') {
     throw new Error(
       `USDC contract address not set for ${network}. ` +
-      `Please set NEXT_PUBLIC_USDC_ADDRESS_${network.toUpperCase().replace(/-/g, '_')} in .env.local`
+      `Set NEXT_PUBLIC_USDC_ADDRESS_${network.toUpperCase().replace(/-/g, '_')} in .env.local or use default.`
     );
   }
   return contract;

@@ -6,9 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // Use environment variable for facilitator URL
-// Development: http://localhost:8080
-// Production: https://your-facilitator.railway.app
-const FACILITATOR_URL = process.env.FACILITATOR_URL || process.env.NEXT_PUBLIC_FACILITATOR_URL || 'http://localhost:8080';
+const FACILITATOR_URL = process.env.FACILITATOR_URL || process.env.NEXT_PUBLIC_FACILITATOR_URL || 'https://facinet.vercel.app';
 
 /**
  * Proxies the payment settlement request to the running facilitator instance.

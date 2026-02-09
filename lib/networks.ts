@@ -54,9 +54,9 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
     chain: sepolia,
     name: 'ethereum-sepolia',
     displayName: 'Ethereum Sepolia',
-    rpcUrl: process.env.RPC_URL_ETHEREUM_SEPOLIA || 'https://ethereum-sepolia-rpc.publicnode.com', // More reliable public RPC
+    rpcUrl: process.env.RPC_URL_ETHEREUM_SEPOLIA || 'https://ethereum-sepolia-rpc.publicnode.com',
     blockExplorer: 'https://sepolia.etherscan.io',
-    usdcAddress: (process.env.NEXT_PUBLIC_USDC_ADDRESS_SEPOLIA || '0x') as `0x${string}`,
+    usdcAddress: (process.env.NEXT_PUBLIC_USDC_ADDRESS_SEPOLIA || '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238') as `0x${string}`,
     usdcDecimals: 6,
     nativeCurrency: {
       name: 'Ethereum',
@@ -64,10 +64,10 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
       decimals: 18,
     },
     erc3009Domain: {
-      name: 'USDC', // ✅ Ethereum Sepolia uses "USDC" not "USD Coin"
+      name: 'USDC',
       version: '2',
       chainId: 11155111,
-      verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_SEPOLIA || '0x') as `0x${string}`,
+      verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_SEPOLIA || '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238') as `0x${string}`,
     },
   },
   'base-sepolia': {
@@ -76,7 +76,7 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
     displayName: 'Base Sepolia',
     rpcUrl: process.env.RPC_URL_BASE_SEPOLIA || 'https://sepolia.base.org',
     blockExplorer: 'https://sepolia.basescan.org',
-    usdcAddress: (process.env.NEXT_PUBLIC_USDC_ADDRESS_BASE_SEPOLIA || '0x') as `0x${string}`,
+    usdcAddress: (process.env.NEXT_PUBLIC_USDC_ADDRESS_BASE_SEPOLIA || '0x036CbD53842c5426634e7929541eC2318f3dCF7e') as `0x${string}`,
     usdcDecimals: 6,
     nativeCurrency: {
       name: 'Ethereum',
@@ -84,10 +84,10 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
       decimals: 18,
     },
     erc3009Domain: {
-      name: 'USDC', // ✅ Base Sepolia uses "USDC" not "USD Coin"
+      name: 'USDC',
       version: '2',
       chainId: 84532,
-      verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_BASE_SEPOLIA || '0x') as `0x${string}`,
+      verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_BASE_SEPOLIA || '0x036CbD53842c5426634e7929541eC2318f3dCF7e') as `0x${string}`,
     },
   },
   'polygon-amoy': {
@@ -96,7 +96,7 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
     displayName: 'Polygon Amoy',
     rpcUrl: process.env.RPC_URL_POLYGON_AMOY || 'https://rpc-amoy.polygon.technology',
     blockExplorer: 'https://amoy.polygonscan.com',
-    usdcAddress: (process.env.NEXT_PUBLIC_USDC_ADDRESS_POLYGON_AMOY || '0x') as `0x${string}`,
+    usdcAddress: (process.env.NEXT_PUBLIC_USDC_ADDRESS_POLYGON_AMOY || '0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582') as `0x${string}`,
     usdcDecimals: 6,
     nativeCurrency: {
       name: 'Polygon',
@@ -104,10 +104,10 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
       decimals: 18,
     },
     erc3009Domain: {
-      name: 'USDC', // ✅ Polygon Amoy uses "USDC" not "USD Coin"
+      name: 'USDC',
       version: '2',
       chainId: 80002,
-      verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_POLYGON_AMOY || '0x') as `0x${string}`,
+      verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_POLYGON_AMOY || '0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582') as `0x${string}`,
     },
   },
 };

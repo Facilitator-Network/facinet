@@ -159,7 +159,7 @@ export const X402_CONFIG = getX402Config();
  */
 export function createPaymentRequirements(
   amountUSDC: string = '1',
-  resource: string = 'http://localhost:3000/builder-hub',
+  resource: string = process.env.NEXT_PUBLIC_APP_URL || 'https://facinet.vercel.app/builder-hub',
   network?: string
 ): X402PaymentRequirements {
   const config = getX402Config(network);

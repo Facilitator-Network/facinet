@@ -23,7 +23,6 @@ const ERC20_ABI = [
   'function transfer(address to, uint256 value) external returns (bool)'
 ];
 
-const USDC_ADDRESS = '0x5425890298aed601595a70AB815c96711a31Bc65';
 const ONE_USDC_ATOMIC = '1000000'; // 1 USDC with 6 decimals
 const MAX_TX_AGE_MS = 60 * 60 * 1000; // 1 hour
 
