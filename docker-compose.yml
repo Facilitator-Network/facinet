@@ -1,0 +1,29 @@
+services:
+  x402-facilitator:
+    image: ukstv/x402-facilitator:latest
+    container_name: x402-facilitator
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.local
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:alpine
+    container_name: x402-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+    driver: local
