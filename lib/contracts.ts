@@ -26,6 +26,12 @@ export const USDC_CONTRACTS = {
     symbol: 'USDC',
     name: 'USD Coin',
   },
+  'monad-testnet': {
+    address: (process.env.NEXT_PUBLIC_USDC_ADDRESS_MONAD_TESTNET || '0x534b2f3A21130d7a60830c2Df862319e593943A3') as `0x${string}`,
+    decimals: 6,
+    symbol: 'USDC',
+    name: 'USD Coin',
+  },
 };
 
 /**

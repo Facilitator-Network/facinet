@@ -28,6 +28,28 @@ export interface NetworkConfig {
   };
 }
 
+// Custom Monad Testnet chain (not yet in wagmi/chains)
+const monadTestnet: Chain = {
+  id: 10143,
+  name: 'Monad Testnet',
+  network: 'monad-testnet',
+  nativeCurrency: {
+    name: 'Monad',
+    symbol: 'MON',
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: { http: ['https://testnet-rpc.monad.xyz'] },
+    public: { http: ['https://testnet-rpc.monad.xyz'] },
+  },
+  blockExplorers: {
+    default: {
+      name: 'Monad Testnet Explorer',
+      url: 'https://testnet.monadvision.com',
+    },
+  },
+} as Chain;
+
 // Network configurations for all supported testnets
 export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
   'avalanche-fuji': {
@@ -108,6 +130,26 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
       version: '2',
       chainId: 80002,
       verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_POLYGON_AMOY || '0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582') as `0x${string}`,
+    },
+  },
+  'monad-testnet': {
+    chain: monadTestnet,
+    name: 'monad-testnet',
+    displayName: 'Monad Testnet',
+    rpcUrl: process.env.RPC_URL_MONAD_TESTNET || 'https://testnet-rpc.monad.xyz',
+    blockExplorer: 'https://testnet.monadvision.com',
+    usdcAddress: (process.env.NEXT_PUBLIC_USDC_ADDRESS_MONAD_TESTNET || '0x534b2f3A21130d7a60830c2Df862319e593943A3') as `0x${string}`,
+    usdcDecimals: 6,
+    nativeCurrency: {
+      name: 'Monad',
+      symbol: 'MON',
+      decimals: 18,
+    },
+    erc3009Domain: {
+      name: 'USDC',
+      version: '2',
+      chainId: 10143,
+      verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_MONAD_TESTNET || '0x534b2f3A21130d7a60830c2Df862319e593943A3') as `0x${string}`,
     },
   },
 };
