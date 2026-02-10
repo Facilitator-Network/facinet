@@ -16,6 +16,7 @@ const RECOMMENDED_BALANCES: Record<string, number> = {
   'polygon-amoy': 0.1,
   'arbitrum-sepolia': 0.05,
   'monad-testnet': 0.1,
+  'optimism-sepolia': 0.05,
 };
 
 const DEACTIVATION_THRESHOLD = 0.0001;

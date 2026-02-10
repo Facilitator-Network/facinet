@@ -41,43 +41,24 @@ export function NetworkSelector({ selectedNetwork, onNetworkChange, disabled }: 
       <label className="text-xs font-mono text-white/40 uppercase tracking-widest">
         Select Network
       </label>
-      <div className="grid grid-cols-2 gap-3">
+      <select
+        value={selectedNetwork}
+        onChange={(e) => handleNetworkSelect(e.target.value)}
+        disabled={disabled || isSwitching}
+        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-primary/50 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
         {SUPPORTED_NETWORKS.map((network) => {
           const config = NETWORK_CONFIGS[network];
-          const isSelected = selectedNetwork === network;
           const isCurrentChain = chain?.id === config.chain.id;
 
           return (
-            <button
-              key={network}
-              onClick={() => handleNetworkSelect(network)}
-              disabled={disabled || isSwitching}
-              className={`p-4 rounded-lg border transition-all text-left ${
-                isSelected
-                  ? 'border-white bg-white/10'
-                  : 'border-white/10 bg-white/5 hover:bg-white/10'
-              } ${disabled || isSwitching ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-            >
-              <div className="font-bold text-white text-sm font-mono mb-1">
-                {config.displayName}
-              </div>
-              <div className="text-xs text-white/40 font-mono">
-                {config.nativeCurrency.symbol}
-              </div>
-              {isCurrentChain && (
-                <div className="mt-2 text-[10px] text-green-400 font-mono">
-                  ✓ Connected
-                </div>
-              )}
-              {isSelected && !isCurrentChain && (
-                <div className="mt-2 text-[10px] text-yellow-400 font-mono">
-                  ⚠ Switch wallet
-                </div>
-              )}
-            </button>
+            <option key={network} value={network}>
+              {config.displayName} ({config.nativeCurrency.symbol}
+              {isCurrentChain ? ' - Connected' : ''})
+            </option>
           );
         })}
-      </div>
+      </select>
       {isSwitching && (
         <div className="text-xs text-white/60 font-mono text-center">
           Switching network...

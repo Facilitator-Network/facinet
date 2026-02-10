@@ -40,6 +40,7 @@ export default function FacilitatorPage() {
   const { address, isConnected, chain } = useAccount()
   const [showDeployModal, setShowDeployModal] = useState(false)
   const [deployStep, setDeployStep] = useState(1)
+  const [reuseExistingAccount, setReuseExistingAccount] = useState(false)
   const [facilitatorName, setFacilitatorName] = useState("")
   const [paymentAddress, setPaymentAddress] = useState("")
   const [selectedNetwork, setSelectedNetwork] = useState<string>('avalanche-fuji')
@@ -90,6 +91,7 @@ export default function FacilitatorPage() {
       "polygon-amoy": { amount: 0.1, faucet: "https://faucet.polygon.technology/" },
       "arbitrum-sepolia": { amount: 0.05, faucet: "https://sepoliafaucet.com/" }, // Needs ETH on Arbitrum Sepolia
       "monad-testnet": { amount: 0.1, faucet: "https://testnet.monadvision.com" }, // Explorer; faucet may vary
+      "optimism-sepolia": { amount: 0.05, faucet: "https://sepolia-optimism.etherscan.io" }, // Explorer; faucet may vary
     }
 
     const entry = minimums[network] || { amount: 0.1 }
@@ -109,14 +111,33 @@ export default function FacilitatorPage() {
     }
   }, [address, generatedWallet])
 
-  // Generate a new wallet
+  // Generate a new wallet (for first-time facilitator account)
   const handleGenerateWallet = () => {
     const wallet = ethers.Wallet.createRandom()
     setGeneratedWallet({
       address: wallet.address,
       privateKey: wallet.privateKey
     })
+    setReuseExistingAccount(false)
     // Keep paymentAddress as connected wallet (not the generated wallet)
+    setDeployStep(2)
+  }
+
+  // Reuse existing facilitator account (same underlying wallet across networks)
+  const handleUseExistingAccount = () => {
+    if (myFacilitators.length === 0) {
+      alert('You do not have an existing facilitator account yet. Please create your first facilitator.')
+      return
+    }
+
+    // Use the most recently used facilitator as the canonical account
+    const primary = myFacilitators[0]
+    setGeneratedWallet({
+      address: primary.facilitatorWallet,
+      // We never expose the private key again for existing accounts
+      privateKey: '',
+    })
+    setReuseExistingAccount(true)
     setDeployStep(2)
   }
 
@@ -129,10 +150,8 @@ export default function FacilitatorPage() {
     return true
   }
 
-  // Encrypt private key with password
+  // Encrypt private key with password (first-time account) or just validate password (reuse)
   const handleEncryptKey = async () => {
-    if (!generatedWallet) return
-
     if (password !== confirmPassword) {
       alert('Passwords do not match!')
       return
@@ -142,6 +161,14 @@ export default function FacilitatorPage() {
       alert('Password must be at least 8 characters with uppercase, lowercase, and number')
       return
     }
+
+    // For existing accounts we only need to confirm the password and move on.
+    if (reuseExistingAccount) {
+      setDeployStep(3)
+      return
+    }
+
+    if (!generatedWallet) return
 
     try {
       // Simple encryption using AES (for demo purposes)
@@ -508,20 +535,35 @@ export default function FacilitatorPage() {
     try {
       const networkConfig = getNetworkConfig(selectedNetwork)
 
-      const response = await fetch('/api/facilitator/create', {
+      const endpoint = reuseExistingAccount
+        ? '/api/facilitator/create-from-existing'
+        : '/api/facilitator/create'
+
+      const baseBody: any = {
+        name: facilitatorName,
+        paymentRecipient: paymentAddress,            // Where fees go (connected wallet)
+        createdBy: address,                          // Connected wallet that created it
+        registrationTxHash: txHash,                  // USDC payment tx hash
+        network: selectedNetwork,                    // Selected network
+        chainId: networkConfig.chain.id,             // Chain ID
+      }
+
+      const body = reuseExistingAccount
+        ? {
+            ...baseBody,
+            password, // Password used to encrypt the original facilitator key
+          }
+        : {
+            ...baseBody,
+            encryptedPrivateKey: encryptedKey,          // User's password-encrypted private key (for backup/export)
+            privateKey: generatedWallet.privateKey,     // Plain private key (backend will encrypt with SYSTEM_MASTER_KEY)
+            facilitatorWallet: generatedWallet.address, // The generated wallet address (new facilitator account)
+          }
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: facilitatorName,
-          encryptedPrivateKey: encryptedKey,          // User's password-encrypted private key (for backup/export)
-          privateKey: generatedWallet.privateKey,      // Plain private key (backend will encrypt with SYSTEM_MASTER_KEY)
-          facilitatorWallet: generatedWallet.address,  // The generated wallet address
-          paymentRecipient: paymentAddress,            // Where fees go (connected wallet)
-          createdBy: address,                          // Connected wallet that created it
-          registrationTxHash: txHash,                  // USDC payment tx hash
-          network: selectedNetwork,                    // Selected network
-          chainId: networkConfig.chain.id,             // Chain ID
-        }),
+        body: JSON.stringify(body),
       })
 
       const data = await response.json()
@@ -858,10 +900,12 @@ export default function FacilitatorPage() {
                         {[
                           "1. Select network for your facilitator",
                           "2. Choose a name for your facilitator",
-                          "3. Generate a new wallet",
-                          "4. Encrypt the private key",
+                          myFacilitators.length > 0
+                            ? "3. Either create a new facilitator account or reuse your existing one across networks"
+                            : "3. Generate a new facilitator account (wallet)",
+                          "4. Encrypt / confirm your password",
                           "5. Pay 1 USDC registration fee",
-                          "6. Start earning fees!"
+                          "6. Fund your facilitator with native gas and start earning fees!",
                         ].map((step, i) => (
                           <li key={i}>{step}</li>
                         ))}
@@ -896,13 +940,55 @@ export default function FacilitatorPage() {
                         <p className="text-[10px] text-white/30 font-mono">Min 3 characters, max 50</p>
                      </div>
 
-                     <button
+                    {myFacilitators.length > 0 && (
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <button
+                          type="button"
+                          onClick={handleGenerateWallet}
+                          className={`flex-1 px-4 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider border ${
+                            !reuseExistingAccount
+                              ? 'bg-white text-black border-white'
+                              : 'bg-transparent text-white border-white/30 hover:border-white/60'
+                          }`}
+                        >
+                          New Facilitator Account
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleUseExistingAccount}
+                          className={`flex-1 px-4 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider border ${
+                            reuseExistingAccount
+                              ? 'bg-white text-black border-white'
+                              : 'bg-transparent text-white border-white/30 hover:border-white/60'
+                          }`}
+                        >
+                          Use Existing Account
+                        </button>
+                      </div>
+                    )}
+
+                    {!myFacilitators.length && (
+                      <button
                         disabled={!facilitatorName || facilitatorName.length < 3 || (chain && chain.id !== getNetworkConfig(selectedNetwork).chain.id)}
                         onClick={handleGenerateWallet}
                         className="w-full bg-white text-black py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                     >
+                      >
                         Generate Wallet →
-                     </button>
+                      </button>
+                    )}
+                    {myFacilitators.length > 0 && (
+                      <button
+                        disabled={
+                          !facilitatorName ||
+                          facilitatorName.length < 3 ||
+                          (chain && chain.id !== getNetworkConfig(selectedNetwork).chain.id)
+                        }
+                        onClick={reuseExistingAccount ? handleUseExistingAccount : handleGenerateWallet}
+                        className="w-full bg-white text-black py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      >
+                        Continue →
+                      </button>
+                    )}
                   </div>
                 </>
               )}
@@ -924,25 +1010,38 @@ export default function FacilitatorPage() {
                          </div>
                       </div>
 
-                      <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 space-y-3">
-                         <div className="flex items-center gap-2 text-red-400 font-bold text-sm uppercase tracking-wide">
-                            <ShieldCheck size={16} /> Save Your Private Key!
-                         </div>
-                         <p className="text-xs text-red-200/60 leading-relaxed">
-                            You'll need it to import to MetaMask and fund with {networkMinimums.currency}. We do not store this.
-                         </p>
-                         {showPrivateKey && generatedWallet && (
-                           <div className="bg-black/70 p-3 rounded-lg border border-red-500/30 font-mono text-xs text-red-200 break-all select-all">
-                             {generatedWallet.privateKey}
+                      {!reuseExistingAccount && (
+                        <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 space-y-3">
+                           <div className="flex items-center gap-2 text-red-400 font-bold text-sm uppercase tracking-wide">
+                              <ShieldCheck size={16} /> Save Your Private Key!
                            </div>
-                         )}
-                         <button
-                           onClick={() => setShowPrivateKey(!showPrivateKey)}
-                           className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded text-xs font-mono font-bold uppercase tracking-wider transition-colors"
-                         >
-                            {showPrivateKey ? 'Hide Private Key' : 'Show Private Key'}
-                         </button>
-                      </div>
+                           <p className="text-xs text-red-200/60 leading-relaxed">
+                              You'll need it to import to MetaMask and fund with {networkMinimums.currency}. We do not store this.
+                           </p>
+                           {showPrivateKey && generatedWallet && (
+                             <div className="bg-black/70 p-3 rounded-lg border border-red-500/30 font-mono text-xs text-red-200 break-all select-all">
+                               {generatedWallet.privateKey}
+                             </div>
+                           )}
+                           <button
+                             onClick={() => setShowPrivateKey(!showPrivateKey)}
+                             className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded text-xs font-mono font-bold uppercase tracking-wider transition-colors"
+                           >
+                              {showPrivateKey ? 'Hide Private Key' : 'Show Private Key'}
+                           </button>
+                        </div>
+                      )}
+
+                      {reuseExistingAccount && (
+                        <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 space-y-2">
+                          <div className="flex items-center gap-2 text-green-400 font-bold text-sm uppercase tracking-wide">
+                            <ShieldCheck size={16} /> Using Existing Facilitator Account
+                          </div>
+                          <p className="text-xs text-green-200/70 leading-relaxed">
+                            This facilitator will reuse your existing secured wallet across all supported networks. We will verify your password but never re-expose your private key.
+                          </p>
+                        </div>
+                      )}
                    </div>
 
                    {/* Password Form */}

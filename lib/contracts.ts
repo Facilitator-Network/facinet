@@ -38,6 +38,12 @@ export const USDC_CONTRACTS = {
     symbol: 'USDC',
     name: 'USD Coin',
   },
+  'optimism-sepolia': {
+    address: (process.env.NEXT_PUBLIC_USDC_ADDRESS_OP_SEPOLIA || '0x5fd84259d66Cd46123540766Be93DFE6D43130D7') as `0x${string}`,
+    decimals: 6,
+    symbol: 'USDC',
+    name: 'USD Coin',
+  },
 };
 
 /**

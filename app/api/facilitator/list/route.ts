@@ -23,6 +23,7 @@ const RECOMMENDED_BALANCES: Record<string, number> = {
   'polygon-amoy': 0.1,      // 0.1 MATIC
   'arbitrum-sepolia': 0.05, // 0.05 ETH
   'monad-testnet': 0.1,     // 0.1 MON
+  'optimism-sepolia': 0.05, // 0.05 ETH
 };
 
 const DEACTIVATION_THRESHOLD = 0.0001;

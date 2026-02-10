@@ -72,6 +72,28 @@ const arbitrumSepoliaChain: Chain = {
   },
 } as Chain;
 
+// Custom Optimism Sepolia chain (OP Sepolia)
+const optimismSepoliaChain: Chain = {
+  id: 11155420,
+  name: 'OP Sepolia',
+  network: 'optimism-sepolia',
+  nativeCurrency: {
+    name: 'Ethereum',
+    symbol: 'ETH',
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: { http: ['https://sepolia.optimism.io'] },
+    public: { http: ['https://sepolia.optimism.io'] },
+  },
+  blockExplorers: {
+    default: {
+      name: 'OP Sepolia Explorer',
+      url: 'https://sepolia-optimism.etherscan.io',
+    },
+  },
+} as Chain;
+
 // Network configurations for all supported testnets
 export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
   'avalanche-fuji': {
@@ -152,6 +174,27 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
       version: '2',
       chainId: 80002,
       verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_POLYGON_AMOY || '0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582') as `0x${string}`,
+    },
+  },
+  'optimism-sepolia': {
+    chain: optimismSepoliaChain,
+    name: 'optimism-sepolia',
+    displayName: 'OP Sepolia',
+    rpcUrl: process.env.RPC_URL_OP_SEPOLIA || 'https://sepolia.optimism.io',
+    blockExplorer: 'https://sepolia-optimism.etherscan.io',
+    usdcAddress: (process.env.NEXT_PUBLIC_USDC_ADDRESS_OP_SEPOLIA || '0x5fd84259d66Cd46123540766Be93DFE6D43130D7') as `0x${string}`,
+    usdcDecimals: 6,
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    erc3009Domain: {
+      // On OP Sepolia the token tracker is "USDC (USDC)", so we use domain name "USDC"
+      name: 'USDC',
+      version: '2',
+      chainId: 11155420,
+      verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_OP_SEPOLIA || '0x5fd84259d66Cd46123540766Be93DFE6D43130D7') as `0x${string}`,
     },
   },
   'arbitrum-sepolia': {
