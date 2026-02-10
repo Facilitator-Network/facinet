@@ -168,7 +168,10 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
       decimals: 18,
     },
     erc3009Domain: {
-      name: 'USDC',
+      // NOTE: Many Circle deployments expect EIP-712 domain name "USD Coin"
+      // even when the token symbol is USDC. If you see FiatTokenV2: invalid signature,
+      // this is the first thing to verify.
+      name: 'USD Coin',
       version: '2',
       chainId: 421614,
       verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_ARBITRUM_SEPOLIA || '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d') as `0x${string}`,
@@ -188,7 +191,7 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
       decimals: 18,
     },
     erc3009Domain: {
-      name: 'USDC',
+      name: 'USD Coin',
       version: '2',
       chainId: 10143,
       verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_MONAD_TESTNET || '0x534b2f3A21130d7a60830c2Df862319e593943A3') as `0x${string}`,
