@@ -15,13 +15,22 @@ import { createPublicClient, http, formatEther } from 'viem';
 import { getNetworkConfig } from '@/lib/networks';
 import { logEvent } from '@/lib/explorer-logging';
 
-// Network-specific minimum balance requirements (in native tokens)
-const MINIMUM_BALANCES: Record<string, number> = {
+/**
+ * Two-threshold model:
+ * - recommended funding: shown in UI (helps pay gas reliably)
+ * - deactivation threshold: only mark needs_funding when balance is extremely low
+ */
+const RECOMMENDED_BALANCES: Record<string, number> = {
   'avalanche-fuji': 0.1,    // 0.1 AVAX
   'ethereum-sepolia': 0.05, // 0.05 ETH
   'base-sepolia': 0.05,     // 0.05 ETH
   'polygon-amoy': 0.1,      // 0.1 MATIC
+  'arbitrum-sepolia': 0.05, // 0.05 ETH
+  'monad-testnet': 0.1,     // 0.1 MON
 };
+
+// Only consider facilitator unfunded when <= this amount (native token)
+const DEACTIVATION_THRESHOLD = 0.0001;
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,12 +56,13 @@ export async function POST(request: NextRequest) {
     // Get network configuration
     const network = facilitator.network || 'avalanche-fuji'; // Default to Avalanche Fuji for old facilitators
     const networkConfig = getNetworkConfig(network);
-    const minimumBalance = MINIMUM_BALANCES[network] || 0.1;
+    const recommendedBalance = RECOMMENDED_BALANCES[network] || 0.1;
     const currencySymbol = networkConfig.nativeCurrency.symbol;
 
     console.log(`🔍 Checking balance for facilitator ${facilitatorId} on ${networkConfig.displayName}`);
     console.log(`   Wallet: ${facilitator.facilitatorWallet}`);
-    console.log(`   Required: ${minimumBalance} ${currencySymbol}`);
+    console.log(`   Recommended: ${recommendedBalance} ${currencySymbol}`);
+    console.log(`   Deactivation threshold: ${DEACTIVATION_THRESHOLD} ${currencySymbol}`);
 
     // Create network-specific public client
     const publicClient = createPublicClient({
@@ -68,14 +78,14 @@ export async function POST(request: NextRequest) {
     const balanceInToken = parseFloat(formatEther(balance));
     console.log(`💰 Balance: ${balanceInToken.toFixed(4)} ${currencySymbol}`);
 
-    // Determine new status based on balance
+    // Determine new status based on balance (deactivation threshold)
     let newStatus: 'active' | 'needs_funding';
-    if (balanceInToken >= minimumBalance) {
+    if (balanceInToken > DEACTIVATION_THRESHOLD) {
       newStatus = 'active';
-      console.log(`✅ Balance sufficient (>= ${minimumBalance} ${currencySymbol}), setting to active`);
+      console.log(`✅ Balance above threshold (> ${DEACTIVATION_THRESHOLD} ${currencySymbol}), setting to active`);
     } else {
       newStatus = 'needs_funding';
-      console.log(`⚠️  Balance insufficient (< ${minimumBalance} ${currencySymbol}), keeping as needs_funding`);
+      console.log(`⚠️  Balance too low (<= ${DEACTIVATION_THRESHOLD} ${currencySymbol}), setting needs_funding`);
     }
 
     // Update status if changed
@@ -110,7 +120,10 @@ export async function POST(request: NextRequest) {
         network: networkConfig.displayName,
         status: newStatus,
         minimumRequired: minimumBalance,
-        isFunded: balanceInToken >= minimumBalance,
+        // Back-compat field name, but now means "above deactivation threshold"
+        minimumRequired: DEACTIVATION_THRESHOLD,
+        isFunded: balanceInToken > DEACTIVATION_THRESHOLD,
+        recommendedMinimum: recommendedBalance,
       },
     });
   } catch (error) {

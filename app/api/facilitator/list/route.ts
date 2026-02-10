@@ -16,13 +16,16 @@ import { getActiveFacilitators, getFacilitator, updateFacilitatorStatus } from '
 import { createPublicClient, http, formatEther } from 'viem';
 import { getNetworkConfig } from '@/lib/networks';
 
-// Network-specific minimum balance requirements (in native tokens)
-const MINIMUM_BALANCES: Record<string, number> = {
+const RECOMMENDED_BALANCES: Record<string, number> = {
   'avalanche-fuji': 0.1,    // 0.1 AVAX
   'ethereum-sepolia': 0.05, // 0.05 ETH
   'base-sepolia': 0.05,     // 0.05 ETH
   'polygon-amoy': 0.1,      // 0.1 MATIC
+  'arbitrum-sepolia': 0.05, // 0.05 ETH
+  'monad-testnet': 0.1,     // 0.1 MON
 };
+
+const DEACTIVATION_THRESHOLD = 0.0001;
 
 export async function GET() {
   try {
@@ -39,7 +42,7 @@ export async function GET() {
           // Get network configuration
           const network = facilitator.network || 'avalanche-fuji'; // Default to Avalanche Fuji for old facilitators
           const networkConfig = getNetworkConfig(network);
-          const minimumBalance = MINIMUM_BALANCES[network] || 0.1;
+          const recommendedBalance = RECOMMENDED_BALANCES[network] || 0.1;
           const currencySymbol = networkConfig.nativeCurrency.symbol;
 
           // Create network-specific public client
@@ -55,9 +58,9 @@ export async function GET() {
 
           const balanceInToken = parseFloat(formatEther(balance));
 
-          // Determine correct status based on balance
+          // Determine correct status based on balance (deactivation threshold)
           let correctStatus: 'active' | 'needs_funding';
-          if (balanceInToken >= minimumBalance) {
+          if (balanceInToken > DEACTIVATION_THRESHOLD) {
             correctStatus = 'active';
           } else {
             correctStatus = 'needs_funding';
@@ -66,7 +69,10 @@ export async function GET() {
           // Update status in Redis if it changed
           if (facilitator.status !== correctStatus) {
             await updateFacilitatorStatus(facilitator.id, correctStatus);
-            console.log(`✅ Auto-updated ${facilitator.name} status: ${facilitator.status} → ${correctStatus} (balance: ${balanceInToken.toFixed(4)} ${currencySymbol})`);
+            console.log(
+              `✅ Auto-updated ${facilitator.name} status: ${facilitator.status} → ${correctStatus} ` +
+              `(balance: ${balanceInToken.toFixed(4)} ${currencySymbol}, threshold: ${DEACTIVATION_THRESHOLD}, recommended: ${recommendedBalance})`
+            );
           }
 
           // Return public info with updated status

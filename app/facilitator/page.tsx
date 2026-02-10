@@ -80,13 +80,24 @@ export default function FacilitatorPage() {
 
   // Get network-specific minimum balance and currency
   const getNetworkMinimums = (network: string) => {
-    const minimums: Record<string, { amount: number; currency: string; faucet: string }> = {
-      'avalanche-fuji': { amount: 0.1, currency: 'AVAX', faucet: 'https://faucet.avax.network/' },
-      'ethereum-sepolia': { amount: 0.05, currency: 'ETH', faucet: 'https://sepoliafaucet.com/' },
-      'base-sepolia': { amount: 0.05, currency: 'ETH', faucet: 'https://www.alchemy.com/faucets/base-sepolia' },
-      'polygon-amoy': { amount: 0.1, currency: 'MATIC', faucet: 'https://faucet.polygon.technology/' },
-    };
-    return minimums[network] || { amount: 0.1, currency: 'AVAX', faucet: 'https://faucet.avax.network/' };
+    const networkConfig = getNetworkConfig(network)
+
+    // Minimum native gas requirements per network (native token units)
+    const minimums: Record<string, { amount: number; faucet?: string }> = {
+      "avalanche-fuji": { amount: 0.1, faucet: "https://core.app/tools/testnet-faucet/" },
+      "ethereum-sepolia": { amount: 0.05, faucet: "https://sepoliafaucet.com/" },
+      "base-sepolia": { amount: 0.05, faucet: "https://www.alchemy.com/faucets/base-sepolia" },
+      "polygon-amoy": { amount: 0.1, faucet: "https://faucet.polygon.technology/" },
+      "arbitrum-sepolia": { amount: 0.05, faucet: "https://sepoliafaucet.com/" }, // Needs ETH on Arbitrum Sepolia
+      "monad-testnet": { amount: 0.1, faucet: "https://testnet.monadvision.com" }, // Explorer; faucet may vary
+    }
+
+    const entry = minimums[network] || { amount: 0.1 }
+    return {
+      amount: entry.amount,
+      currency: networkConfig.nativeCurrency.symbol,
+      faucet: entry.faucet || "",
+    }
   };
 
   const networkMinimums = getNetworkMinimums(selectedNetwork);
@@ -918,7 +929,7 @@ export default function FacilitatorPage() {
                             <ShieldCheck size={16} /> Save Your Private Key!
                          </div>
                          <p className="text-xs text-red-200/60 leading-relaxed">
-                            You'll need it to import to MetaMask and fund with AVAX. We do not store this.
+                            You'll need it to import to MetaMask and fund with {networkMinimums.currency}. We do not store this.
                          </p>
                          {showPrivateKey && generatedWallet && (
                            <div className="bg-black/70 p-3 rounded-lg border border-red-500/30 font-mono text-xs text-red-200 break-all select-all">
