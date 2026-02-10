@@ -32,6 +32,12 @@ export const USDC_CONTRACTS = {
     symbol: 'USDC',
     name: 'USD Coin',
   },
+  'arbitrum-sepolia': {
+    address: (process.env.NEXT_PUBLIC_USDC_ADDRESS_ARBITRUM_SEPOLIA || '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d') as `0x${string}`,
+    decimals: 6,
+    symbol: 'USDC',
+    name: 'USD Coin',
+  },
 };
 
 /**

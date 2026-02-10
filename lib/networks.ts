@@ -28,7 +28,7 @@ export interface NetworkConfig {
   };
 }
 
-// Custom Monad Testnet chain (not yet in wagmi/chains) monad live
+// Custom Monad Testnet chain (not yet in wagmi/chains)
 const monadTestnet: Chain = {
   id: 10143,
   name: 'Monad Testnet',
@@ -46,6 +46,28 @@ const monadTestnet: Chain = {
     default: {
       name: 'Monad Testnet Explorer',
       url: 'https://testnet.monadvision.com',
+    },
+  },
+} as Chain;
+
+// Custom Arbitrum Sepolia chain
+const arbitrumSepoliaChain: Chain = {
+  id: 421614,
+  name: 'Arbitrum Sepolia',
+  network: 'arbitrum-sepolia',
+  nativeCurrency: {
+    name: 'Ethereum',
+    symbol: 'ETH',
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: { http: ['https://sepolia-rollup.arbitrum.io/rpc'] },
+    public: { http: ['https://sepolia-rollup.arbitrum.io/rpc'] },
+  },
+  blockExplorers: {
+    default: {
+      name: 'Arbiscan (Sepolia)',
+      url: 'https://sepolia.arbiscan.io',
     },
   },
 } as Chain;
@@ -130,6 +152,26 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
       version: '2',
       chainId: 80002,
       verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_POLYGON_AMOY || '0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582') as `0x${string}`,
+    },
+  },
+  'arbitrum-sepolia': {
+    chain: arbitrumSepoliaChain,
+    name: 'arbitrum-sepolia',
+    displayName: 'Arbitrum Sepolia',
+    rpcUrl: process.env.RPC_URL_ARBITRUM_SEPOLIA || 'https://sepolia-rollup.arbitrum.io/rpc',
+    blockExplorer: 'https://sepolia.arbiscan.io',
+    usdcAddress: (process.env.NEXT_PUBLIC_USDC_ADDRESS_ARBITRUM_SEPOLIA || '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d') as `0x${string}`,
+    usdcDecimals: 6,
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    erc3009Domain: {
+      name: 'USDC',
+      version: '2',
+      chainId: 421614,
+      verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_ARBITRUM_SEPOLIA || '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d') as `0x${string}`,
     },
   },
   'monad-testnet': {
