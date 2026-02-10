@@ -234,7 +234,9 @@ export const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
       decimals: 18,
     },
     erc3009Domain: {
-      name: 'USD Coin',
+      // Monad testnet USDC (0x534b2f3A...) was initialized with "USDC" as EIP-712 name.
+      // If you get FiatTokenV2: invalid signature, try switching to "USD Coin".
+      name: 'USDC',
       version: '2',
       chainId: 10143,
       verifyingContract: (process.env.NEXT_PUBLIC_USDC_ADDRESS_MONAD_TESTNET || '0x534b2f3A21130d7a60830c2Df862319e593943A3') as `0x${string}`,
