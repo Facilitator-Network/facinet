@@ -28,7 +28,7 @@ export interface NetworkConfig {
   };
 }
 
-// Custom Monad Testnet chain (not yet in wagmi/chains)
+// Custom Monad Testnet chain (not yet in wagmi/chains) monad live
 const monadTestnet: Chain = {
   id: 10143,
   name: 'Monad Testnet',
