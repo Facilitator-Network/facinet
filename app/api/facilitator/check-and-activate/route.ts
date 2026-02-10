@@ -119,8 +119,7 @@ export async function POST(request: NextRequest) {
         currency: currencySymbol,
         network: networkConfig.displayName,
         status: newStatus,
-        minimumRequired: minimumBalance,
-        // Back-compat field name, but now means "above deactivation threshold"
+        // Back-compat field name: now indicates deactivation threshold
         minimumRequired: DEACTIVATION_THRESHOLD,
         isFunded: balanceInToken > DEACTIVATION_THRESHOLD,
         recommendedMinimum: recommendedBalance,
