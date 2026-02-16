@@ -35,6 +35,16 @@ import { Wallet, JsonRpcProvider, Contract, Interface } from 'ethers';
 import { getNetworkConfig, isNetworkSupported } from '@/lib/networks';
 import { logEvent } from '@/lib/explorer-logging';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Network, X-Chain-Id',
+};
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -55,7 +65,7 @@ export async function POST(request: NextRequest) {
     if (!facilitatorId || !contractAddress || !functionName || !abi) {
       return NextResponse.json(
         { error: 'Missing required fields: facilitatorId, contractAddress, functionName, abi' },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -63,7 +73,7 @@ export async function POST(request: NextRequest) {
     if (!requestNetwork || !isNetworkSupported(requestNetwork)) {
       return NextResponse.json(
         { error: `Unsupported network: ${requestNetwork}` },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -71,7 +81,7 @@ export async function POST(request: NextRequest) {
     if (!contractAddress.match(/^0x[a-fA-F0-9]{40}$/)) {
       return NextResponse.json(
         { error: 'Invalid contract address format' },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -82,7 +92,7 @@ export async function POST(request: NextRequest) {
     if (!facilitator) {
       return NextResponse.json(
         { error: 'Facilitator not found' },
-        { status: 404 }
+        { status: 404, headers: corsHeaders }
       );
     }
 
@@ -90,14 +100,14 @@ export async function POST(request: NextRequest) {
     if (facilitator.network && facilitator.network !== requestNetwork) {
       return NextResponse.json(
         { error: `Facilitator ${facilitatorId} is registered for network ${facilitator.network}, but request is for ${requestNetwork}` },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
     if (facilitator.chainId !== undefined && facilitator.chainId !== requestChainId) {
       return NextResponse.json(
         { error: `Facilitator ${facilitatorId} is registered for chain ID ${facilitator.chainId}, but request is for ${requestChainId}` },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -110,7 +120,7 @@ export async function POST(request: NextRequest) {
       console.error('❌ SYSTEM_MASTER_KEY not set');
       return NextResponse.json(
         { error: 'System configuration error' },
-        { status: 500 }
+        { status: 500, headers: corsHeaders }
       );
     }
 
@@ -157,7 +167,7 @@ export async function POST(request: NextRequest) {
           message: error.message || 'Unknown error',
           reason: error.reason || error.data?.message || 'Execution reverted',
         },
-        { status: 500 }
+        { status: 500, headers: corsHeaders }
       );
     }
 
@@ -176,7 +186,7 @@ export async function POST(request: NextRequest) {
           txHash: tx.hash,
           message: error.message || 'Transaction reverted',
         },
-        { status: 500 }
+        { status: 500, headers: corsHeaders }
       );
     }
 
@@ -213,7 +223,7 @@ export async function POST(request: NextRequest) {
       functionName: functionName,
       gasUsed: receipt?.gasUsed?.toString() || '0',
       gasSpent: gasSpent,
-    });
+    }, { headers: corsHeaders });
   } catch (error: any) {
     console.error('❌ Contract execution error:', error);
     return NextResponse.json(
@@ -221,7 +231,7 @@ export async function POST(request: NextRequest) {
         error: 'Contract execution failed',
         message: error.message || 'Unknown error',
       },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }

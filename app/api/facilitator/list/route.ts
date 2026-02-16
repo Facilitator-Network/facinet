@@ -20,6 +20,16 @@ import { getActiveFacilitators, getFacilitator, updateFacilitatorStatus } from '
 import { createPublicClient, http, formatEther } from 'viem';
 import { getNetworkConfig, getNetworkByChainId, isNetworkSupported } from '@/lib/networks';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Network, X-Chain-Id',
+};
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
 const RECOMMENDED_BALANCES: Record<string, number> = {
   'avalanche-fuji': 0.1,    // 0.1 AVAX
   'ethereum-sepolia': 0.05, // 0.05 ETH
@@ -126,12 +136,12 @@ export async function GET(request: NextRequest) {
       facilitators: filteredFacilitators,
       count: filteredFacilitators.length,
       network: networkFilter || null,
-    });
+    }, { headers: corsHeaders });
   } catch (error) {
     console.error('❌ Error listing facilitators:', error);
     return NextResponse.json(
       { error: 'Failed to list facilitators' },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
