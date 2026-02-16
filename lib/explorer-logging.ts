@@ -13,6 +13,7 @@ export type EventType =
   | 'facilitator_activated'
   | 'gas_funded'
   | 'transaction'
+  | 'contract_execution'
   | 'status_changed';
 
 export interface ExplorerLog {
@@ -40,6 +41,10 @@ export interface ExplorerLog {
   toAddress?: string;
   amount?: string;
   gasSpent?: string;
+
+  // Contract execution details
+  contractAddress?: string;
+  functionName?: string;
 
   // Status
   status: 'success' | 'failed' | 'pending';
