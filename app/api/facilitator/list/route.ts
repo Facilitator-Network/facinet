@@ -1,8 +1,12 @@
 /**
- * GET /api/facilitator/list
+ * GET /api/facilitator/list?network=ethereum-sepolia&chainId=11155111
  *
  * Get list of all facilitators with real-time status based on native token balance
  * Returns public info only (no private keys)
+ *
+ * Query Parameters:
+ * - network (optional): Filter by network name (e.g., 'ethereum-sepolia')
+ * - chainId (optional): Filter by chain ID (e.g., 11155111)
  *
  * Network-aware Status Logic:
  * - Avalanche Fuji: 0.1 AVAX minimum
@@ -11,10 +15,10 @@
  * - Polygon Amoy: 0.1 MATIC minimum
  */
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getActiveFacilitators, getFacilitator, updateFacilitatorStatus } from '@/lib/facilitator-storage';
 import { createPublicClient, http, formatEther } from 'viem';
-import { getNetworkConfig } from '@/lib/networks';
+import { getNetworkConfig, getNetworkByChainId, isNetworkSupported } from '@/lib/networks';
 
 const RECOMMENDED_BALANCES: Record<string, number> = {
   'avalanche-fuji': 0.1,    // 0.1 AVAX
@@ -28,9 +32,28 @@ const RECOMMENDED_BALANCES: Record<string, number> = {
 
 const DEACTIVATION_THRESHOLD = 0.0001;
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const facilitators = await getActiveFacilitators();
+    const { searchParams } = new URL(request.url);
+    const networkParam = searchParams.get('network');
+    const chainIdParam = searchParams.get('chainId');
+
+    // Resolve network filter from query params
+    let networkFilter: string | undefined;
+    if (networkParam && isNetworkSupported(networkParam)) {
+      networkFilter = networkParam;
+    } else if (chainIdParam) {
+      const chainId = parseInt(chainIdParam, 10);
+      if (!isNaN(chainId)) {
+        const networkConfig = getNetworkByChainId(chainId);
+        if (networkConfig) {
+          networkFilter = networkConfig.name;
+        }
+      }
+    }
+
+    // Get facilitators (with optional network filter)
+    const facilitators = await getActiveFacilitators(networkFilter);
 
     // Check and update status for each facilitator based on network-specific balance
     const facilitatorsWithUpdatedStatus = await Promise.all(
@@ -89,10 +112,20 @@ export async function GET() {
       })
     );
 
+    // Apply additional filtering if network/chainId was specified
+    let filteredFacilitators = facilitatorsWithUpdatedStatus;
+    if (networkFilter) {
+      filteredFacilitators = facilitatorsWithUpdatedStatus.filter((f) => {
+        return f.network === networkFilter || 
+               (f.chainId !== undefined && getNetworkConfig(networkFilter).chain.id === f.chainId);
+      });
+    }
+
     return NextResponse.json({
       success: true,
-      facilitators: facilitatorsWithUpdatedStatus,
-      count: facilitatorsWithUpdatedStatus.length,
+      facilitators: filteredFacilitators,
+      count: filteredFacilitators.length,
+      network: networkFilter || null,
     });
   } catch (error) {
     console.error('❌ Error listing facilitators:', error);
