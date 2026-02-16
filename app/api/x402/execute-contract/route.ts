@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
       // Execute transaction
       tx = await contract[functionName](...functionArgs, {
         value: value !== '0' ? value : undefined,
-        gasLimit: gasEstimate + (gasEstimate / 10n), // Add 10% buffer
+        gasLimit: gasEstimate + (gasEstimate / BigInt(10)), // Add 10% buffer
       });
 
       console.log(`⏳ Transaction submitted: ${tx.hash}`);
