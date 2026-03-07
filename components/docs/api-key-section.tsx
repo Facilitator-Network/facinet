@@ -36,8 +36,10 @@ export function ApiKeySection() {
   const [newApiKey, setNewApiKey] = useState('')
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
+  const [whitelistStatus, setWhitelistStatus] = useState<'none' | 'pending' | 'approved'>('none')
+  const [whitelistChecking, setWhitelistChecking] = useState(false)
 
-  // Fetch existing keys
+  // Fetch existing keys and whitelist status
   useEffect(() => {
     if (!address) return
     const fetchKeys = async () => {
@@ -52,7 +54,20 @@ export function ApiKeySection() {
         setLoadingKeys(false)
       }
     }
+    const checkWhitelist = async () => {
+      setWhitelistChecking(true)
+      try {
+        const res = await fetch(`/api/whitelist/check?wallet=${address}`)
+        const data = await res.json()
+        if (data.success) setWhitelistStatus(data.status)
+      } catch {
+        // ignore
+      } finally {
+        setWhitelistChecking(false)
+      }
+    }
     fetchKeys()
+    checkWhitelist()
   }, [address])
 
   const handleCopy = (text: string) => {
@@ -170,12 +185,25 @@ export function ApiKeySection() {
           <Key className="h-5 w-5 text-primary" /> Gasless API
         </h2>
         {isConnected && (
-          <button
-            onClick={() => { setShowPurchaseModal(true); setPurchaseStep('confirm'); setError(''); setNewApiKey('') }}
-            className="px-4 py-2 rounded-lg bg-white text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-white/90 transition-colors"
-          >
-            Get API Key — 10 USDC
-          </button>
+          whitelistStatus === 'approved' ? (
+            <button
+              onClick={() => { setShowPurchaseModal(true); setPurchaseStep('confirm'); setError(''); setNewApiKey('') }}
+              className="px-4 py-2 rounded-lg bg-white text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-white/90 transition-colors"
+            >
+              Get API Key — 10 USDC
+            </button>
+          ) : whitelistStatus === 'pending' ? (
+            <span className="px-4 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-300 text-xs font-mono font-bold uppercase tracking-wider">
+              Whitelist Pending
+            </span>
+          ) : (
+            <a
+              href="/facilitator"
+              className="px-4 py-2 rounded-lg bg-purple-600 text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-purple-500 transition-colors"
+            >
+              Apply for Whitelist First
+            </a>
+          )
         )}
       </div>
 
@@ -239,12 +267,20 @@ export function ApiKeySection() {
           ) : keys.length === 0 ? (
             <div className="p-6 rounded-xl border border-white/5 bg-white/[0.02] text-center space-y-3">
               <p className="text-white/40 font-mono text-sm">No API keys yet</p>
-              <button
-                onClick={() => { setShowPurchaseModal(true); setPurchaseStep('confirm'); setError(''); setNewApiKey('') }}
-                className="px-6 py-2 rounded-lg bg-white text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-white/90 transition-colors"
-              >
-                Purchase Your First Key — 10 USDC
-              </button>
+              {whitelistStatus === 'approved' ? (
+                <button
+                  onClick={() => { setShowPurchaseModal(true); setPurchaseStep('confirm'); setError(''); setNewApiKey('') }}
+                  className="px-6 py-2 rounded-lg bg-white text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-white/90 transition-colors"
+                >
+                  Purchase Your First Key — 10 USDC
+                </button>
+              ) : whitelistStatus === 'pending' ? (
+                <p className="text-yellow-300 font-mono text-xs">Your whitelist application is under review</p>
+              ) : (
+                <a href="/facilitator" className="inline-block px-6 py-2 rounded-lg bg-purple-600 text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-purple-500 transition-colors">
+                  Apply for Whitelist First
+                </a>
+              )}
             </div>
           ) : (
             <div className="space-y-3">

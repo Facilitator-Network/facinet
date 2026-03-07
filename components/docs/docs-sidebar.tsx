@@ -18,36 +18,48 @@ interface NavItem {
 
 export function DocsSidebar() {
   const pathname = usePathname()
-  const [expandedSections, setExpandedSections] = useState<string[]>(["Facinet Client", "Facilitator", "Agents", "Architecture", "API Reference"])
+  const [expandedSections, setExpandedSections] = useState<string[]>(["Facinet SDK", "Paywall", "Gasless API", "Facilitator", "Core Standards", "API Reference"])
 
   const navigation: NavItem[] = [
-    { title: "Getting Started", href: "/docs/getting-started" },
+    { title: "Facinet SDK", href: "/docs" },
     {
-      title: "Facinet Client",
+      title: "Paywall",
       items: [
-        { title: "Features", href: "/docs/client/features" },
-        { title: "Installation", href: "/docs/client/installation" },
-        { title: "CLI Usage", href: "/docs/client/cli" },
-        { title: "SDK Usage", href: "/docs/client/sdk" },
+        { title: "Express.js Middleware", href: "/docs#paywall-middleware" },
+        { title: "Next.js API Routes", href: "/docs#paywall-middleware" },
+      ],
+    },
+    {
+      title: "Gasless API",
+      items: [
+        { title: "Get API Key", href: "/docs#gasless-api" },
+        { title: "Usage & Limits", href: "/docs#gasless-api" },
       ],
     },
     {
       title: "Facilitator",
       items: [
         { title: "Overview", href: "/docs/facilitator/overview" },
-        { title: "Install", href: "/docs/facilitator/install" },
+        { title: "Run a Facilitator", href: "/docs#run-a-facilitator" },
         { title: "Configuration", href: "/docs/facilitator/config" },
         { title: "Staking & Rewards", href: "/docs/facilitator/staking" },
-        { title: "Monitoring", href: "/docs/facilitator/monitoring" },
       ],
     },
     {
-      title: "Agents",
+      title: "Core Standards",
       items: [
-        { title: "Overview", href: "/docs/agents/overview" },
-        { title: "Register Agent", href: "/docs/agents/register" },
-        { title: "Capabilities", href: "/docs/agents/capabilities" },
-        { title: "Versioning", href: "/docs/agents/versioning" },
+        { title: "x402 Protocol", href: "/docs#x402-protocol" },
+        { title: "ERC-3009", href: "/docs#core-standards" },
+        { title: "ERC-8004", href: "/docs#core-standards" },
+      ],
+    },
+    {
+      title: "API Reference",
+      items: [
+        { title: "Endpoints", href: "/docs#api-endpoints" },
+        { title: "SDK Methods", href: "/docs#sdk-reference" },
+        { title: "CLI Commands", href: "/docs#cli-commands" },
+        { title: "Supported Networks", href: "/docs#supported-networks" },
       ],
     },
     {
@@ -55,14 +67,6 @@ export function DocsSidebar() {
       items: [
         { title: "Network", href: "/docs/architecture/network" },
         { title: "Request Flow", href: "/docs/architecture/flow" },
-      ],
-    },
-    {
-      title: "API Reference",
-      items: [
-        { title: "Facilitator API", href: "/docs/api/facilitator" },
-        { title: "Agents API", href: "/docs/api/agents" },
-        { title: "Event Streams", href: "/docs/api/events" },
       ],
     },
   ]
@@ -96,13 +100,13 @@ export function DocsSidebar() {
                   <span className="mr-3 text-primary opacity-50">[{isExpanded ? "-" : "+"}]</span>
                   {section.title.toUpperCase()}
                 </button>
-                
+
                 {isExpanded && (
                   <div className="ml-1 space-y-1 border-l border-white/5 pl-4">
                     {section.items.map((item) => {
                       const isItemActive = pathname === item.href
                       return (
-                        <Link key={item.href} href={item.href} className={cn("block hover:text-white transition-colors py-1", isItemActive ? "text-primary" : "text-white/40")}>
+                        <Link key={item.href + item.title} href={item.href} className={cn("block hover:text-white transition-colors py-1", isItemActive ? "text-primary" : "text-white/40")}>
                           <span className="mr-3 opacity-30">{isItemActive ? "*" : "-"}</span>
                           {item.title}
                         </Link>

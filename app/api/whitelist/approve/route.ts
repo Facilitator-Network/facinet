@@ -55,48 +55,62 @@ export async function POST(request: NextRequest) {
     await redis.del(`whitelist:pending:${walletLower}`);
     await redis.srem('whitelist:pending_set', walletLower);
 
-    // Send approval email if Resend API key is configured
-    if (process.env.RESEND_API_KEY && application.email) {
+    // Send approval email via SendGrid
+    let emailSent = false;
+    if (process.env.SENDGRID_API_KEY && application.email) {
       try {
-        const emailRes = await fetch('https://api.resend.com/emails', {
+        const emailRes = await fetch('https://api.sendgrid.com/v3/mail/send', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+            'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: process.env.RESEND_FROM_EMAIL || 'Facinet <noreply@facinet.xyz>',
-            to: application.email,
-            subject: 'You\'re Whitelisted — Welcome to Facinet!',
-            html: `
-              <div style="font-family: monospace; background: #000; color: #fff; padding: 40px; border-radius: 12px;">
-                <h1 style="color: #fff; font-size: 24px;">Welcome to Facinet, ${application.name}!</h1>
-                <p style="color: #ccc; line-height: 1.8;">
-                  Your wallet <code style="background: #222; padding: 2px 6px; border-radius: 4px;">${wallet}</code> has been whitelisted.
-                </p>
-                <p style="color: #ccc; line-height: 1.8;">
-                  You can now create a facilitator node on Facinet and start earning fees by processing gasless USDC payments.
-                </p>
-                <div style="margin: 30px 0;">
-                  <a href="https://facinet.vercel.app/facilitator" style="background: #fff; color: #000; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-family: monospace;">
-                    Deploy Your Facilitator →
-                  </a>
-                </div>
-                <p style="color: #666; font-size: 12px;">
-                  Facinet — The payment infrastructure for the agent economy.
-                </p>
-              </div>
-            `,
+            personalizations: [
+              {
+                to: [{ email: application.email, name: application.name || '' }],
+                subject: "You're Whitelisted — Welcome to Facinet!",
+              },
+            ],
+            from: {
+              email: process.env.SENDGRID_FROM_EMAIL || 'noreply@facinet.xyz',
+              name: 'Facinet',
+            },
+            content: [
+              {
+                type: 'text/html',
+                value: `
+                  <div style="font-family: monospace; background: #000; color: #fff; padding: 40px; border-radius: 12px;">
+                    <h1 style="color: #fff; font-size: 24px;">Welcome to Facinet, ${application.name}!</h1>
+                    <p style="color: #ccc; line-height: 1.8;">
+                      Your wallet <code style="background: #222; padding: 2px 6px; border-radius: 4px;">${wallet}</code> has been whitelisted.
+                    </p>
+                    <p style="color: #ccc; line-height: 1.8;">
+                      You can now create a facilitator node on Facinet and start earning fees by processing gasless USDC payments.
+                    </p>
+                    <div style="margin: 30px 0;">
+                      <a href="https://facinet.vercel.app/facilitator" style="background: #fff; color: #000; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-family: monospace;">
+                        Deploy Your Facilitator
+                      </a>
+                    </div>
+                    <p style="color: #666; font-size: 12px;">
+                      Facinet — The payment infrastructure for the agent economy.
+                    </p>
+                  </div>
+                `,
+              },
+            ],
           }),
         });
 
-        if (emailRes.ok) {
-          console.log(`✅ Approval email sent to ${application.email}`);
+        if (emailRes.status === 202) {
+          console.log(`Approval email sent to ${application.email}`);
+          emailSent = true;
         } else {
-          console.error('❌ Failed to send email:', await emailRes.text());
+          console.error('Failed to send email:', emailRes.status, await emailRes.text());
         }
       } catch (emailError) {
-        console.error('❌ Email send error:', emailError);
+        console.error('Email send error:', emailError);
         // Don't fail the approval if email fails
       }
     }
@@ -104,10 +118,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: `Wallet ${wallet} has been approved.`,
-      emailSent: !!process.env.RESEND_API_KEY,
+      emailSent,
     });
   } catch (error) {
-    console.error('❌ Whitelist approve error:', error);
+    console.error('Whitelist approve error:', error);
     return NextResponse.json(
       { error: 'Failed to approve application' },
       { status: 500 }

@@ -70,7 +70,7 @@ export default function HomePage() {
           setStats([
             { value: String(statsData.stats.activeFacilitators), label: "Facilitators" },
             { value: statsData.stats.activeFacilitators > 0 ? "99.9%" : "0%", label: "Mean Uptime" },
-            { value: String(statsData.stats.totalPayments), label: "Transactions" },
+            { value: String(statsData.stats.totalPaymentsProcessed || 0), label: "Transactions" },
           ])
         }
       } catch (error) {

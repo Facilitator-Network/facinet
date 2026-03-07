@@ -933,15 +933,30 @@ export default function FacilitatorPage() {
                 <div className="p-12 rounded-xl border border-white/10 bg-white/5 text-center space-y-6">
                   <div className="space-y-2">
                     <p className="text-white/60">You don't have any facilitators yet.</p>
-                    <p className="text-sm text-white/40">Launch a cloud node to start earning rewards.</p>
+                    <p className="text-sm text-white/40">
+                      {whitelistStatus === 'approved' ? 'Launch a cloud node to start earning rewards.' : 'Apply for whitelist to deploy a cloud node.'}
+                    </p>
                   </div>
-                  <button
-                    onClick={() => setShowDeployModal(true)}
-                    className="group flex items-center gap-2 mx-auto px-8 py-3 bg-blue-600 text-white rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-blue-500 transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]"
-                  >
-                    <Cloud size={18} className="text-white group-hover:scale-110 transition-transform" />
-                    <span>Deploy Now</span>
-                  </button>
+                  {whitelistStatus === 'approved' ? (
+                    <button
+                      onClick={() => setShowDeployModal(true)}
+                      className="group flex items-center gap-2 mx-auto px-8 py-3 bg-blue-600 text-white rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-blue-500 transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.6)]"
+                    >
+                      <Cloud size={18} className="text-white group-hover:scale-110 transition-transform" />
+                      <span>Deploy Now</span>
+                    </button>
+                  ) : whitelistStatus === 'pending' ? (
+                    <div className="px-6 py-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-300 font-mono text-sm">
+                      Your whitelist application is under review
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setShowWhitelistModal(true)}
+                      className="group flex items-center gap-2 mx-auto px-8 py-3 bg-purple-600 text-white rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-purple-500 transition-all"
+                    >
+                      <span>Apply for Whitelist</span>
+                    </button>
+                  )}
                 </div>
               )}
            </div>
