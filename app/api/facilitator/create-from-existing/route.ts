@@ -28,6 +28,9 @@ import {
 import { decryptPrivateKey } from '@/lib/facilitator-crypto';
 import { logEvent } from '@/lib/explorer-logging';
 import { isNetworkSupported, getNetworkConfig } from '@/lib/networks';
+import { getRedis } from '@/lib/redis';
+
+const CREATOR_KEY_PREFIX = 'facilitator:creator:';
 
 export async function POST(request: NextRequest) {
   try {
@@ -88,6 +91,19 @@ export async function POST(request: NextRequest) {
         { error: 'Invalid creator address' },
         { status: 400 }
       );
+    }
+
+    // Rate limit: each wallet can only create one facilitator
+    {
+      const redis = getRedis();
+      const creatorKey = `${CREATOR_KEY_PREFIX}${createdBy.toLowerCase()}`;
+      const existingFacilitator = await redis.get(creatorKey);
+      if (existingFacilitator) {
+        return NextResponse.json(
+          { success: false, error: 'Each wallet can only create one facilitator. You already have a facilitator registered.' },
+          { status: 429 }
+        );
+      }
     }
 
     // Find an existing facilitator for this user to act as the "account"
@@ -168,6 +184,13 @@ export async function POST(request: NextRequest) {
 
     // Store facilitator in Redis
     await storeFacilitator(facilitator);
+
+    // Track creator address for rate limiting (one facilitator per wallet)
+    {
+      const redis = getRedis();
+      const creatorKey = `${CREATOR_KEY_PREFIX}${createdBy.toLowerCase()}`;
+      await redis.set(creatorKey, id);
+    }
 
     console.log(
       `✅ Created additional facilitator ${id} on ${network} for existing account ${baseFacilitator.facilitatorWallet}`

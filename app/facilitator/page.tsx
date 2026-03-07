@@ -913,11 +913,17 @@ export default function FacilitatorPage() {
                   </div>
 
                   <div className="space-y-6">
-                     {/* Network Selector */}
-                     <NetworkSelector
+                     {/* COMMENTED: Network selector UI removed — hardcoded to avalanche-fuji */}
+                     {/* <NetworkSelector
                        selectedNetwork={selectedNetwork}
                        onNetworkChange={setSelectedNetwork}
-                     />
+                     /> */}
+
+                     {/* Network info display (locked to Avalanche Fuji) */}
+                     <div className="p-4 rounded-xl border border-white/10 bg-white/5">
+                       <p className="text-xs font-mono text-white/40 uppercase tracking-widest mb-1">Network</p>
+                       <p className="text-sm text-white font-mono">Avalanche Fuji (Chain ID: 43113)</p>
+                     </div>
 
                      {/* Network Mismatch Warning */}
                      {chain && chain.id !== getNetworkConfig(selectedNetwork).chain.id && (

@@ -38,7 +38,8 @@ interface Facilitator {
 }
 
 const PLATFORM_ADDRESS = process.env.NEXT_PUBLIC_PAYMENT_RECIPIENT || '0x0000000000000000000000000000000000000000'
-const REDIRECT_URL = 'https://apex-hunt.vercel.app/'
+// COMMENTED: External redirect to apex-hunt removed
+// const REDIRECT_URL = 'https://apex-hunt.vercel.app/'
 
 export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
   const { address, isConnected, chain } = useAccount()
@@ -206,11 +207,11 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
       setTxHash(transactionHash)
       setStep('success')
 
-      // Redirect after 3 seconds
-      setTimeout(() => {
-        console.log('🎯 Redirecting to apex-hunt...')
-        window.location.href = REDIRECT_URL
-      }, 3000)
+      // COMMENTED: External redirect to apex-hunt removed
+      // setTimeout(() => {
+      //   console.log('🎯 Redirecting to apex-hunt...')
+      //   window.location.href = REDIRECT_URL
+      // }, 3000)
 
     } catch (err) {
       console.error('❌ Batch payment error:', err)
@@ -262,20 +263,21 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
             </div>
           )}
 
-          {/* Step 1: Network Selection */}
+          {/* Step 1: Network Selection — COMMENTED: Multi-network selector removed, hardcoded to Avalanche Fuji */}
           {isConnected && step === 'network' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-300">
               <div className="p-6 rounded-xl border border-white/10 bg-white/5 space-y-4">
-                <h3 className="font-bold text-white font-mono uppercase tracking-tight">Select Network</h3>
+                <h3 className="font-bold text-white font-mono uppercase tracking-tight">Network</h3>
                 <p className="text-sm text-white/60 font-mono">
-                  Choose which network you want to make the payment on
+                  Payment will be processed on Avalanche Fuji testnet
                 </p>
               </div>
 
-              <NetworkSelector
+              {/* COMMENTED: Network selector UI removed — hardcoded to avalanche-fuji */}
+              {/* <NetworkSelector
                 selectedNetwork={selectedNetwork}
                 onNetworkChange={setSelectedNetwork}
-              />
+              /> */}
 
               {/* Network Mismatch Warning */}
               {chain && chain.id !== getNetworkConfig(selectedNetwork).chain.id && (
@@ -387,9 +389,15 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
                   </div>
                 )}
               </div>
-              <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
+              {/* COMMENTED: External redirect message removed */}
+              {/* <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
                 <p className="text-sm text-primary font-mono">
                   🎯 Redirecting to Apex Hunt in 3 seconds...
+                </p>
+              </div> */}
+              <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
+                <p className="text-sm text-primary font-mono">
+                  Payment completed successfully via x402 protocol.
                 </p>
               </div>
             </div>

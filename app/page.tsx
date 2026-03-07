@@ -38,27 +38,39 @@ export default function HomePage() {
     // Fetch real data from backend
     const fetchNetworkStats = async () => {
       try {
-        const response = await fetch('/api/facilitator/list')
-        const data = await response.json()
+        // COMMENTED: Old approach fetching from facilitator list and computing fake transaction count
+        // const response = await fetch('/api/facilitator/list')
+        // const data = await response.json()
+        //
+        // if (data.success && data.facilitators) {
+        //   const facilitators: Facilitator[] = data.facilitators
+        //
+        //   // Calculate stats from real data
+        //   const activeFacilitators = facilitators.filter((f) => f.status === 'active').length
+        //   const totalFacilitators = facilitators.length
+        //
+        //   // Calculate mean uptime (if we have facilitators, show 99.9%, else 0%)
+        //   const meanUptime = totalFacilitators > 0 ? "99.9%" : "0%"
+        //
+        //   // For transactions, we can set a placeholder or fetch from another endpoint
+        //   // For now, showing total facilitators as a proxy
+        //   const transactions = totalFacilitators > 0 ? `${totalFacilitators * 42}` : "0"
+        //
+        //   setStats([
+        //     { value: String(activeFacilitators), label: "Facilitators" },
+        //     { value: meanUptime, label: "Mean Uptime" },
+        //     { value: transactions, label: "Transactions" },
+        //   ])
+        // }
 
-        if (data.success && data.facilitators) {
-          const facilitators: Facilitator[] = data.facilitators
-
-          // Calculate stats from real data
-          const activeFacilitators = facilitators.filter((f) => f.status === 'active').length
-          const totalFacilitators = facilitators.length
-
-          // Calculate mean uptime (if we have facilitators, show 99.9%, else 0%)
-          const meanUptime = totalFacilitators > 0 ? "99.9%" : "0%"
-
-          // For transactions, we can set a placeholder or fetch from another endpoint
-          // For now, showing total facilitators as a proxy
-          const transactions = totalFacilitators > 0 ? `${totalFacilitators * 42}` : "0"
-
+        // New approach: fetch from real stats API
+        const statsResponse = await fetch('/api/stats/network')
+        const statsData = await statsResponse.json()
+        if (statsData.success) {
           setStats([
-            { value: String(activeFacilitators), label: "Facilitators" },
-            { value: meanUptime, label: "Mean Uptime" },
-            { value: transactions, label: "Transactions" },
+            { value: String(statsData.stats.activeFacilitators), label: "Facilitators" },
+            { value: statsData.stats.activeFacilitators > 0 ? "99.9%" : "0%", label: "Mean Uptime" },
+            { value: String(statsData.stats.totalPayments), label: "Transactions" },
           ])
         }
       } catch (error) {

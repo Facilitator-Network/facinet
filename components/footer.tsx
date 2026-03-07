@@ -33,11 +33,12 @@ export function Footer() {
                   Facilitators
                 </Link>
               </li>
-              <li>
+              {/* COMMENTED: Dead nav link removed — agents page not active */}
+              {/* <li>
                 <Link href="/agents" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Agents
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="/docs" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Documentation

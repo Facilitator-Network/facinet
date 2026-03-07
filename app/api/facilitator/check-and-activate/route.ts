@@ -21,7 +21,8 @@ import { logEvent } from '@/lib/explorer-logging';
  * - deactivation threshold: only mark needs_funding when balance is extremely low
  */
 const RECOMMENDED_BALANCES: Record<string, number> = {
-  'avalanche-fuji': 0.1,    // 0.1 AVAX
+  // 'avalanche-fuji': 0.1,    // 0.1 AVAX (old value)
+  'avalanche-fuji': 1.0,    // 1.0 AVAX
   'ethereum-sepolia': 0.05, // 0.05 ETH
   'base-sepolia': 0.05,     // 0.05 ETH
   'polygon-amoy': 0.1,      // 0.1 MATIC

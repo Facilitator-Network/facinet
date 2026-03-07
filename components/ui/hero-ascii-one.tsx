@@ -30,11 +30,11 @@ export default function HeroAsciiWrapper({ children }: HeroAsciiWrapperProps) {
             
             {/* Nav Links (Desktop) */}
             <div className="hidden lg:flex items-center gap-6 ml-8">
-               {['Home', 'Facilitator', 'Chain', 'Explorer', 'Institution', 'Docs'].map((item) => (
-                 <Link 
-                   key={item} 
+               {['Home', 'Demo', 'Facilitator', 'Chain', 'Explorer', 'Institution', 'Docs'].map((item) => (
+                 <Link
+                   key={item}
                    href={
-                     item === 'Home' ? '/' : 
+                     item === 'Home' ? '/' :
                      `/${item.toLowerCase()}`
                    }
                    className="text-white/70 hover:text-white text-xs font-mono tracking-widest uppercase transition-colors"
@@ -161,9 +161,9 @@ export default function HeroAsciiWrapper({ children }: HeroAsciiWrapperProps) {
 
             {/* Navigation Links */}
             <nav className="flex flex-col gap-4">
-              {['Home', 'Facilitator', 'Chain', 'Explorer', 'Institution', 'Docs'].map((item) => (
-                <Link 
-                  key={item} 
+              {['Home', 'Demo', 'Facilitator', 'Chain', 'Explorer', 'Institution', 'Docs'].map((item) => (
+                <Link
+                  key={item}
                   href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-2xl font-mono font-light text-white/80 hover:text-white hover:pl-4 transition-all"
