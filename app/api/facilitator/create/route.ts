@@ -19,6 +19,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   storeFacilitator,
   generateFacilitatorId,
+  getFacilitatorsByCreator,
   type Facilitator,
 } from '@/lib/facilitator-storage';
 import { logEvent } from '@/lib/explorer-logging';
@@ -43,12 +44,37 @@ export async function POST(request: NextRequest) {
       chainId,
     } = body;
 
+    // Whitelist check: only whitelisted wallets can create facilitators
+    const ADMIN_WALLET = (process.env.ADMIN_WALLET || '').toLowerCase();
+    if (createdBy && createdBy.toLowerCase() !== ADMIN_WALLET) {
+      const redis = getRedis();
+      const whitelistApproved = await redis.get(`whitelist:approved:${createdBy.toLowerCase()}`);
+      if (!whitelistApproved) {
+        return NextResponse.json(
+          { success: false, error: 'Your wallet is not whitelisted. Please apply for whitelist access first.' },
+          { status: 403 }
+        );
+      }
+    }
+
     // Rate limit: each wallet can only create one facilitator
     if (createdBy) {
+      // Check Redis key first (fast path)
       const redis = getRedis();
       const creatorKey = `${CREATOR_KEY_PREFIX}${createdBy.toLowerCase()}`;
       const existingFacilitator = await redis.get(creatorKey);
       if (existingFacilitator) {
+        return NextResponse.json(
+          { success: false, error: 'Each wallet can only create one facilitator. You already have a facilitator registered.' },
+          { status: 429 }
+        );
+      }
+
+      // Also check by creator in facilitator list (handles old facilitators without Redis key)
+      const existingByCreator = await getFacilitatorsByCreator(createdBy);
+      if (existingByCreator && existingByCreator.length > 0) {
+        // Backfill the Redis key for future fast lookups
+        await redis.set(creatorKey, existingByCreator[0].id);
         return NextResponse.json(
           { success: false, error: 'Each wallet can only create one facilitator. You already have a facilitator registered.' },
           { status: 429 }

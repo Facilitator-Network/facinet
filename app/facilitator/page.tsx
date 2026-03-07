@@ -76,6 +76,17 @@ export default function FacilitatorPage() {
   const [isPaymentSuccess, setIsPaymentSuccess] = useState(false)
   const [paymentError, setPaymentError] = useState<string>('')
 
+  // Whitelist states
+  const [whitelistStatus, setWhitelistStatus] = useState<'loading' | 'none' | 'pending' | 'approved'>('loading')
+  const [showWhitelistModal, setShowWhitelistModal] = useState(false)
+  const [whitelistName, setWhitelistName] = useState('')
+  const [whitelistEmail, setWhitelistEmail] = useState('')
+  const [whitelistSubmitting, setWhitelistSubmitting] = useState(false)
+  const [whitelistMessage, setWhitelistMessage] = useState('')
+
+  const ADMIN_WALLET = process.env.NEXT_PUBLIC_ADMIN_WALLET || ''
+  const isAdmin = address?.toLowerCase() === ADMIN_WALLET.toLowerCase()
+
   // wagmi hook for signing typed data (ERC-3009)
   const { signTypedDataAsync } = useSignTypedData()
 
@@ -85,7 +96,7 @@ export default function FacilitatorPage() {
 
     // Minimum native gas requirements per network (native token units)
     const minimums: Record<string, { amount: number; faucet?: string }> = {
-      "avalanche-fuji": { amount: 0.1, faucet: "https://core.app/tools/testnet-faucet/" },
+      "avalanche-fuji": { amount: 1.0, faucet: "https://core.app/tools/testnet-faucet/" },
       "ethereum-sepolia": { amount: 0.05, faucet: "https://sepoliafaucet.com/" },
       "base-sepolia": { amount: 0.05, faucet: "https://www.alchemy.com/faucets/base-sepolia" },
       "polygon-amoy": { amount: 0.1, faucet: "https://faucet.polygon.technology/" },
@@ -110,6 +121,66 @@ export default function FacilitatorPage() {
       setPaymentAddress(address)
     }
   }, [address, generatedWallet])
+
+  // Check whitelist status when wallet connects
+  useEffect(() => {
+    if (!address) {
+      setWhitelistStatus('loading')
+      return
+    }
+
+    // Admin is always approved
+    if (address.toLowerCase() === ADMIN_WALLET.toLowerCase()) {
+      setWhitelistStatus('approved')
+      return
+    }
+
+    const checkWhitelist = async () => {
+      try {
+        const res = await fetch(`/api/whitelist/check?wallet=${address}`)
+        const data = await res.json()
+        if (data.success) {
+          setWhitelistStatus(data.status as 'none' | 'pending' | 'approved')
+        }
+      } catch {
+        setWhitelistStatus('none')
+      }
+    }
+    checkWhitelist()
+  }, [address])
+
+  // Handle whitelist application submit
+  const handleWhitelistApply = async () => {
+    if (!whitelistName || !whitelistEmail || !address) return
+
+    setWhitelistSubmitting(true)
+    setWhitelistMessage('')
+    try {
+      const res = await fetch('/api/whitelist/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: whitelistName,
+          email: whitelistEmail,
+          wallet: address,
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setWhitelistMessage(data.message)
+        setWhitelistStatus(data.status === 'already_approved' ? 'approved' : 'pending')
+        if (data.status !== 'already_approved') {
+          setTimeout(() => setShowWhitelistModal(false), 2000)
+        }
+      } else {
+        setWhitelistMessage(data.error || 'Failed to submit application')
+      }
+    } catch {
+      setWhitelistMessage('Network error. Please try again.')
+    } finally {
+      setWhitelistSubmitting(false)
+    }
+  }
 
   // Generate a new wallet (for first-time facilitator account)
   const handleGenerateWallet = () => {
@@ -676,30 +747,89 @@ export default function FacilitatorPage() {
                  </p>
                </div>
 
-               {/* CLOUD CARD */}
-               <button
-                 onClick={() => setShowDeployModal(true)}
-                 className="relative group p-6 rounded-xl border border-blue-500/40 bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-blue-500/5 hover:border-blue-400/60 hover:from-blue-500/30 hover:to-blue-500/10 backdrop-blur-md transition-all text-left shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20"
-               >
-                 <div className="absolute top-4 right-4 flex gap-2">
-                    <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-green-500/20 border border-green-500/30 text-[10px] font-bold text-green-400 uppercase tracking-wider animate-pulse">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                        LIVE
-                    </div>
-                    <div className="p-2 rounded-lg bg-blue-500/20 text-blue-400 group-hover:bg-blue-500/30 transition-colors">
-                        <Cloud size={24} />
-                    </div>
-                 </div>
-                 <h3 className="text-xl font-bold text-white font-mono uppercase tracking-tight mb-2">Cloud Node</h3>
-                 <div className="flex items-center gap-2 mb-3">
-                   <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase bg-blue-500/20 text-blue-300 border border-blue-500/20">
-                     Recommended
-                   </span>
-                 </div>
-                 <p className="text-blue-100/80 text-sm font-light max-w-[85%]">
-                   Deploy a managed facilitator node instantly. No setup required. Start earning rewards immediately.
+               {/* CLOUD CARD — conditional based on whitelist status */}
+               {whitelistStatus === 'approved' || myFacilitators.length > 0 ? (
+                 /* WHITELISTED OR ALREADY HAS FACILITATOR — show Cloud Node */
+                 <button
+                   onClick={() => {
+                     if (myFacilitators.length > 0) {
+                       alert('You already have a facilitator registered. Each wallet can only create one facilitator.')
+                       return
+                     }
+                     setShowDeployModal(true)
+                   }}
+                   className={`relative group p-6 rounded-xl border backdrop-blur-md transition-all text-left shadow-lg ${
+                     myFacilitators.length > 0
+                       ? 'border-white/10 bg-white/5 opacity-60 cursor-not-allowed'
+                       : 'border-blue-500/40 bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-blue-500/5 hover:border-blue-400/60 hover:from-blue-500/30 hover:to-blue-500/10 shadow-blue-500/10 hover:shadow-blue-500/20'
+                   }`}
+                 >
+                   <div className="absolute top-4 right-4 flex gap-2">
+                      <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-green-500/20 border border-green-500/30 text-[10px] font-bold text-green-400 uppercase tracking-wider animate-pulse">
+                          <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                          LIVE
+                      </div>
+                      <div className="p-2 rounded-lg bg-blue-500/20 text-blue-400 group-hover:bg-blue-500/30 transition-colors">
+                          <Cloud size={24} />
+                      </div>
+                   </div>
+                   <h3 className="text-xl font-bold text-white font-mono uppercase tracking-tight mb-2">Cloud Node</h3>
+                   <div className="flex items-center gap-2 mb-3">
+                     {myFacilitators.length > 0 ? (
+                       <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase bg-yellow-500/20 text-yellow-400 border border-yellow-500/20">
+                         Already Registered (1 per wallet)
+                       </span>
+                     ) : (
+                       <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase bg-blue-500/20 text-blue-300 border border-blue-500/20">
+                         Recommended
+                       </span>
+                     )}
+                   </div>
+                   <p className="text-blue-100/80 text-sm font-light max-w-[85%]">
+                     Deploy a managed facilitator node instantly. No setup required. Start earning rewards immediately.
                  </p>
-               </button>
+                 </button>
+               ) : whitelistStatus === 'pending' ? (
+                 /* PENDING — show waiting card */
+                 <div className="relative p-6 rounded-xl border border-yellow-500/30 bg-gradient-to-br from-yellow-500/10 via-orange-500/5 to-yellow-500/5 backdrop-blur-md text-left">
+                   <div className="absolute top-4 right-4 flex gap-2">
+                     <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-yellow-500/20 border border-yellow-500/30 text-[10px] font-bold text-yellow-400 uppercase tracking-wider animate-pulse">
+                       <div className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
+                       PENDING
+                     </div>
+                   </div>
+                   <h3 className="text-xl font-bold text-white font-mono uppercase tracking-tight mb-2">Application Under Review</h3>
+                   <div className="flex items-center gap-2 mb-3">
+                     <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase bg-yellow-500/20 text-yellow-400 border border-yellow-500/20">
+                       Awaiting Approval
+                     </span>
+                   </div>
+                   <p className="text-yellow-100/70 text-sm font-light max-w-[85%]">
+                     Your whitelist application is being reviewed. You&apos;ll receive an email once approved.
+                   </p>
+                 </div>
+               ) : (
+                 /* NOT WHITELISTED — show Apply button */
+                 <button
+                   onClick={() => setShowWhitelistModal(true)}
+                   className="relative group p-6 rounded-xl border border-purple-500/40 bg-gradient-to-br from-purple-500/20 via-blue-500/10 to-purple-500/5 hover:border-purple-400/60 hover:from-purple-500/30 hover:to-purple-500/10 backdrop-blur-md transition-all text-left shadow-lg shadow-purple-500/10 hover:shadow-purple-500/20"
+                 >
+                   <div className="absolute top-4 right-4 flex gap-2">
+                     <div className="p-2 rounded-lg bg-purple-500/20 text-purple-400 group-hover:bg-purple-500/30 transition-colors">
+                       <Cloud size={24} />
+                     </div>
+                   </div>
+                   <h3 className="text-xl font-bold text-white font-mono uppercase tracking-tight mb-2">Apply for Whitelist</h3>
+                   <div className="flex items-center gap-2 mb-3">
+                     <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase bg-purple-500/20 text-purple-300 border border-purple-500/20">
+                       Required to Deploy
+                     </span>
+                   </div>
+                   <p className="text-purple-100/80 text-sm font-light max-w-[85%]">
+                     Apply to become a facilitator. Submit your details and get whitelisted to deploy a cloud node.
+                   </p>
+                 </button>
+               )}
              </div>
 
              {/* MY FACILITATORS SECTION */}
@@ -875,6 +1005,104 @@ export default function FacilitatorPage() {
       </div>
 
       {/* DEPLOY MODAL */}
+      {/* ADMIN BUTTON — only visible for admin wallet */}
+      {isConnected && isAdmin && (
+        <div className="mb-8">
+          <Link
+            href="/admin"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono font-bold uppercase tracking-wider hover:bg-red-500/20 transition-colors"
+          >
+            <ShieldCheck size={14} />
+            Admin Panel — Whitelist Manager
+          </Link>
+        </div>
+      )}
+
+      {/* WHITELIST APPLICATION MODAL */}
+      {showWhitelistModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+          <div className="relative w-full max-w-lg bg-black border border-white/10 rounded-2xl shadow-2xl my-8 animate-in fade-in zoom-in duration-200">
+            <div className="p-8 space-y-6">
+              <button
+                onClick={() => { setShowWhitelistModal(false); setWhitelistMessage('') }}
+                className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors z-10"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="text-center space-y-2">
+                <h2 className="text-2xl font-bold font-mono text-white uppercase tracking-tight">
+                  Apply for Whitelist
+                </h2>
+                <p className="text-white/50 text-sm font-light">
+                  Get approved to deploy a facilitator node on Facinet
+                </p>
+              </div>
+
+              {whitelistMessage ? (
+                <div className={`p-6 rounded-xl border text-center space-y-2 ${
+                  whitelistStatus === 'pending' || whitelistStatus === 'approved'
+                    ? 'border-green-500/20 bg-green-500/5'
+                    : 'border-red-500/20 bg-red-500/5'
+                }`}>
+                  <div className={`text-lg font-bold font-mono ${
+                    whitelistStatus === 'pending' || whitelistStatus === 'approved' ? 'text-green-400' : 'text-red-400'
+                  }`}>
+                    {whitelistStatus === 'pending' || whitelistStatus === 'approved' ? '✓' : '✗'}
+                  </div>
+                  <p className={`text-sm font-mono ${
+                    whitelistStatus === 'pending' || whitelistStatus === 'approved' ? 'text-green-300/80' : 'text-red-300/80'
+                  }`}>
+                    {whitelistMessage}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-white/40 uppercase tracking-widest">Your Name</label>
+                    <input
+                      type="text"
+                      value={whitelistName}
+                      onChange={(e) => setWhitelistName(e.target.value)}
+                      placeholder="Enter your name"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white font-mono focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/20"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-white/40 uppercase tracking-widest">Email Address</label>
+                    <input
+                      type="email"
+                      value={whitelistEmail}
+                      onChange={(e) => setWhitelistEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white font-mono focus:outline-none focus:border-primary/50 transition-colors placeholder:text-white/20"
+                    />
+                    <p className="text-[10px] text-white/30 font-mono">We&apos;ll notify you when your application is approved</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono text-white/40 uppercase tracking-widest">Wallet Address</label>
+                    <div className="w-full bg-white/5 border border-primary/20 rounded-lg px-4 py-3 text-primary font-mono text-sm break-all">
+                      {address || '0x...'}
+                    </div>
+                    <p className="text-[10px] text-green-400/60 font-mono">✓ Auto-filled from your connected wallet</p>
+                  </div>
+
+                  <button
+                    onClick={handleWhitelistApply}
+                    disabled={!whitelistName || !whitelistEmail || whitelistSubmitting}
+                    className="w-full bg-white text-black py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                  >
+                    {whitelistSubmitting ? 'Submitting...' : 'Submit Application'}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {showDeployModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
            <div className="relative w-full max-w-2xl bg-black border border-white/10 rounded-2xl shadow-2xl my-8 animate-in fade-in zoom-in duration-200">
@@ -898,14 +1126,12 @@ export default function FacilitatorPage() {
                      <h3 className="font-bold text-white font-mono uppercase tracking-tight">How it works:</h3>
                      <ul className="space-y-2 text-sm text-white/60 font-mono">
                         {[
-                          "1. Select network for your facilitator",
-                          "2. Choose a name for your facilitator",
-                          myFacilitators.length > 0
-                            ? "3. Either create a new facilitator account or reuse your existing one across networks"
-                            : "3. Generate a new facilitator account (wallet)",
-                          "4. Encrypt / confirm your password",
-                          "5. Pay 1 USDC registration fee",
-                          "6. Fund your facilitator with native gas and start earning fees!",
+                          "1. Choose a name for your facilitator",
+                          "2. Generate a new facilitator wallet",
+                          "3. Set a password to encrypt your private key",
+                          "4. Pay 1 USDC registration fee (gasless via x402)",
+                          "5. Fund your facilitator with at least 1 AVAX for gas",
+                          "6. Your facilitator goes live and starts earning fees!",
                         ].map((step, i) => (
                           <li key={i}>{step}</li>
                         ))}

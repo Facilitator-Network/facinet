@@ -38,8 +38,7 @@ interface Facilitator {
 }
 
 const PLATFORM_ADDRESS = process.env.NEXT_PUBLIC_PAYMENT_RECIPIENT || '0x0000000000000000000000000000000000000000'
-// COMMENTED: External redirect to apex-hunt removed
-// const REDIRECT_URL = 'https://apex-hunt.vercel.app/'
+const REDIRECT_URL = 'https://apex-hunt.vercel.app/'
 
 export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
   const { address, isConnected, chain } = useAccount()
@@ -207,11 +206,10 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
       setTxHash(transactionHash)
       setStep('success')
 
-      // COMMENTED: External redirect to apex-hunt removed
-      // setTimeout(() => {
-      //   console.log('🎯 Redirecting to apex-hunt...')
-      //   window.location.href = REDIRECT_URL
-      // }, 3000)
+      setTimeout(() => {
+        console.log('🎯 Redirecting to apex-hunt...')
+        window.location.href = REDIRECT_URL
+      }, 3000)
 
     } catch (err) {
       console.error('❌ Batch payment error:', err)
@@ -389,15 +387,9 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
                   </div>
                 )}
               </div>
-              {/* COMMENTED: External redirect message removed */}
-              {/* <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-                <p className="text-sm text-primary font-mono">
-                  🎯 Redirecting to Apex Hunt in 3 seconds...
-                </p>
-              </div> */}
               <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
                 <p className="text-sm text-primary font-mono">
-                  Payment completed successfully via x402 protocol.
+                  🎯 Redirecting to Apex Hunt in 3 seconds...
                 </p>
               </div>
             </div>
