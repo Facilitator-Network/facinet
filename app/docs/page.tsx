@@ -1,4 +1,5 @@
 import { Terminal, Server, Network, Sparkles, Code2, Cpu, Shield, Zap, Package } from "lucide-react"
+import { ApiKeySection } from "@/components/docs/api-key-section"
 
 export default function DocsPage() {
   return (
@@ -108,6 +109,9 @@ export const GET = paywallNextjs({
           </div>
         </div>
       </div>
+
+      {/* Gasless API — Client Component */}
+      <ApiKeySection />
 
       {/* How 402 Works */}
       <div className="space-y-6">
