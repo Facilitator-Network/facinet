@@ -52,8 +52,10 @@ export async function POST(request: NextRequest) {
 
     // Verify payment on-chain
     try {
-      const { verifyRegistrationPayment } = await import('@/lib/verify-payment');
-      const verification = await verifyRegistrationPayment(paymentTxHash, wallet, network);
+      const { verifyPayment } = await import('@/lib/verify-payment');
+      const platformWallet = process.env.NEXT_PUBLIC_PAYMENT_RECIPIENT || '';
+      const API_KEY_PRICE = '10000000'; // 10 USDC (6 decimals)
+      const verification = await verifyPayment(paymentTxHash, wallet, platformWallet, API_KEY_PRICE, network);
       if (!verification.valid) {
         return NextResponse.json(
           { error: `Payment verification failed: ${verification.error}` },
