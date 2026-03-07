@@ -26,6 +26,7 @@ import {
   getTypedDataForSigning,
   createSignedAuthorization,
 } from "@/lib/erc3009"
+import { ApiKeySection } from "@/components/docs/api-key-section"
 
 interface Facilitator {
   id: string
@@ -255,15 +256,14 @@ export default function DemoPage() {
             <p className="text-lg md:text-xl text-white/50 font-light font-mono max-w-2xl mx-auto">
               Try the x402 paywall live and get your gasless API key.
             </p>
-
-            <a
-              href="/docs#gasless-api"
-              className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg font-mono font-bold text-sm uppercase tracking-wider hover:bg-white/90 transition-all"
-            >
-              Get API Key — 10 USDC
-              <ArrowRight size={16} />
-            </a>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Gasless API Key — inline purchase */}
+      <section className="pb-12 relative">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+          <ApiKeySection />
         </div>
       </section>
 
