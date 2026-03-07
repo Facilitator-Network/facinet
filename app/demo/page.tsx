@@ -255,6 +255,14 @@ export default function DemoPage() {
             <p className="text-lg md:text-xl text-white/50 font-light font-mono max-w-2xl mx-auto">
               Try the x402 paywall live and get your gasless API key.
             </p>
+
+            <a
+              href="/docs#gasless-api"
+              className="inline-flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg font-mono font-bold text-sm uppercase tracking-wider hover:bg-white/90 transition-all"
+            >
+              Get API Key — 10 USDC
+              <ArrowRight size={16} />
+            </a>
           </motion.div>
         </div>
       </section>
@@ -785,47 +793,7 @@ export default function DemoPage() {
         </div>
       </section>
 
-      {/* ====== SECTION 4: GASLESS API KEY ====== */}
-      <section className="py-24 relative border-t border-white/5">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="p-8 md:p-12 rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl text-center space-y-6"
-          >
-            <div className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5">
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary">
-                Gasless API
-              </span>
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-white font-mono uppercase tracking-tight">
-              Make Anything Gasless
-            </h2>
-            <p className="text-white/50 font-mono text-sm max-w-xl mx-auto">
-              Get an API key to execute any on-chain transaction without gas. Your users never pay gas — Facinet facilitators handle it. <strong className="text-white">1,000 calls for 10 USDC.</strong>
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="/docs#gasless-api"
-                className="group flex items-center gap-2 bg-white text-black px-8 py-4 rounded-lg font-mono font-bold text-sm uppercase tracking-wider hover:bg-white/90 transition-all"
-              >
-                Get API Key — 10 USDC
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </a>
-              <a
-                href="/docs"
-                className="group flex items-center gap-2 border border-white/20 text-white/70 px-6 py-4 rounded-lg font-mono text-sm uppercase tracking-wider hover:bg-white/5 hover:text-white transition-all"
-              >
-                View Docs
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ====== SECTION 5: ADD TO YOUR APP CTA ====== */}
+      {/* ====== SECTION 4: ADD TO YOUR APP CTA ====== */}
       <section className="py-24 relative border-t border-white/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
           <motion.div
