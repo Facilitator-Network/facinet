@@ -92,27 +92,27 @@ export default function HomePage() {
       {/* 1. Hero Section */}
       <HeroSection data={heroData} onGetDemoClick={() => setShowDemoPaymentModal(true)} />
 
+      {/* 2. Whitelist Apply */}
+      <WaitlistSection />
+
       <div className="space-y-0">
-        {/* 2. What is X402 */}
+        {/* 3. What is X402 */}
         <X402Section data={X402_DATA} />
 
-        {/* 3. Facilitator */}
+        {/* 4. Facilitator */}
         <FacilitatorSection data={FACILITATOR_DEFINITION_DATA} />
 
-        {/* 4. Comparison Table */}
+        {/* 5. Comparison Table */}
         <ComparisonTableSection data={COMPARISON_TABLE_DATA} />
 
-        {/* 5. Product Suite */}
+        {/* 6. Product Suite */}
         <ProductsSection data={PRODUCTS_DATA} />
 
-        {/* 6. Ways to Use */}
+        {/* 7. Ways to Use */}
         <WaysToUseSection data={WAYS_TO_USE_DATA} />
 
-        {/* 7. Vendor Benefits */}
+        {/* 8. Vendor Benefits */}
         <VendorBenefitsSection />
-
-        {/* 8. Waitlist */}
-        <WaitlistSection />
       </div>
 
       <Footer data={FOOTER_DATA} />

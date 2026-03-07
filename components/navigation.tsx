@@ -53,7 +53,7 @@ export function Navigation() {
 
   const links = [
     { href: "/", label: "Home" },
-    { href: "/demo", label: "Demo" },
+    { href: "/demo", label: "API" },
     { href: "/facilitator", label: "Facilitators" },
     { href: "/explorer", label: "Dashboard" },
     // COMMENTED: Dead nav link removed — agents page not active
