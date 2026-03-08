@@ -67,13 +67,13 @@ function getEventBadgeStyle(eventType: string): string {
     case "facilitator_added":
       return "text-blue-400 bg-blue-500/10 border-blue-500/20"
     case "facilitator_activated":
-      return "text-green-400 bg-green-500/10 border-green-500/20"
+      return "text-blue-400/80 bg-blue-500/5 border-blue-500/10"
     case "transaction":
-      return "text-purple-400 bg-purple-500/10 border-purple-500/20"
+      return "text-blue-400 bg-blue-500/10 border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.1)]"
     case "status_changed":
-      return "text-yellow-400 bg-yellow-500/10 border-yellow-500/20"
+      return "text-white/60 bg-white/5 border-white/10"
     case "contract_execution":
-      return "text-cyan-400 bg-cyan-500/10 border-cyan-500/20"
+      return "text-blue-300 bg-blue-500/10 border-blue-500/20"
     default:
       return "text-white/40 bg-white/5 border-white/10"
   }
@@ -256,27 +256,21 @@ export default function ExplorerPage() {
     <div className="relative py-8 md:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* ── Header ───────────────────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-4 mb-16"
-        >
+        {/* 1. HERO HEADER */}
+        <div className="space-y-4 mb-16">
           <div className="flex items-center gap-3 text-primary mb-4">
             <div className="h-px w-12 bg-primary" />
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-xs font-bold font-mono text-green-400 uppercase tracking-wider">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
-              LIVE
-            </div>
+            <span className="text-sm font-mono uppercase tracking-widest text-primary font-bold">Network Explorer</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold font-mono text-white uppercase tracking-tight">
-            Network Dashboard
+            X402 Network Explorer
           </h1>
           <p className="text-xl text-white/50 max-w-none font-light leading-relaxed">
-            Real-time network statistics, facilitator leaderboard, and transaction explorer
+            Real-time network statistics, facilitator leaderboard, and transaction explorer.
           </p>
-        </motion.div>
+        </div>
+
+        <div className="border-t border-white/5 mb-16" />
 
         <div className="border-t border-white/5 mb-12" />
 

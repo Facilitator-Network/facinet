@@ -46,7 +46,7 @@ export function DetailedArchitectureDiagram() {
       {/* SDK Layer */}
       <Layer title="SDK Layer (npm install facinet)">
         <div className="flex flex-col items-center gap-4">
-          <div className="p-3 bg-green-500/20 border border-green-500/50 rounded text-green-300 font-mono text-sm">
+          <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded text-blue-300 font-mono text-sm shadow-[0_0_15px_rgba(59,130,246,0.1)]">
             Facinet SDK
           </div>
           <div className="flex gap-8 text-xs text-muted-foreground">
@@ -96,7 +96,7 @@ export function DetailedArchitectureDiagram() {
       {/* Blockchain */}
       <Layer title="Blockchain - Avalanche Fuji">
         <div className="flex flex-col items-center gap-4">
-            <div className="p-4 bg-yellow-500/20 border border-yellow-500/50 rounded text-yellow-300 font-bold">
+            <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded text-white font-bold shadow-[0_0_20px_rgba(59,130,246,0.1)]">
                 USDC Contract (ERC-3009)
             </div>
             <div className="text-xs text-muted-foreground p-2 border rounded">
@@ -142,17 +142,17 @@ export function HighLevelArchitectureDiagram() {
                 </div>
 
                 {/* Arrow */}
-                 <div className="flex-1 h-[2px] w-full bg-gradient-to-r from-primary to-yellow-500 relative hidden md:block">
+                <div className="flex-1 h-[2px] w-full bg-gradient-to-r from-primary to-blue-300/30 relative hidden md:block">
                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black px-2 text-xs text-muted-foreground whitespace-nowrap">
                         0-Gas Txs
                      </div>
-                 </div>
-                 <ArrowDown className="md:hidden text-muted-foreground" />
+                </div>
+                <ArrowDown className="md:hidden text-muted-foreground" />
 
                 {/* Blockchain */}
                 <div className="flex flex-col items-center gap-2">
-                     <div className="w-20 h-20 rounded-full bg-yellow-500/20 border-2 border-yellow-500 flex items-center justify-center">
-                        <Database className="h-8 w-8 text-yellow-400" />
+                     <div className="w-20 h-20 rounded-full bg-blue-500/10 border-2 border-blue-500/40 flex items-center justify-center">
+                        <Database className="h-8 w-8 text-blue-400" />
                     </div>
                     <span className="font-bold text-lg">Blockchain</span>
                     <span className="text-xs text-muted-foreground">Settlement</span>

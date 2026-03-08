@@ -56,7 +56,7 @@ export default function DemoPage() {
     setApiLoading(true)
     setError("")
     try {
-      const res = await fetch("/api/demo/weather")
+      const res = await fetch("/api/weather")
       const data = await res.json()
       setApiResponse(data)
       setActiveStep(2)
@@ -153,7 +153,7 @@ export default function DemoPage() {
       const txHash = result.txHash || result.tx || result.transaction
 
       // Now call the API with payment header
-      const paidRes = await fetch("/api/demo/weather", {
+      const paidRes = await fetch("/api/weather", {
         headers: { "x-payment": txHash || "paid" },
       })
       const paidData = await paidRes.json()
@@ -192,7 +192,7 @@ export default function DemoPage() {
     // Short delay for realism
     await new Promise((r) => setTimeout(r, 1500))
 
-    const res = await fetch("/api/demo/weather", {
+    const res = await fetch("/api/weather", {
       headers: { "x-demo-mode": "true" },
     })
     const data = await res.json()
@@ -233,32 +233,24 @@ export default function DemoPage() {
   ]
 
   return (
-    <div className="min-h-screen pt-20 pb-24">
-      {/* ====== SECTION 1: HERO ====== */}
-      <section className="py-16 md:py-24 relative">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-6"
-          >
-            <div className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5">
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary">
-                API & Demo
-              </span>
-            </div>
-
-            <h1 className="text-4xl md:text-6xl font-bold text-white uppercase tracking-tight font-mono">
-              Facinet API
-            </h1>
-
-            <p className="text-lg md:text-xl text-white/50 font-light font-mono max-w-2xl mx-auto">
-              Try the x402 paywall live and get your gasless API key.
-            </p>
-          </motion.div>
+    <div className="relative py-8 md:py-12 space-y-12">
+      {/* 1. HERO HEADER */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="space-y-4 mb-16">
+          <div className="flex items-center gap-3 text-primary mb-4">
+             <div className="h-px w-12 bg-primary" />
+             <span className="text-sm font-mono uppercase tracking-widest text-primary font-bold">API & Demo</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold font-mono text-white uppercase tracking-tight">
+            Build with Facinet
+          </h1>
+          <p className="text-xl text-white/50 max-w-none font-light leading-relaxed">
+            Try the x402 paywall live and get your gasless API key. The simplest way to integrate decentralized payments.
+          </p>
         </div>
-      </section>
+
+        <div className="border-t border-white/5 mb-16" />
+      </div>
 
       {/* Gasless API Key — inline purchase */}
       <section className="pb-12 relative">
@@ -283,10 +275,10 @@ export default function DemoPage() {
                       className={`
                         w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center border transition-all duration-300
                         ${isComplete
-                          ? "bg-primary/20 border-primary/50 text-primary"
+                          ? "bg-white/30 border-white/50 text-white shadow-[0_0_20px_rgba(255,255,255,0.15)]"
                           : isActive
-                            ? "bg-white/10 border-white/30 text-white"
-                            : "bg-black/40 border-white/10 text-white/30"
+                            ? "bg-white border-white text-black shadow-[0_0_30px_rgba(255,255,255,0.4)] scale-110"
+                            : "bg-white/20 border-white/30 text-white shadow-[0_0_15px_rgba(255,255,255,0.05)]"
                         }
                       `}
                     >
@@ -299,7 +291,7 @@ export default function DemoPage() {
                     <span
                       className={`
                         mt-2 text-[9px] md:text-[10px] font-mono uppercase tracking-wider
-                        ${isActive ? "text-white" : isComplete ? "text-primary/70" : "text-white/30"}
+                        ${isActive ? "text-white font-black" : isComplete ? "text-white/90" : "text-white"}
                       `}
                     >
                       {step.label}
@@ -309,7 +301,7 @@ export default function DemoPage() {
                     <div
                       className={`
                         w-12 md:w-24 h-px mx-2 md:mx-4 mb-6 transition-all duration-300
-                        ${isComplete ? "bg-primary/40" : "bg-white/10"}
+                        ${isComplete ? "bg-white/60" : "bg-white/30"}
                       `}
                     />
                   )}
@@ -340,69 +332,69 @@ export default function DemoPage() {
                 </div>
 
                 {/* Code Block */}
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-xl blur-2xl opacity-40" />
-                  <div className="relative rounded-xl overflow-hidden bg-[#0A0A0A] border border-white/10 shadow-2xl">
-                    {/* Code window header */}
-                    <div className="flex items-center gap-4 px-4 py-3 bg-white/5 border-b border-white/5">
-                      <div className="flex gap-1.5">
-                        <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
-                        <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-                        <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+                  <div className="relative group">
+                    <div className="relative rounded-xl overflow-hidden bg-black/40 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] backdrop-blur-xl group-hover:border-white/40 transition-all duration-500">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+                      {/* Code window header */}
+                      <div className="flex items-center gap-4 px-4 py-3 bg-white/5 border-b border-white/5">
+                        <div className="flex gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-white/20" />
+                          <div className="w-3 h-3 rounded-full bg-white/10" />
+                          <div className="w-3 h-3 rounded-full bg-white/5" />
+                        </div>
+                        <div className="text-xs text-white/40 font-mono select-none uppercase tracking-widest">server.js</div>
                       </div>
-                      <div className="text-xs text-white/40 font-mono select-none">server.js</div>
-                    </div>
                     {/* Code content */}
                     <div className="p-4 md:p-6 overflow-x-auto">
                       <pre className="font-mono text-xs md:text-sm leading-relaxed">
-                        <span className="text-gray-500">{"// Developer adds one line to protect their API"}</span>{"\n"}
-                        <span className="text-purple-400">const</span>{" "}
+                        <span className="text-white/40 italic">{"// Developer adds one line to protect their API"}</span>{"\n"}
+                        <span className="text-blue-400">const</span>{" "}
                         <span className="text-white">{"{ "}</span>
-                        <span className="text-blue-400">paywall</span>
+                        <span className="text-blue-300">paywall</span>
                         <span className="text-white">{" } = "}</span>
-                        <span className="text-yellow-300">require</span>
+                        <span className="text-white/70">require</span>
                         <span className="text-white">{"("}</span>
-                        <span className="text-green-400">{"'facinet-sdk'"}</span>
+                        <span className="text-blue-400/70">{"'facinet-sdk'"}</span>
                         <span className="text-white">{");"}</span>{"\n\n"}
                         <span className="text-blue-400">app</span>
                         <span className="text-white">.</span>
-                        <span className="text-yellow-300">get</span>
+                        <span className="text-blue-300">get</span>
                         <span className="text-white">{"("}</span>
-                        <span className="text-green-400">{"'/api/premium-weather'"}</span>
+                        <span className="text-blue-400/70">{"'/api/premium-weather'"}</span>
                         <span className="text-white">{","}</span>{"\n"}
                         <span className="text-white">{"  "}</span>
-                        <span className="text-yellow-300">paywall</span>
+                        <span className="text-blue-300">paywall</span>
                         <span className="text-white">{"({"}</span>{"\n"}
                         <span className="text-white">{"    "}</span>
-                        <span className="text-blue-400">amount</span>
+                        <span className="text-white/80">amount</span>
                         <span className="text-white">{": "}</span>
-                        <span className="text-green-400">{"'0.10'"}</span>
+                        <span className="text-blue-400/70">{"'0.10'"}</span>
                         <span className="text-white">{","}</span>{"\n"}
                         <span className="text-white">{"    "}</span>
-                        <span className="text-blue-400">recipient</span>
+                        <span className="text-white/80">recipient</span>
                         <span className="text-white">{": "}</span>
-                        <span className="text-green-400">{"'0xDEV_WALLET'"}</span>
+                        <span className="text-blue-400/70">{"'0xDEV_WALLET'"}</span>
                         <span className="text-white">{","}</span>{"\n"}
                         <span className="text-white">{"    "}</span>
-                        <span className="text-blue-400">network</span>
+                        <span className="text-white/80">network</span>
                         <span className="text-white">{": "}</span>
-                        <span className="text-green-400">{"'avalanche-fuji'"}</span>{"\n"}
+                        <span className="text-blue-400/70">{"'avalanche-fuji'"}</span>{"\n"}
                         <span className="text-white">{"  }),"}</span>{"\n"}
                         <span className="text-white">{"  ("}</span>
-                        <span className="text-blue-400">req</span>
+                        <span className="text-white/80">req</span>
                         <span className="text-white">{", "}</span>
-                        <span className="text-blue-400">res</span>
-                        <span className="text-white">{") "}</span>
-                        <span className="text-purple-400">{"=>"}</span>
+                        <span className="text-white/80">res</span>
+                        <span className="text-white">{" ) "}</span>
+                        <span className="text-blue-400">{"=>"}</span>
                         <span className="text-white">{" {"}</span>{"\n"}
                         <span className="text-white">{"    "}</span>
-                        <span className="text-blue-400">res</span>
+                        <span className="text-white/80">res</span>
                         <span className="text-white">.</span>
-                        <span className="text-yellow-300">json</span>
+                        <span className="text-blue-300">json</span>
                         <span className="text-white">{"({ "}</span>
-                        <span className="text-blue-400">forecast</span>
+                        <span className="text-white/80">forecast</span>
                         <span className="text-white">{": "}</span>
-                        <span className="text-green-400">{"'Sunny, 24C'"}</span>
+                        <span className="text-blue-400/70">{"'Sunny, 24C'"}</span>
                         <span className="text-white">{" });"}</span>{"\n"}
                         <span className="text-white">{"  }"}</span>{"\n"}
                         <span className="text-white">{");"}</span>
@@ -420,7 +412,7 @@ export default function DemoPage() {
                   <button
                     onClick={callDemoApi}
                     disabled={apiLoading}
-                    className="group flex items-center gap-3 bg-white text-black px-8 py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    className="group flex items-center gap-3 bg-white/10 border border-white/20 text-white/80 px-8 py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-white hover:text-black hover:border-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg"
                   >
                     {apiLoading ? (
                       <>
@@ -466,33 +458,32 @@ export default function DemoPage() {
                   </div>
                 </div>
 
-                {/* JSON Response */}
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-red-600/10 to-orange-600/10 rounded-xl blur-2xl opacity-40" />
-                  <div className="relative rounded-xl overflow-hidden bg-[#0A0A0A] border border-white/10 shadow-2xl">
-                    <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/5">
-                      <div className="flex items-center gap-4">
-                        <div className="flex gap-1.5">
-                          <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
-                          <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-                          <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+                    <div className="relative group">
+                      <div className="relative rounded-xl overflow-hidden bg-black/40 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] backdrop-blur-xl group-hover:border-white/40 transition-all duration-500">
+                        <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent pointer-events-none opacity-20" />
+                        <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/5">
+                          <div className="flex items-center gap-4">
+                            <div className="flex gap-1.5">
+                              <div className="w-3 h-3 rounded-full bg-white/20" />
+                              <div className="w-3 h-3 rounded-full bg-white/10" />
+                              <div className="w-3 h-3 rounded-full bg-white/5" />
+                            </div>
+                            <div className="text-xs text-white/40 font-mono select-none uppercase tracking-widest">response.json</div>
+                          </div>
+                          <button
+                            onClick={() => copyToClipboard(JSON.stringify(apiResponse, null, 2))}
+                            className="text-white/30 hover:text-white/70 transition-colors"
+                          >
+                            <Copy size={12} />
+                          </button>
                         </div>
-                        <div className="text-xs text-white/40 font-mono select-none">response.json</div>
+                        <div className="p-4 md:p-6 overflow-x-auto">
+                          <pre className="font-mono text-xs md:text-sm leading-relaxed text-white/80">
+                            {JSON.stringify(apiResponse, null, 2)}
+                          </pre>
+                        </div>
                       </div>
-                      <button
-                        onClick={() => copyToClipboard(JSON.stringify(apiResponse, null, 2))}
-                        className="text-white/30 hover:text-white/70 transition-colors"
-                      >
-                        <Copy size={14} />
-                      </button>
                     </div>
-                    <div className="p-4 md:p-6 overflow-x-auto">
-                      <pre className="font-mono text-xs md:text-sm leading-relaxed text-white/80">
-                        {JSON.stringify(apiResponse, null, 2)}
-                      </pre>
-                    </div>
-                  </div>
-                </div>
 
                 {/* Explanation */}
                 <div className="p-5 rounded-xl border border-white/10 bg-white/5">
@@ -665,38 +656,37 @@ export default function DemoPage() {
                   <h2 className="text-2xl md:text-3xl font-bold text-white font-mono uppercase tracking-tight">
                     Payment Complete
                   </h2>
-                  <p className="text-green-400 font-mono text-sm font-bold">
+                  <p className="text-white/70 font-mono text-sm">
                     Payment settled on Avalanche. Data received. Zero gas paid by you.
                   </p>
                 </div>
 
-                {/* Success Response JSON */}
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-green-600/15 to-emerald-600/15 rounded-xl blur-2xl opacity-50" />
-                  <div className="relative rounded-xl overflow-hidden bg-[#0A0A0A] border border-green-500/20 shadow-2xl">
-                    <div className="flex items-center justify-between px-4 py-3 bg-green-500/5 border-b border-green-500/10">
-                      <div className="flex items-center gap-4">
-                        <div className="flex gap-1.5">
-                          <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
-                          <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
-                          <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+                    <div className="relative group">
+                      <div className="relative rounded-xl overflow-hidden bg-black/40 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] backdrop-blur-xl group-hover:border-white/40 transition-all duration-500">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none opacity-10" />
+                        <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/10">
+                          <div className="flex items-center gap-4">
+                            <div className="flex gap-1.5">
+                              <div className="w-3 h-3 rounded-full bg-white/20" />
+                              <div className="w-3 h-3 rounded-full bg-white/10" />
+                              <div className="w-3 h-3 rounded-full bg-white/5" />
+                            </div>
+                            <div className="text-xs text-white/40 font-mono select-none uppercase tracking-widest">200 OK - response.json</div>
+                          </div>
+                          <button
+                            onClick={() => copyToClipboard(JSON.stringify(paymentResult, null, 2))}
+                            className="text-white/30 hover:text-white/70 transition-colors"
+                          >
+                            <Copy size={12} />
+                          </button>
                         </div>
-                        <div className="text-xs text-green-400/60 font-mono select-none">200 OK - response.json</div>
+                        <div className="p-4 md:p-6 overflow-x-auto">
+                          <pre className="font-mono text-xs md:text-sm leading-relaxed text-white/80">
+                            {JSON.stringify(paymentResult, null, 2)}
+                          </pre>
+                        </div>
                       </div>
-                      <button
-                        onClick={() => copyToClipboard(JSON.stringify(paymentResult, null, 2))}
-                        className="text-white/30 hover:text-white/70 transition-colors"
-                      >
-                        <Copy size={14} />
-                      </button>
                     </div>
-                    <div className="p-4 md:p-6 overflow-x-auto">
-                      <pre className="font-mono text-xs md:text-sm leading-relaxed text-white/80">
-                        {JSON.stringify(paymentResult, null, 2)}
-                      </pre>
-                    </div>
-                  </div>
-                </div>
 
                 {/* Restart */}
                 <div className="flex justify-center">
@@ -744,13 +734,13 @@ export default function DemoPage() {
                 icon: User,
                 title: "User / Agent",
                 description: "Calls API. Gets 402. Signs payment authorization. Gets data. Zero gas fees.",
-                color: "purple",
+                color: "blue",
               },
               {
                 icon: Server,
                 title: "Facilitator",
                 description: "Receives signed auth. Pays gas on behalf of user. Settles on Avalanche.",
-                color: "green",
+                color: "blue",
               },
             ].map((role, i) => {
               const Icon = role.icon
@@ -766,18 +756,14 @@ export default function DemoPage() {
                   <div
                     className={`
                       w-12 h-12 rounded-xl flex items-center justify-center mb-5
-                      ${role.color === "blue" ? "bg-blue-500/10 border border-blue-500/20" : ""}
-                      ${role.color === "purple" ? "bg-purple-500/10 border border-purple-500/20" : ""}
-                      ${role.color === "green" ? "bg-green-500/10 border border-green-500/20" : ""}
+                      ${role.color === "blue" ? "bg-white/5 border border-white/10" : ""}
+                      ${role.color === "purple" ? "bg-white/5 border border-white/10" : ""}
+                      ${role.color === "green" ? "bg-white/5 border border-white/10" : ""}
                     `}
                   >
                     <Icon
                       size={22}
-                      className={`
-                        ${role.color === "blue" ? "text-blue-400" : ""}
-                        ${role.color === "purple" ? "text-purple-400" : ""}
-                        ${role.color === "green" ? "text-green-400" : ""}
-                      `}
+                      className="text-white/80"
                     />
                   </div>
                   <h3 className="text-lg font-bold text-white font-mono uppercase tracking-wider mb-3">
@@ -811,30 +797,31 @@ export default function DemoPage() {
             </p>
 
             {/* NPM Install */}
-            <div className="relative">
-              <div className="rounded-xl overflow-hidden bg-[#0A0A0A] border border-white/10 shadow-2xl">
+            <div className="relative group">
+              <div className="relative rounded-xl overflow-hidden bg-black/40 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] backdrop-blur-xl group-hover:border-white/40 transition-all duration-500 text-left">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
                 <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/5">
                   <div className="flex items-center gap-4">
                     <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
-                      <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-                      <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-white/5" />
                     </div>
-                    <div className="text-xs text-white/40 font-mono select-none">terminal</div>
+                    <div className="text-[10px] text-white/40 font-mono select-none uppercase tracking-widest">terminal</div>
                   </div>
                   <button
                     onClick={() => copyToClipboard("npm install facinet-sdk")}
                     className="text-white/30 hover:text-white/70 transition-colors flex items-center gap-1.5"
                   >
-                    <Copy size={12} />
-                    <span className="text-[10px] font-mono uppercase tracking-wider">
+                    <Copy size={10} />
+                    <span className="text-[9px] font-mono uppercase tracking-wider">
                       {copied ? "Copied!" : "Copy"}
                     </span>
                   </button>
                 </div>
                 <div className="p-5">
                   <pre className="font-mono text-sm md:text-base text-white/80">
-                    <span className="text-green-400">$</span> npm install facinet-sdk
+                    <span className="text-blue-400">$</span> npm install facinet-sdk
                   </pre>
                 </div>
               </div>

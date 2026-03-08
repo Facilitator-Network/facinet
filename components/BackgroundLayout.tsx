@@ -35,11 +35,11 @@ export function BackgroundLayout() {
       >
         <ColorBends
           colors={[
-            "#FF0000", "#FF0000", // Red Red
+            "#0000FF", "#0066FF", // Blue variants
             "#000000", // Black (Separator)
-            "#0000FF", "#0000FF", // Blue Blue
+            "#00AAFF", "#00FFFF", // Cyan variants
             "#000000", // Black (Separator)
-            "#00FF00", "#00FF00", // Green Green
+            "#0033FF", "#0088FF", // More blue variants
             "#000000"  // Black (Separator)
           ]}
           rotation={0}

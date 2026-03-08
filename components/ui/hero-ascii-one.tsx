@@ -30,13 +30,13 @@ export default function HeroAsciiWrapper({ children }: HeroAsciiWrapperProps) {
             
             {/* Nav Links (Desktop) */}
             <div className="hidden lg:flex items-center gap-6 ml-8">
-               {['Home', 'API', 'Facilitator', 'Chain', 'Dashboard', 'Institution', 'Docs'].map((item) => (
+               {['Home', 'API', 'Facilitator', 'Chain', 'Explorer', 'Institution', 'Docs'].map((item) => (
                  <Link
                    key={item}
                    href={
                      item === 'Home' ? '/' :
-                     item === 'API' ? '/demo' :
-                     item === 'Dashboard' ? '/explorer' :
+                     item === 'API' ? '/api' :
+                     item === 'Explorer' ? '/explorer' :
                      `/${item.toLowerCase()}`
                    }
                    className="text-white/70 hover:text-white text-xs font-mono tracking-widest uppercase transition-colors"
@@ -163,10 +163,15 @@ export default function HeroAsciiWrapper({ children }: HeroAsciiWrapperProps) {
 
             {/* Navigation Links */}
             <nav className="flex flex-col gap-4">
-              {['Home', 'API', 'Facilitator', 'Chain', 'Dashboard', 'Institution', 'Docs'].map((item) => (
+              {['Home', 'API', 'Facilitator', 'Chain', 'Explorer', 'Institution', 'Docs'].map((item) => (
                 <Link
                   key={item}
-                  href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                  href={
+                    item === 'Home' ? '/' : 
+                    item === 'API' ? '/api' : 
+                    item === 'Explorer' ? '/explorer' :
+                    `/${item.toLowerCase()}`
+                  }
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-2xl font-mono font-light text-white/80 hover:text-white hover:pl-4 transition-all"
                 >
@@ -179,7 +184,7 @@ export default function HeroAsciiWrapper({ children }: HeroAsciiWrapperProps) {
           <div className="mt-auto border-t border-white/10 pt-6">
             <div className="flex justify-between text-xs font-mono text-white/40 uppercase tracking-widest">
               <span>Net: Active</span>
-              <span>v1.0.0</span>
+              <span>v0.2.3</span>
             </div>
           </div>
         </div>
@@ -222,7 +227,7 @@ export default function HeroAsciiWrapper({ children }: HeroAsciiWrapperProps) {
                 <div key={i} className="w-1 h-3 bg-white/10" style={{ height: `${[12, 8, 14, 6, 16, 10, 8, 12][i % 8]}px` }}></div>
               ))}
             </div>
-            <span>V1.0.0</span>
+            <span>V0.2.3</span>
           </div>
           
           <div className="flex items-center gap-2 lg:gap-4 text-[8px] lg:text-[9px] font-mono text-white/50">

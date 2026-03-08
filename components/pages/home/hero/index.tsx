@@ -50,6 +50,11 @@ interface HeroSectionProps {
 export function HeroSection({ data, onGetDemoClick }: HeroSectionProps) {
   // State for auto-expansion animation
   const [isAutoExpanded, setIsAutoExpanded] = useState(false)
+  const [activeOption, setActiveOption] = useState<'get' | 'watch'>('get')
+  const [hoveredOption, setHoveredOption] = useState<'get' | 'watch' | null>(null)
+
+  // Determine which option to highlight visually
+  const displayOption = hoveredOption || activeOption
 
   useEffect(() => {
     // Sequence: Wait 500ms -> Expand -> Wait 2s -> Collapse
@@ -140,16 +145,55 @@ export function HeroSection({ data, onGetDemoClick }: HeroSectionProps) {
               {data.description}
             </p>
             
-            {/* Call to Actions */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center w-full z-20 pointer-events-auto">
-                <GlowingBorderBtn onClick={onGetDemoClick}>
+            {/* Call to Actions - Three options in one */}
+            <div className="flex flex-col sm:flex-row items-center gap-0 justify-center w-full z-20 pointer-events-auto border border-[#27272a] p-1 rounded-full backdrop-blur-xl bg-black/50 shadow-2xl max-w-fit mx-auto">
+              
+              {/* Demo/Watch Group */}
+              <div className="flex items-center">
+                <button 
+                  onMouseEnter={() => setHoveredOption('get')}
+                  onMouseLeave={() => setHoveredOption(null)}
+                  onClick={() => {
+                    setActiveOption('get')
+                    onGetDemoClick?.()
+                  }}
+                  className={cn(
+                    "px-6 sm:px-8 h-12 rounded-full text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 relative z-10 whitespace-nowrap",
+                    displayOption === 'get' 
+                      ? "text-white bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
+                      : "text-white/50 hover:text-white/80 hover:bg-white/5"
+                  )}
+                >
+                  <PrimaryIcon className="w-4 h-4 shrink-0" />
                   {data.ctaPrimary.text}
-                </GlowingBorderBtn>
+                </button>
 
-                <Button variant="ghost" className="rounded-full bg-white/5 backdrop-blur-sm border border-white/10 gap-2 text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300 h-auto py-3 px-6 text-sm font-medium">
-                  <SecondaryIcon className="w-4 h-4" />
+                <button 
+                  onMouseEnter={() => setHoveredOption('watch')}
+                  onMouseLeave={() => setHoveredOption(null)}
+                  onClick={() => setActiveOption('watch')}
+                  className={cn(
+                    "px-6 sm:px-8 h-12 rounded-full text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 relative z-10 whitespace-nowrap",
+                    displayOption === 'watch' 
+                      ? "text-white bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
+                      : "text-white/50 hover:text-white/80 hover:bg-white/5"
+                  )}
+                >
+                  <SecondaryIcon className="w-4 h-4 shrink-0" />
                   {data.ctaSecondary.text}
-                </Button>
+                </button>
+              </div>
+
+              {/* Apply for Whitelisting */}
+              <button
+                onClick={() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-8 h-12 rounded-full text-sm font-bold transition-all duration-500 flex items-center justify-center gap-2 relative z-10 whitespace-nowrap bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black hover:border-white group"
+              >
+                <span className="relative z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] group-hover:drop-shadow-none">
+                  Apply for Whitelisting
+                </span>
+                <span className="absolute -inset-0.5 bg-white/5 rounded-full blur-sm opacity-50 group-hover:opacity-0 transition-opacity" />
+              </button>
             </div> 
 
             {/* Stats Grid */}

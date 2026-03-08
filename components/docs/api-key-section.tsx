@@ -188,7 +188,7 @@ export function ApiKeySection() {
           whitelistStatus === 'approved' ? (
             <button
               onClick={() => { setShowPurchaseModal(true); setPurchaseStep('confirm'); setError(''); setNewApiKey('') }}
-              className="px-4 py-2 rounded-lg bg-white text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-white/90 transition-colors"
+              className="px-4 py-2 rounded-lg bg-white text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-white/90 transition-all border border-white"
             >
               Get API Key — 10 USDC
             </button>
@@ -199,7 +199,7 @@ export function ApiKeySection() {
           ) : (
             <a
               href="/facilitator"
-              className="px-4 py-2 rounded-lg bg-purple-600 text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-purple-500 transition-colors"
+              className="px-4 py-2 rounded-lg bg-white/10 text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-white/20 transition-colors border border-white/10"
             >
               Apply for Whitelist First
             </a>
@@ -277,7 +277,7 @@ export function ApiKeySection() {
               ) : whitelistStatus === 'pending' ? (
                 <p className="text-yellow-300 font-mono text-xs">Your whitelist application is under review</p>
               ) : (
-                <a href="/facilitator" className="inline-block px-6 py-2 rounded-lg bg-purple-600 text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-purple-500 transition-colors">
+                <a href="/facilitator" className="inline-block px-6 py-2 rounded-lg bg-white/10 text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-white/20 transition-colors border border-white/10">
                   Apply for Whitelist First
                 </a>
               )}
@@ -386,7 +386,7 @@ export function ApiKeySection() {
 
               {purchaseStep === 'processing' && (
                 <div className="space-y-6 text-center py-8">
-                  <Loader2 className="w-16 h-16 text-primary animate-spin mx-auto" />
+                  <Loader2 className="w-16 h-16 text-white animate-spin mx-auto opacity-20" />
                   <div>
                     <h3 className="text-xl font-bold text-white mb-2">Processing Payment...</h3>
                     <p className="text-sm text-white/60 font-mono">Sign the transaction in your wallet</p>
@@ -410,7 +410,7 @@ export function ApiKeySection() {
                   <div className="p-4 rounded-lg bg-black/50 border border-primary/30 space-y-2">
                     <p className="text-[10px] text-white/40 font-mono uppercase tracking-widest">Your API Key</p>
                     <div className="flex items-center gap-2">
-                      <code className="flex-1 text-xs text-primary font-mono break-all select-all">{newApiKey}</code>
+                      <code className="flex-1 text-xs text-white/90 font-mono break-all select-all">{newApiKey}</code>
                       <button
                         onClick={() => handleCopy(newApiKey)}
                         className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"

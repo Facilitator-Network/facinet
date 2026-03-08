@@ -660,7 +660,7 @@ export default function FacilitatorPage() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* HERO HEADER */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-4 mb-16">
           <div className="flex items-center gap-3 text-primary mb-4">
              <div className="h-px w-12 bg-primary" />
              <span className="text-sm font-mono uppercase tracking-widest text-primary font-bold">Network Dashboard</span>
@@ -672,6 +672,8 @@ export default function FacilitatorPage() {
             The backbone of the autonomous economy. Run a node, earn fees, and secure agent transactions.
           </p>
         </div>
+
+        <div className="border-t border-white/5 mb-16" />
 
 
 
@@ -703,10 +705,10 @@ export default function FacilitatorPage() {
 
         {/* 1. NETWORK STATS GRID */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-24">
-          <StatCard label="Active Nodes" value={loading ? "..." : networkStats.activeNodes.toString()} icon={Server} color="text-green-400" />
-          <StatCard label="Total Staked" value={networkStats.totalStaked} icon={Wallet} color="text-purple-400" />
-          <StatCard label="Fees Generated" value={networkStats.feesGenerated} icon={Activity} color="text-blue-400" />
-          <StatCard label="Transactions" value={networkStats.transactions.toString()} icon={ArrowRight} color="text-orange-400" />
+          <StatCard label="Active Nodes" value={loading ? "..." : networkStats.activeNodes.toString()} icon={Server} color="text-white" />
+          <StatCard label="Total Staked" value={networkStats.totalStaked} icon={Wallet} color="text-white" />
+          <StatCard label="Fees Generated" value={networkStats.feesGenerated} icon={Activity} color="text-white" />
+          <StatCard label="Transactions" value={networkStats.transactions.toString()} icon={ArrowRight} color="text-white" />
           <StatCard label="Network Uptime" value={networkStats.networkUptime} icon={Clock} color="text-white" />
         </div>
 
@@ -902,7 +904,7 @@ export default function FacilitatorPage() {
                              <div className={`px-2 py-1 rounded text-[10px] font-mono uppercase tracking-wide flex items-center gap-1.5 ${
                                facilitator.status === 'active'
                                  ? 'bg-green-500/10 border border-green-500/20 text-green-400'
-                                 : 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-400'
+                                 : 'bg-blue-500/10 border border-blue-500/20 text-blue-400'
                              }`}>
                                 <div className={`w-1 h-1 rounded-full ${facilitator.status === 'active' ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'}`} />
                                 {facilitator.status}
@@ -946,13 +948,13 @@ export default function FacilitatorPage() {
                       <span>Deploy Now</span>
                     </button>
                   ) : whitelistStatus === 'pending' ? (
-                    <div className="px-6 py-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-300 font-mono text-sm">
+                    <div className="px-6 py-3 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 font-mono text-sm animate-pulse">
                       Your whitelist application is under review
                     </div>
                   ) : (
                     <button
                       onClick={() => setShowWhitelistModal(true)}
-                      className="group flex items-center gap-2 mx-auto px-8 py-3 bg-purple-600 text-white rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-purple-500 transition-all"
+                      className="group flex items-center gap-2 mx-auto px-10 py-4 bg-blue-600 text-white rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-blue-500 transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_40px_rgba(37,99,235,0.5)]"
                     >
                       <span>Apply for Whitelist</span>
                     </button>
@@ -1003,9 +1005,9 @@ export default function FacilitatorPage() {
                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wide ${
                          node.status === 'active'
                            ? 'bg-green-500/10 border border-green-500/20 text-green-400'
-                           : 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-400'
+                           : 'bg-blue-500/10 border border-blue-500/20 text-blue-400'
                        }`}>
-                         <span className={`w-1.5 h-1.5 rounded-full ${node.status === 'active' ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'}`} />
+                         <span className={`w-1.5 h-1.5 rounded-full ${node.status === 'active' ? 'bg-blue-500' : 'bg-white/20'}`} />
                          {node.status}
                        </span>
                     </div>
@@ -1101,7 +1103,7 @@ export default function FacilitatorPage() {
                     <div className="w-full bg-white/5 border border-primary/20 rounded-lg px-4 py-3 text-primary font-mono text-sm break-all">
                       {address || '0x...'}
                     </div>
-                    <p className="text-[10px] text-green-400/60 font-mono">✓ Auto-filled from your connected wallet</p>
+                    <p className="text-[10px] text-blue-400/60 font-mono">✓ Auto-filled from your connected wallet</p>
                   </div>
 
                   <button
@@ -1168,8 +1170,8 @@ export default function FacilitatorPage() {
 
                      {/* Network Mismatch Warning */}
                      {chain && chain.id !== getNetworkConfig(selectedNetwork).chain.id && (
-                       <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                         <p className="text-sm text-yellow-300 font-mono">
+                       <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10">
+                         <p className="text-sm text-white/70 font-mono">
                            ⚠️ Please switch your wallet to {NETWORK_CONFIGS[selectedNetwork].displayName}
                          </p>
                        </div>
@@ -1406,7 +1408,7 @@ export default function FacilitatorPage() {
                          <div className="w-full bg-primary/10 border border-primary/20 rounded-lg px-4 py-3 text-primary font-mono text-sm break-all">
                             {paymentAddress || address || '0x...'}
                          </div>
-                         <p className="text-[10px] text-green-400/60 font-mono">✓ All earned fees will be sent to your connected wallet automatically.</p>
+                         <p className="text-[10px] text-blue-400/60 font-mono">✓ All earned fees will be sent to your connected wallet automatically.</p>
                       </div>
 
                       <button

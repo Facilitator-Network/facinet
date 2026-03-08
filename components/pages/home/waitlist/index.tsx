@@ -53,7 +53,7 @@ export function WaitlistSection() {
   }
 
   return (
-    <section className="pt-16 pb-12 relative bg-transparent border-t border-white/5">
+    <section id="waitlist" className="pt-16 pb-12 relative bg-transparent border-t border-white/5">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         <div className="max-w-5xl mx-auto rounded-3xl border border-white/10 bg-black/60 backdrop-blur-xl overflow-hidden relative">
@@ -85,7 +85,7 @@ export function WaitlistSection() {
               </h2>
 
               <p className="text-white/50 text-lg max-w-xl mx-auto leading-relaxed font-light">
-                Get whitelisted to deploy facilitators and purchase gasless API keys. Start earning in the x402 network.
+                Get whitelisted to deploy facilitators and purchase gasless API keys.
               </p>
             </div>
 

@@ -14,7 +14,7 @@ export function DocsContent() {
           <div className="flex items-center gap-3">
             <h1 className="text-4xl font-bold text-foreground">Getting Started</h1>
             <Badge variant="outline" className="text-xs">
-              v1.0.0
+              v0.2.3
             </Badge>
           </div>
           <p className="text-lg text-muted-foreground leading-relaxed">
@@ -117,7 +117,7 @@ await client.connect();`}</code>
                   <code>{`const agent = await client.registerAgent({
   name: 'my-trading-agent',
   capabilities: ['trading', 'arbitrage'],
-  version: '1.0.0'
+  version: '0.2.3'
 });
 
 console.log('Agent registered:', agent.id);`}</code>

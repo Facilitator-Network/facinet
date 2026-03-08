@@ -11,7 +11,7 @@
  * - Dynamic icons are handled by `ICON_MAP` to avoid conditional logic in the render loop.
  */
 
-import { ShieldCheck, Landmark, MessageSquareText, LucideIcon, Check } from "lucide-react"
+import { ShieldCheck, Landmark, MessageSquareText, LucideIcon, Check, User, Link2, Zap, Shield, Activity } from "lucide-react"
 
 // Mapping string names from data to actual React Components
 // This allows the data file to store "ShieldCheck" as a string.
@@ -19,6 +19,11 @@ const ICON_MAP: Record<string, LucideIcon> = {
   ShieldCheck,
   Landmark,
   MessageSquareText,
+  User,
+  Link2,
+  Zap,
+  Shield,
+  Activity
 }
 
 interface FacilitatorSectionProps {
@@ -55,9 +60,9 @@ export function FacilitatorSection({ data }: FacilitatorSectionProps) {
               
               {/* Node 1: Client */}
               <div className="flex flex-col items-center gap-3">
-                 <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center relative">
-                    <span className="text-xl">👤</span>
-                    <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-black" />
+                 <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center relative transition-colors group-hover:border-white/40">
+                    <User className="h-6 w-6 text-white/70" />
+                    <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-white/40 rounded-full border-2 border-black" />
                  </div>
                  <span className="text-xs font-mono text-white/40 uppercase tracking-widest">Client</span>
               </div>
@@ -70,11 +75,11 @@ export function FacilitatorSection({ data }: FacilitatorSectionProps) {
 
               {/* Node 2: Facilitator (Center) */}
               <div className="flex flex-col items-center gap-3 relative">
-                 <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
-                 <div className="h-16 w-16 rounded-2xl bg-black/80 border border-primary/50 flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(var(--primary),0.3)]">
-                    <ShieldCheck className="h-8 w-8 text-primary" />
+                 <div className="absolute inset-0 bg-white/10 blur-xl rounded-full" />
+                 <div className="h-16 w-16 rounded-2xl bg-black/80 border border-white/40 flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                    <ShieldCheck className="h-8 w-8 text-white" />
                  </div>
-                 <span className="text-xs font-mono text-primary font-bold uppercase tracking-widest">Facilitator</span>
+                 <span className="text-xs font-mono text-white font-bold uppercase tracking-widest">Facilitator</span>
               </div>
 
               {/* Arrow 2 */}
@@ -85,8 +90,8 @@ export function FacilitatorSection({ data }: FacilitatorSectionProps) {
 
               {/* Node 3: Blockchain */}
               <div className="flex flex-col items-center gap-3">
-                 <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center">
-                    <span className="text-xl">🔗</span>
+                 <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center transition-colors group-hover:border-white/40">
+                    <Link2 className="h-6 w-6 text-white/70" />
                  </div>
                  <span className="text-xs font-mono text-white/40 uppercase tracking-widest">Chain</span>
               </div>
@@ -119,11 +124,11 @@ export function FacilitatorSection({ data }: FacilitatorSectionProps) {
                  const Icon = ICON_MAP[item.icon] || ShieldCheck
                  return (
                    <div key={index} className="flex gap-4 p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors group">
-                     <div className="shrink-0 h-10 w-10 rounded-lg bg-black/40 flex items-center justify-center border border-white/10 group-hover:border-primary/50 transition-colors">
-                       <Icon className="h-5 w-5 text-primary" />
+                     <div className="shrink-0 h-10 w-10 rounded-lg bg-black/40 flex items-center justify-center border border-white/10 group-hover:border-white/40 transition-colors">
+                       <Icon className="h-5 w-5 text-white/80" />
                      </div>
                      <div>
-                        <h4 className="text-base font-bold text-white mb-2 uppercase tracking-wide group-hover:text-primary transition-colors font-mono">{item.title}</h4>
+                        <h4 className="text-base font-bold text-white mb-2 uppercase tracking-wide group-hover:text-white transition-colors font-mono">{item.title}</h4>
                         <p className="text-sm text-white/60 leading-relaxed font-light">{item.description}</p>
                      </div>
                    </div>
@@ -138,17 +143,21 @@ export function FacilitatorSection({ data }: FacilitatorSectionProps) {
               {data.benefits?.title}
             </h3>
             <div className="space-y-4">
-              {data.benefits?.items.map((item, index) => (
-                <div key={index} className="flex gap-4 p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors group">
-                  <div className="shrink-0 h-10 w-10 rounded-lg bg-black/40 flex items-center justify-center border border-white/10 group-hover:border-green-500/50 transition-colors">
-                    <Check className="h-5 w-5 text-green-400" />
+              {data.benefits?.items.map((item, index) => {
+                const benefitIcons = [Zap, Shield, Activity]
+                const Icon = benefitIcons[index % benefitIcons.length]
+                return (
+                  <div key={index} className="flex gap-4 p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors group">
+                    <div className="shrink-0 h-10 w-10 rounded-lg bg-black/40 flex items-center justify-center border border-white/10 group-hover:border-white/40 transition-colors">
+                      <Icon className="h-5 w-5 text-white/70" />
+                    </div>
+                    <div>
+                      <h4 className="text-base font-bold text-white mb-2 uppercase tracking-wide group-hover:text-white transition-colors font-mono">{item.title}</h4>
+                      <p className="text-sm text-white/60 leading-relaxed font-light">{item.description}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-base font-bold text-white mb-2 uppercase tracking-wide group-hover:text-green-400 transition-colors font-mono">{item.title}</h4>
-                    <p className="text-sm text-white/60 leading-relaxed font-light">{item.description}</p>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
 

@@ -50,7 +50,7 @@ export function AnimatedArchitectureFlow({
       {title && (
         <div className="relative z-10 mb-8 md:mb-12 text-center md:text-left">
           <h3 className="text-xl md:text-2xl font-bold font-mono text-white uppercase tracking-tight mb-2 flex items-center gap-3">
-             <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(var(--primary),0.5)]" />
+             <div className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.3)]" />
              {title}
           </h3>
           {description && <p className="text-white/50 text-sm md:text-base max-w-2xl font-light font-mono">{description}</p>}
@@ -74,8 +74,8 @@ export function AnimatedArchitectureFlow({
                    <div 
                       className={`
                         w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center relative z-20 transition-all duration-500
-                        ${step.type === 'start' ? 'bg-white/10 border-2 border-primary text-primary shadow-[0_0_20px_rgba(var(--primary),0.3)]' : 
-                          step.type === 'end' ? 'bg-white/10 border-2 border-green-500 text-green-500 shadow-[0_0_20px_rgba(34,197,94,0.3)]' : 
+                        ${step.type === 'start' ? 'bg-white/10 border-2 border-white text-white shadow-[0_0_20px_rgba(255,255,255,0.2)]' : 
+                          step.type === 'end' ? 'bg-white/10 border-2 border-white/60 text-white/90 shadow-[0_0_20px_rgba(255,255,255,0.15)]' : 
                           'bg-black/60 border border-white/20 text-white/70 hover:border-white/50 hover:text-white'}
                       `}
                    >
@@ -83,7 +83,7 @@ export function AnimatedArchitectureFlow({
                       
                       {/* Status Dot */}
                       <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-black ${
-                          step.type === 'start' ? 'bg-primary' : step.type === 'end' ? 'bg-green-500' : 'bg-white/20'
+                          step.type === 'start' ? 'bg-white' : step.type === 'end' ? 'bg-white/60' : 'bg-white/20'
                       }`} />
                    </div>
 
@@ -93,7 +93,7 @@ export function AnimatedArchitectureFlow({
                         {step.label}
                       </div>
                       {step.subLabel && (
-                        <div className="text-[10px] font-mono text-primary/80 uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded-full inline-block">
+                        <div className="text-[10px] font-mono text-white/70 uppercase tracking-widest bg-white/10 px-2 py-0.5 rounded-full inline-block">
                           {step.subLabel}
                         </div>
                       )}
@@ -119,7 +119,7 @@ export function AnimatedArchitectureFlow({
                             ease: "linear",
                             delay: index * 0.5 // Stagger the flows
                           }}
-                          className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-primary to-transparent opacity-70"
+                          className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white to-transparent opacity-70"
                        />
                     </div>
                     

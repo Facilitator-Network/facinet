@@ -18,7 +18,7 @@ export default function DocsPage() {
           <code className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm font-mono text-primary">
             npm install facinet-sdk
           </code>
-          <span className="text-xs text-white/40 font-mono">v1.0.0</span>
+          <span className="text-xs text-white/40 font-mono">v0.2.3</span>
         </div>
       </div>
 
@@ -30,21 +30,36 @@ export default function DocsPage() {
 
         <div className="space-y-4">
           {/* Install */}
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] overflow-hidden">
-            <div className="px-4 py-2 border-b border-white/5 text-xs font-mono text-white/40 uppercase tracking-widest">
-              Install
-            </div>
-            <pre className="p-4 text-sm font-mono text-white/80 overflow-x-auto">
+          <div className="relative group">
+            <div className="relative rounded-xl overflow-hidden bg-black/40 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] backdrop-blur-xl group-hover:border-white/40 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+              <div className="flex items-center gap-4 px-4 py-3 bg-white/5 border-b border-white/5">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-white/20" />
+                  <div className="w-3 h-3 rounded-full bg-white/10" />
+                  <div className="w-3 h-3 rounded-full bg-white/5" />
+                </div>
+                <div className="text-xs text-white/40 font-mono select-none uppercase tracking-widest">Install</div>
+              </div>
+              <pre className="p-4 md:p-6 text-sm font-mono text-white/80 overflow-x-auto leading-relaxed">
 {`npm install facinet-sdk`}
-            </pre>
+              </pre>
+            </div>
           </div>
 
           {/* Basic Payment */}
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] overflow-hidden">
-            <div className="px-4 py-2 border-b border-white/5 text-xs font-mono text-white/40 uppercase tracking-widest">
-              Make a Gasless Payment
-            </div>
-            <pre className="p-4 text-sm font-mono text-white/80 overflow-x-auto">
+          <div className="relative group">
+            <div className="relative rounded-xl overflow-hidden bg-black/40 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] backdrop-blur-xl group-hover:border-white/40 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+              <div className="flex items-center gap-4 px-4 py-3 bg-white/5 border-b border-white/5">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-white/20" />
+                  <div className="w-3 h-3 rounded-full bg-white/10" />
+                  <div className="w-3 h-3 rounded-full bg-white/5" />
+                </div>
+                <div className="text-xs text-white/40 font-mono select-none uppercase tracking-widest">Basic Payment</div>
+              </div>
+              <pre className="p-4 md:p-6 text-sm font-mono text-white/80 overflow-x-auto leading-relaxed">
 {`import { Facinet } from 'facinet-sdk'
 
 const facinet = new Facinet({ network: 'avalanche-fuji' })
@@ -56,7 +71,8 @@ const result = await facinet.pay({
 })
 
 console.log('TX:', result.txHash)`}
-            </pre>
+              </pre>
+            </div>
           </div>
         </div>
       </div>
@@ -73,11 +89,18 @@ console.log('TX:', result.txHash)`}
 
         <div className="space-y-4">
           {/* Express */}
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] overflow-hidden">
-            <div className="px-4 py-2 border-b border-white/5 text-xs font-mono text-white/40 uppercase tracking-widest">
-              Express.js — One Line Paywall
-            </div>
-            <pre className="p-4 text-sm font-mono text-white/80 overflow-x-auto">
+          <div className="relative group">
+            <div className="relative rounded-xl overflow-hidden bg-black/40 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] backdrop-blur-xl group-hover:border-white/40 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+              <div className="flex items-center gap-4 px-4 py-3 bg-white/5 border-b border-white/5">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-white/20" />
+                  <div className="w-3 h-3 rounded-full bg-white/10" />
+                  <div className="w-3 h-3 rounded-full bg-white/5" />
+                </div>
+                <div className="text-xs text-white/40 font-mono select-none uppercase tracking-widest">Express.js</div>
+              </div>
+              <pre className="p-4 md:p-6 text-sm font-mono text-white/80 overflow-x-auto leading-relaxed">
 {`import { paywall } from 'facinet-sdk'
 
 // Charge 0.10 USDC per request
@@ -88,15 +111,23 @@ app.get('/api/premium', paywall({
   // req.x402 contains payment proof
   res.json({ data: 'premium content' })
 })`}
-            </pre>
+              </pre>
+            </div>
           </div>
 
           {/* Next.js */}
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] overflow-hidden">
-            <div className="px-4 py-2 border-b border-white/5 text-xs font-mono text-white/40 uppercase tracking-widest">
-              Next.js API Route
-            </div>
-            <pre className="p-4 text-sm font-mono text-white/80 overflow-x-auto">
+          <div className="relative group">
+            <div className="relative rounded-xl overflow-hidden bg-black/40 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] backdrop-blur-xl group-hover:border-white/40 transition-all duration-500">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+              <div className="flex items-center gap-4 px-4 py-3 bg-white/5 border-b border-white/5">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-white/20" />
+                  <div className="w-3 h-3 rounded-full bg-white/10" />
+                  <div className="w-3 h-3 rounded-full bg-white/5" />
+                </div>
+                <div className="text-xs text-white/40 font-mono select-none uppercase tracking-widest">Next.js</div>
+              </div>
+              <pre className="p-4 md:p-6 text-sm font-mono text-white/80 overflow-x-auto leading-relaxed">
 {`import { paywallNextjs } from 'facinet-sdk'
 
 export const GET = paywallNextjs({
@@ -105,7 +136,8 @@ export const GET = paywallNextjs({
 })(async (req) => {
   return Response.json({ data: 'premium content' })
 })`}
-            </pre>
+              </pre>
+            </div>
           </div>
         </div>
       </div>
@@ -174,8 +206,18 @@ export const GET = paywallNextjs({
           <Terminal className="h-5 w-5 text-primary" /> CLI Commands
         </h2>
 
-        <div className="rounded-xl border border-white/10 bg-white/[0.02] overflow-hidden">
-          <pre className="p-4 text-sm font-mono text-white/80 overflow-x-auto">
+        <div className="relative group">
+          <div className="relative rounded-xl overflow-hidden bg-black/40 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.05)] backdrop-blur-xl group-hover:border-white/40 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+            <div className="flex items-center gap-4 px-4 py-3 bg-white/5 border-b border-white/5">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-white/20" />
+                <div className="w-3 h-3 rounded-full bg-white/10" />
+                <div className="w-3 h-3 rounded-full bg-white/5" />
+              </div>
+              <div className="text-xs text-white/40 font-mono select-none uppercase tracking-widest">CLI Commands</div>
+            </div>
+            <pre className="p-4 md:p-6 text-sm font-mono text-white/80 overflow-x-auto leading-relaxed">
 {`# Install globally
 npm install -g facinet-sdk
 
@@ -187,7 +229,8 @@ facinet facilitator list
 
 # Check facilitator status
 facinet facilitator status`}
-          </pre>
+            </pre>
+          </div>
         </div>
       </div>
 

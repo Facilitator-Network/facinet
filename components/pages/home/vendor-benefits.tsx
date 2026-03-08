@@ -47,9 +47,9 @@ export function VendorBenefitsSection() {
                 <div className="p-8 rounded-2xl bg-gradient-to-br from-white/5 to-transparent border border-white/10 flex flex-col justify-center gap-4">
                     <div className="flex items-center justify-between text-sm font-mono text-white/60 border-b border-white/10 pb-2">
                     <span>Without Facinet</span>
-                    <span className="text-red-400">Complex</span>
+                    <span className="text-white/40">Complex</span>
                     </div>
-                    <div className="bg-black/50 p-4 rounded-lg font-mono text-xs text-red-200/50 space-y-2">
+                    <div className="bg-black/50 p-4 rounded-lg font-mono text-xs text-white/30 space-y-2">
                     <div>[Vendor] &larr;&rarr; [Eth RPC]</div>
                     <div>[Vendor] &larr;&rarr; [Avax RPC]</div>
                     <div>[Vendor] &larr;&rarr; [Base RPC]</div>
@@ -58,10 +58,10 @@ export function VendorBenefitsSection() {
 
                     <div className="flex items-center justify-between text-sm font-mono text-white/60 border-b border-white/10 pb-2 pt-4">
                     <span>With Facinet</span>
-                    <span className="text-green-400">Simple</span>
+                    <span className="text-white/90">Simple</span>
                     </div>
-                    <div className="bg-black/50 p-4 rounded-lg font-mono text-xs text-green-200/70 border border-green-500/20">
-                    <div>[Vendor] &larr;&rarr; <span className="text-green-400 font-bold">[FACINET API]</span></div>
+                    <div className="bg-black/50 p-4 rounded-lg font-mono text-xs text-white/70 border border-white/20">
+                    <div>[Vendor] &larr;&rarr; <span className="text-white/90 font-bold">[FACINET API]</span></div>
                     </div>
                 </div>
             </div>

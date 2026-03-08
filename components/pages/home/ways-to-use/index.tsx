@@ -64,12 +64,12 @@ export function WaysToUseSection({ data }: WaysToUseSectionProps) {
                 return (
                   <div key={index} className="flex gap-4 group">
                     <div className="flex-shrink-0 mt-1">
-                      <div className="h-8 w-8 rounded bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 transition-colors">
-                        <Icon className="h-4 w-4 text-primary" />
+                      <div className="h-8 w-8 rounded bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-white/10 transition-colors">
+                        <Icon className="h-4 w-4 text-white/60" />
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors uppercase tracking-tight">
+                      <h3 className="text-lg font-bold text-white group-hover:text-white transition-colors uppercase tracking-tight">
                         {item.title}
                       </h3>
                       <p className="text-white/50 text-sm mt-1">
@@ -93,8 +93,8 @@ export function WaysToUseSection({ data }: WaysToUseSectionProps) {
                
                {/* 1. Autonomous Resources (CPU) */}
                <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md flex flex-col justify-between group hover:bg-white/10 transition-colors">
-                  <div className="h-10 w-10 rounded-lg bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
-                    <Cpu className="h-5 w-5 text-purple-400" />
+                  <div className="h-10 w-10 rounded-lg bg-white/5 flex items-center justify-center border border-white/10">
+                    <Cpu className="h-5 w-5 text-white/60" />
                   </div>
                   <div>
                     <div className="h-2 w-24 bg-white/10 rounded mb-2" />
@@ -107,8 +107,8 @@ export function WaysToUseSection({ data }: WaysToUseSectionProps) {
 
                {/* 2. APIs (Code) */}
                <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md flex flex-col justify-between group hover:bg-white/10 transition-colors">
-                  <div className="h-10 w-10 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/30">
-                    <Code className="h-5 w-5 text-primary" />
+                  <div className="h-10 w-10 rounded-lg bg-white/5 flex items-center justify-center border border-white/10">
+                    <Code className="h-5 w-5 text-white/60" />
                   </div>
                   <div>
                     <div className="h-2 w-20 bg-white/10 rounded mb-2" />
@@ -122,8 +122,8 @@ export function WaysToUseSection({ data }: WaysToUseSectionProps) {
                {/* 3. Cross-Chain (Network) - Wide Span (col-span-2) */}
                <div className="col-span-2 p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md flex items-center justify-between group hover:bg-white/10 transition-colors">
                   <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-lg bg-pink-500/20 flex items-center justify-center border border-pink-500/30">
-                      <Network className="h-6 w-6 text-pink-400" />
+                    <div className="h-12 w-12 rounded-lg bg-white/5 flex items-center justify-center border border-white/10">
+                      <Network className="h-6 w-6 text-white/60" />
                     </div>
                     <div className="space-y-2">
                       <div className="h-2.5 w-32 bg-white/10 rounded" />
@@ -132,7 +132,7 @@ export function WaysToUseSection({ data }: WaysToUseSectionProps) {
                   </div>
                   {/* Decorative status indicators */}
                   <div className="hidden sm:flex gap-2">
-                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                    <div className="h-2 w-2 rounded-full bg-white/40 animate-pulse" />
                     <div className="h-2 w-2 rounded-full bg-white/20" />
                     <div className="h-2 w-2 rounded-full bg-white/20" />
                   </div>
@@ -140,8 +140,8 @@ export function WaysToUseSection({ data }: WaysToUseSectionProps) {
 
                {/* 4. Micropayments (Image) */}
                <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md flex flex-col justify-between group hover:bg-white/10 transition-colors">
-                  <div className="h-10 w-10 rounded-lg bg-yellow-500/20 flex items-center justify-center border border-yellow-500/30">
-                    <Image className="h-5 w-5 text-yellow-400" />
+                  <div className="h-10 w-10 rounded-lg bg-white/5 flex items-center justify-center border border-white/10">
+                    <Image className="h-5 w-5 text-white/60" />
                   </div>
                   <div>
                     <div className="h-2 w-24 bg-white/10 rounded mb-2" />
@@ -154,8 +154,8 @@ export function WaysToUseSection({ data }: WaysToUseSectionProps) {
 
                {/* 5. Marketplaces (Store) */}
                <div className="p-5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md flex flex-col justify-between group hover:bg-white/10 transition-colors">
-                  <div className="h-10 w-10 rounded-lg bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
-                    <Store className="h-5 w-5 text-blue-400" />
+                  <div className="h-10 w-10 rounded-lg bg-white/5 flex items-center justify-center border border-white/10">
+                    <Store className="h-5 w-5 text-white/60" />
                   </div>
                   <div>
                     <div className="h-2 w-20 bg-white/10 rounded mb-2" />

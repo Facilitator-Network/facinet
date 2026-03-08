@@ -47,8 +47,8 @@ const ArchitectureDiagram = () => (
               <span className="text-sm font-mono text-white font-bold">Owned Facilitator</span>
            </div>
            <ArrowDown className="text-white/20 mx-auto" size={16} />
-           <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center gap-3">
-              <Scale className="text-purple-400" size={20} />
+           <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center gap-3">
+              <Scale className="text-blue-400" size={20} />
               <div className="flex flex-col">
                 <span className="text-sm font-mono text-white font-bold">Policy Engine</span>
                 <span className="text-[10px] text-white/40">SLA Checks</span>
@@ -61,31 +61,31 @@ const ArchitectureDiagram = () => (
       <div className="flex md:flex-col gap-24 items-center justify-center">
          {/* Success Path */}
          <div className="flex items-center gap-2">
-            <div className="h-0.5 w-8 md:w-16 bg-green-500/30" />
-            <span className="text-[10px] font-mono text-green-400 uppercase bg-green-500/10 px-2 py-0.5 rounded">SLA Met</span>
-            <ArrowRight className="text-green-500/50" size={16} />
+            <div className="h-0.5 w-8 md:w-16 bg-blue-500/20" />
+            <span className="text-[10px] font-mono text-blue-400/80 uppercase bg-blue-500/5 px-2 py-0.5 rounded border border-blue-500/10">SLA Checked</span>
+            <ArrowRight className="text-blue-500/30" size={16} />
          </div>
          
          {/* Fail Path */}
          <div className="flex items-center gap-2">
-            <div className="h-0.5 w-8 md:w-16 bg-red-500/30" />
-            <span className="text-[10px] font-mono text-red-400 uppercase bg-red-500/10 px-2 py-0.5 rounded">Fallback</span>
-            <ArrowRight className="text-red-500/50" size={16} />
+            <div className="h-0.5 w-8 md:w-16 bg-white/10" />
+            <span className="text-[10px] font-mono text-white/40 uppercase bg-white/5 px-2 py-0.5 rounded border border-white/5">Fallback</span>
+            <ArrowRight className="text-white/20" size={16} />
          </div>
       </div>
 
       {/* External/Facinet Box */}
       <div className="flex-1 flex flex-col gap-8">
          {/* Settlement */}
-         <div className="p-6 rounded-2xl bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-500/20 flex items-center justify-between">
+         <div className="p-6 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
             <div className="flex items-center gap-3">
-               <Globe className="text-green-400" size={24} />
+               <Globe className="text-blue-400" size={24} />
                <div className="flex flex-col">
                   <span className="text-sm font-mono text-white font-bold">Settlement Chain</span>
                   <span className="text-[10px] text-white/50">Funds Moved</span>
                </div>
             </div>
-            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
          </div>
 
          {/* Distributed Facilitator */}
@@ -214,34 +214,20 @@ export default function InstitutionPage() {
         
         {/* 1. HERO HEADER */}
         {/* 1. HERO HEADER */}
-        <div className="relative space-y-6 max-w-5xl">
-          {/* Background Highlight */}
-          <div className="absolute -top-24 -left-20 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
-          
-          <div className="relative z-10">
-             <div className="flex items-center gap-3 text-primary mb-4">
-                <div className="h-px w-12 bg-primary" />
-                <span className="text-sm font-mono uppercase tracking-widest text-primary font-bold">Enterprise & Regulation</span>
-             </div>
-             <h1 className="text-4xl md:text-5xl font-bold font-mono text-white uppercase tracking-tight">
-               Institutional & <br className="hidden md:block"/> 
-               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/50">Regulated</span>{' '}
-               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Execution</span>
-             </h1>
-             <p className="text-xl text-white/50 max-w-3xl font-light leading-relaxed">
-                Enterprise-grade facilitator execution with <span className="text-white">compliance</span>, <span className="text-white">verifiability</span>, and guaranteed <span className="text-white">decentralized fallback</span>.
-             </p>
-             
-             {/* Hero Badges */}
-             <div className="flex flex-wrap gap-3 mt-8">
-                {['Audit-Ready Architecture', 'Compliance-First Design', 'Non-Custodial'].map((tag, i) => (
-                   <div key={i} className="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs font-mono uppercase tracking-wider text-white/70">
-                      {tag}
-                   </div>
-                ))}
-             </div>
+        <div className="space-y-4 mb-16">
+          <div className="flex items-center gap-3 text-primary mb-4">
+             <div className="h-px w-12 bg-primary" />
+             <span className="text-sm font-mono uppercase tracking-widest text-primary font-bold">Enterprise & Regulation</span>
           </div>
+          <h1 className="text-4xl md:text-5xl font-bold font-mono text-white uppercase tracking-tight">
+            Institutional Execution
+          </h1>
+          <p className="text-xl text-white/50 max-w-none font-light leading-relaxed">
+            Enterprise-grade facilitator execution with compliance, verifiability, and guaranteed decentralized fallback.
+          </p>
         </div>
+
+        <div className="border-t border-white/5 mb-16" />
 
         <div className="py-24 flex items-center justify-center">
            <div className="h-px w-full max-w-xs bg-gradient-to-r from-transparent via-white/10 to-transparent" />

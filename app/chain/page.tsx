@@ -101,8 +101,8 @@ export default function ChainPage() {
     <div className="relative py-8 md:py-12 space-y-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* 1. HERO WITH ARCHITECTURE */}
-        <div className="space-y-4">
+        {/* 1. HERO HEADER */}
+        <div className="space-y-4 mb-16">
           <div className="flex items-center gap-3 text-primary mb-4">
              <div className="h-px w-12 bg-primary" />
              <span className="text-sm font-mono uppercase tracking-widest text-primary font-bold">Architecture Deep Dive</span>
@@ -110,23 +110,31 @@ export default function ChainPage() {
           <h1 className="text-4xl md:text-5xl font-bold font-mono text-white uppercase tracking-tight">
             What is Facinet Chain?
           </h1>
-          <p className="text-xl text-white/50 max-w-none font-light leading-relaxed mb-12">
+          <p className="text-xl text-white/50 max-w-none font-light leading-relaxed">
             Facinet’s chain is the coordination layer that makes decentralized X402 payments reliable across networks—
             without moving user funds or introducing trust.
           </p>
-
-
-          <div className="w-full mt-12">
-             <div className="mb-4 flex items-center gap-2">
-                <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-xs font-mono text-green-400 uppercase tracking-widest">Live System Architecture</span>
-             </div>
-             <SystemArchitectureDiagram />
-          </div>
         </div>
 
-        <div className="border-t border-white/5 my-24" />
+        <div className="border-t border-white/5 mb-16" />
 
+        <div className="w-full mt-12">
+           <div className="mb-4 flex items-center gap-2">
+              <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-xs font-mono text-green-400 uppercase tracking-widest flex items-center gap-2">
+                Live System Architecture
+                <span className="px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] lowercase italic opacity-70">
+                  publishing soon
+                </span>
+              </span>
+           </div>
+           <SystemArchitectureDiagram />
+        </div>
+      </div>
+
+      <div className="border-t border-white/5 my-24" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* 2. KEY FEATURES - FEATURE GRID */}
         <div>
            <SectionHeading 
