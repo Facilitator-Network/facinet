@@ -25,17 +25,29 @@ export default function AdminPage() {
   const [stats, setStats] = useState({ pendingCount: 0, approvedCount: 0 })
   const [loading, setLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [adminSecret, setAdminSecret] = useState('')
+  const [secretSubmitted, setSecretSubmitted] = useState(false)
+  const [authError, setAuthError] = useState(false)
 
   const fetchData = async () => {
-    if (!address || !isAdmin) return
+    if (!address || !isAdmin || !adminSecret) return
     setLoading(true)
+    setAuthError(false)
     try {
-      const res = await fetch(`/api/whitelist/pending?admin=${address}`)
+      const res = await fetch('/api/whitelist/pending', {
+        headers: { 'x-admin-secret': adminSecret },
+      })
+      if (res.status === 403) {
+        setAuthError(true)
+        setSecretSubmitted(false)
+        return
+      }
       const data = await res.json()
       if (data.success) {
         setPending(data.pending || [])
         setApproved(data.approved || [])
         setStats(data.stats || { pendingCount: 0, approvedCount: 0 })
+        setSecretSubmitted(true)
       }
     } catch (error) {
       console.error('Failed to fetch whitelist data:', error)
@@ -45,16 +57,16 @@ export default function AdminPage() {
   }
 
   useEffect(() => {
-    if (isAdmin) fetchData()
-  }, [address, isAdmin])
+    if (isAdmin && adminSecret) fetchData()
+  }, [address, isAdmin, adminSecret])
 
   const handleApprove = async (wallet: string) => {
     setActionLoading(wallet)
     try {
       const res = await fetch('/api/whitelist/approve', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet, admin: address }),
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': adminSecret },
+        body: JSON.stringify({ wallet }),
       })
       const data = await res.json()
       if (data.success) {
@@ -75,8 +87,8 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/whitelist/reject', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wallet, admin: address }),
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': adminSecret },
+        body: JSON.stringify({ wallet }),
       })
       const data = await res.json()
       if (data.success) {
@@ -113,6 +125,37 @@ export default function AdminPage() {
           <XCircle className="w-16 h-16 text-red-400/50 mx-auto" />
           <h1 className="text-3xl font-bold font-mono text-white uppercase tracking-tight">Unauthorized</h1>
           <p className="text-white/40 font-mono text-sm">This page is restricted to admin wallets only.</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Admin secret gate
+  if (!secretSubmitted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-6 max-w-md w-full px-4">
+          <ShieldCheck className="w-16 h-16 text-white/20 mx-auto" />
+          <h1 className="text-3xl font-bold font-mono text-white uppercase tracking-tight">Admin Auth</h1>
+          <p className="text-white/40 font-mono text-sm">Enter admin secret to continue</p>
+          {authError && (
+            <p className="text-red-400 font-mono text-sm">Invalid secret. Try again.</p>
+          )}
+          <input
+            type="password"
+            value={adminSecret}
+            onChange={(e) => setAdminSecret(e.target.value)}
+            placeholder="Admin secret..."
+            className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white font-mono text-sm focus:outline-none focus:border-white/30"
+            onKeyDown={(e) => { if (e.key === 'Enter' && adminSecret) fetchData() }}
+          />
+          <button
+            onClick={fetchData}
+            disabled={!adminSecret}
+            className="w-full py-3 rounded-lg bg-white text-black font-mono font-bold uppercase tracking-wider text-sm hover:bg-white/90 disabled:opacity-50 transition-colors"
+          >
+            Authenticate
+          </button>
         </div>
       </div>
     )

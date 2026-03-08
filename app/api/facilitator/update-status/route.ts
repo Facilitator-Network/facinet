@@ -7,7 +7,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { updateFacilitatorStatus } from '@/lib/facilitator-storage';
 
+const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
+
 export async function POST(request: NextRequest) {
+  const authHeader = request.headers.get('x-admin-secret');
+  if (!ADMIN_SECRET || !authHeader || authHeader !== ADMIN_SECRET) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 403 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { id, status } = body;

@@ -6,19 +6,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRedis } from '@/lib/redis';
 
-const ADMIN_WALLET = (process.env.ADMIN_WALLET || '').toLowerCase();
+const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
 
 export async function POST(request: NextRequest) {
+  const authHeader = request.headers.get('x-admin-secret');
+  if (!ADMIN_SECRET || !authHeader || authHeader !== ADMIN_SECRET) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 403 }
+    );
+  }
+
   try {
     const body = await request.json();
-    const { wallet, admin } = body;
-
-    if (!admin || admin.toLowerCase() !== ADMIN_WALLET) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 403 }
-      );
-    }
+    const { wallet } = body;
 
     if (!wallet) {
       return NextResponse.json(

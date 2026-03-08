@@ -8,7 +8,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { encryptPrivateKey } from '@/lib/facilitator-crypto';
 
+const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
+
 export async function POST(request: NextRequest) {
+  const authHeader = request.headers.get('x-admin-secret');
+  if (!ADMIN_SECRET || !authHeader || authHeader !== ADMIN_SECRET) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 403 }
+    );
+  }
+
   try {
     const { privateKey } = await request.json();
 

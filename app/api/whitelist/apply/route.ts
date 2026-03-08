@@ -18,6 +18,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Input sanitization
+    const sanitizedName = String(name).trim().slice(0, 100).replace(/[<>]/g, '');
+    const sanitizedEmail = String(email).trim().slice(0, 200);
+
+    if (sanitizedName.length < 1) {
+      return NextResponse.json(
+        { error: 'Name is required' },
+        { status: 400 }
+      );
+    }
+
     if (!wallet.match(/^0x[a-fA-F0-9]{40}$/)) {
       return NextResponse.json(
         { error: 'Invalid wallet address' },
@@ -25,7 +36,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    if (!sanitizedEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       return NextResponse.json(
         { error: 'Invalid email address' },
         { status: 400 }
@@ -53,8 +64,8 @@ export async function POST(request: NextRequest) {
 
     // Store application
     const application = {
-      name,
-      email,
+      name: sanitizedName,
+      email: sanitizedEmail,
       wallet: walletLower,
       appliedAt: new Date().toISOString(),
     };
