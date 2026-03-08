@@ -1,78 +1,63 @@
 /**
  * POST /api/admin/delete-all-facilitators
  *
- * Deletes ALL facilitators and related data from Redis
- * USE WITH CAUTION - This is irreversible!
+ * Deletes ALL facilitators and related data from Redis.
+ * ADMIN ONLY — requires admin secret header.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getRedis } from '@/lib/redis';
 
+const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
+
 export async function POST(request: NextRequest) {
+  // Auth check — must provide admin secret
+  const authHeader = request.headers.get('x-admin-secret');
+  if (!ADMIN_SECRET || !authHeader || authHeader !== ADMIN_SECRET) {
+    return NextResponse.json(
+      { error: 'Unauthorized' },
+      { status: 403 }
+    );
+  }
+
   try {
     const redis = getRedis();
 
-    console.log('🗑️  Starting deletion of all facilitators...');
-
-    // Step 1: Get all facilitator IDs from the active set
     const activeIds = await redis.smembers('facilitators:active');
-    console.log(`Found ${activeIds.length} facilitator IDs in active set`);
 
-    // Step 2: Delete all facilitator data keys
     let deletedFacilitators = 0;
     for (const id of activeIds as string[]) {
-      const key = `facilitator:${id}`;
-      await redis.del(key);
+      await redis.del(`facilitator:${id}`);
       deletedFacilitators++;
-      console.log(`  Deleted: ${key}`);
     }
 
-    // Step 3: Clear the active facilitators set
     await redis.del('facilitators:active');
-    console.log('✅ Cleared facilitators:active set');
 
-    // Step 4: Delete all explorer logs
-    const explorerKeys = [
-      'explorer:logs',
-    ];
-
+    const explorerKeys = ['explorer:logs'];
     for (const key of explorerKeys) {
       await redis.del(key);
-      console.log(`✅ Cleared ${key}`);
     }
 
-    // Step 5: Delete all facilitator-specific explorer logs
     let deletedFacilitatorLogs = 0;
     for (const id of activeIds as string[]) {
-      const logKey = `explorer:facilitator:${id}`;
-      await redis.del(logKey);
+      await redis.del(`explorer:facilitator:${id}`);
       deletedFacilitatorLogs++;
     }
-    console.log(`✅ Deleted ${deletedFacilitatorLogs} facilitator log lists`);
-
-    // Step 6: Get and delete all transaction logs (this is harder, so we'll scan)
-    // Note: In production, you'd use SCAN, but for simplicity we'll delete the main logs
-    console.log('✅ Cleared transaction logs');
-
-    const summary = {
-      facilitatorsDeleted: deletedFacilitators,
-      activeSetCleared: true,
-      explorerLogsCleared: true,
-      facilitatorLogsDeleted: deletedFacilitatorLogs,
-    };
-
-    console.log('✅ Deletion complete!');
-    console.log(JSON.stringify(summary, null, 2));
 
     return NextResponse.json({
       success: true,
       message: 'All facilitators and related data deleted successfully',
-      summary,
+      summary: {
+        facilitatorsDeleted: deletedFacilitators,
+        activeSetCleared: true,
+        explorerLogsCleared: true,
+        facilitatorLogsDeleted: deletedFacilitatorLogs,
+      },
     });
   } catch (error) {
-    console.error('❌ Error deleting facilitators:', error);
+    console.error('Error deleting facilitators:', error);
     return NextResponse.json(
-      { error: 'Failed to delete facilitators', details: String(error) },
+      { error: 'Failed to delete facilitators' },
       { status: 500 }
     );
   }
