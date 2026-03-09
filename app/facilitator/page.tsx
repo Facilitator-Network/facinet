@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ShieldCheck, Server, Activity, Wallet, Clock, ArrowRight, Cloud, X, AlertCircle, Terminal, Trash2, RadioTower } from "lucide-react"
+import { ShieldCheck, Server, Activity, Wallet, Clock, ArrowRight, Cloud, X, AlertCircle, Terminal, Trash2, RadioTower, ChevronLeft, ChevronRight } from "lucide-react"
 import { useState, useEffect } from "react"
 import { AnimatedArchitectureFlow } from "@/components/ui/architecture-flow"
 import { SectionHeading } from "@/components/ui/section-heading"
@@ -84,6 +84,10 @@ export default function FacilitatorPage() {
   const [whitelistEmail, setWhitelistEmail] = useState('')
   const [whitelistSubmitting, setWhitelistSubmitting] = useState(false)
   const [whitelistMessage, setWhitelistMessage] = useState('')
+
+  // Pagination for active facilitators list
+  const [currentPage, setCurrentPage] = useState(1)
+  const ITEMS_PER_PAGE = 10
 
   const ADMIN_WALLET = process.env.NEXT_PUBLIC_ADMIN_WALLET || ''
   const isAdmin = address?.toLowerCase() === ADMIN_WALLET.toLowerCase()
@@ -1002,33 +1006,83 @@ export default function FacilitatorPage() {
               <div className="col-span-4 md:col-span-2 text-right">Status</div>
            </div>
 
-           {/* Table Rows (Real Data - Only Active) */}
-           <div className="space-y-2">
-             {loading ? (
-               <div className="text-center py-12 text-[var(--text-tertiary)]">Loading facilitators...</div>
-             ) : facilitators.filter(f => f.status === 'active').length > 0 ? (
-               facilitators.filter(f => f.status === 'active').map((node) => (
-                 <div key={node.id} className="grid grid-cols-12 gap-4 px-4 py-4 rounded-lg border border-[var(--bg-border)] hover:border-[var(--bg-border)] hover:bg-[var(--glass-subtle-bg)] transition-colors items-center">
-                    <div className="col-span-4 md:col-span-3 font-medium text-[var(--text-primary)] font-body">{node.name}</div>
-                    <div className="col-span-4 md:col-span-3 font-mono text-xs text-[var(--text-tertiary)] truncate">{node.id}</div>
-                    <div className="col-span-2 hidden md:block text-right text-sm text-[var(--text-secondary)] font-mono">{node.totalPayments || 0}</div>
-                    <div className="col-span-2 hidden md:block text-right text-sm text-[var(--text-secondary)] font-mono">N/A</div>
-                    <div className="col-span-4 md:col-span-2 flex justify-end">
-                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wide ${
-                         node.status === 'active'
-                           ? 'bg-[var(--success-bg)] border border-[var(--success-border)] text-[var(--success)]'
-                           : 'bg-[var(--accent-subtle)] border border-[var(--accent-muted)] text-[var(--accent)]'
-                       }`}>
-                         <span className={`w-1.5 h-1.5 rounded-full ${node.status === 'active' ? 'bg-[var(--accent)]' : 'bg-[var(--text-tertiary)]'}`} />
-                         {node.status}
-                       </span>
-                    </div>
+           {/* Table Rows (Real Data - Only Active, Paginated) */}
+           {(() => {
+             const activeFacilitators = facilitators.filter(f => f.status === 'active')
+             const totalPages = Math.max(1, Math.ceil(activeFacilitators.length / ITEMS_PER_PAGE))
+             const safePage = Math.min(currentPage, totalPages)
+             const startIdx = (safePage - 1) * ITEMS_PER_PAGE
+             const pageItems = activeFacilitators.slice(startIdx, startIdx + ITEMS_PER_PAGE)
+
+             return (
+               <>
+                 <div className="space-y-2">
+                   {loading ? (
+                     <div className="text-center py-12 text-[var(--text-tertiary)]">Loading facilitators...</div>
+                   ) : pageItems.length > 0 ? (
+                     pageItems.map((node) => (
+                       <div key={node.id} className="grid grid-cols-12 gap-4 px-4 py-4 rounded-lg border border-[var(--bg-border)] hover:border-[var(--bg-border)] hover:bg-[var(--glass-subtle-bg)] transition-colors items-center">
+                          <div className="col-span-4 md:col-span-3 font-medium text-[var(--text-primary)] font-body">{node.name}</div>
+                          <div className="col-span-4 md:col-span-3 font-mono text-xs text-[var(--text-tertiary)] truncate">{node.id}</div>
+                          <div className="col-span-2 hidden md:block text-right text-sm text-[var(--text-secondary)] font-mono">{node.totalPayments || 0}</div>
+                          <div className="col-span-2 hidden md:block text-right text-sm text-[var(--text-secondary)] font-mono">N/A</div>
+                          <div className="col-span-4 md:col-span-2 flex justify-end">
+                             <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wide ${
+                               node.status === 'active'
+                                 ? 'bg-[var(--success-bg)] border border-[var(--success-border)] text-[var(--success)]'
+                                 : 'bg-[var(--accent-subtle)] border border-[var(--accent-muted)] text-[var(--accent)]'
+                             }`}>
+                               <span className={`w-1.5 h-1.5 rounded-full ${node.status === 'active' ? 'bg-[var(--success)]' : 'bg-[var(--text-tertiary)]'}`} />
+                               {node.status}
+                             </span>
+                          </div>
+                       </div>
+                     ))
+                   ) : (
+                     <div className="text-center py-12 text-[var(--text-tertiary)] font-body">No facilitators found. Be the first to create one!</div>
+                   )}
                  </div>
-               ))
-             ) : (
-               <div className="text-center py-12 text-[var(--text-tertiary)] font-body">No facilitators found. Be the first to create one!</div>
-             )}
-           </div>
+
+                 {/* Pagination */}
+                 {!loading && activeFacilitators.length > ITEMS_PER_PAGE && (
+                   <div className="flex items-center justify-between pt-4">
+                     <span className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-wider">
+                       {startIdx + 1}–{Math.min(startIdx + ITEMS_PER_PAGE, activeFacilitators.length)} of {activeFacilitators.length}
+                     </span>
+                     <div className="flex items-center gap-1">
+                       <button
+                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                         disabled={safePage <= 1}
+                         className="p-1.5 rounded-lg border border-white/10 text-white/50 hover:bg-white/5 hover:text-white/80 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                       >
+                         <ChevronLeft size={14} />
+                       </button>
+                       {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                         <button
+                           key={page}
+                           onClick={() => setCurrentPage(page)}
+                           className={`w-7 h-7 rounded-lg font-mono text-[11px] font-bold transition-colors ${
+                             page === safePage
+                               ? 'bg-white/10 border border-white/20 text-white'
+                               : 'text-white/40 hover:text-white/70 hover:bg-white/5'
+                           }`}
+                         >
+                           {page}
+                         </button>
+                       ))}
+                       <button
+                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                         disabled={safePage >= totalPages}
+                         className="p-1.5 rounded-lg border border-white/10 text-white/50 hover:bg-white/5 hover:text-white/80 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                       >
+                         <ChevronRight size={14} />
+                       </button>
+                     </div>
+                   </div>
+                 )}
+               </>
+             )
+           })()}
         </div>
 
       </div>
