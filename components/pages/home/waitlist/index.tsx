@@ -106,35 +106,31 @@ export function WaitlistSection() {
                   </ConnectButton.Custom>
                 </div>
               ) : status === 'approved' ? (
-                <div className="bg-[var(--success-bg)] border border-[var(--success-border)] rounded-xl p-6 text-center animate-in fade-in zoom-in duration-300">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="h-12 w-12 rounded-full bg-[var(--success-bg)] flex items-center justify-center border border-[var(--success)] shadow-[0_0_15px_rgba(34,197,94,0.3)]">
-                      <CheckCircle2 className="h-6 w-6 text-[var(--success)]" />
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-[var(--text-primary)] font-bold font-mono text-lg">WHITELISTED</h3>
-                      <p className="text-[var(--text-secondary)] text-sm font-mono">
-                        You're approved! Deploy facilitators or get API keys.
-                      </p>
-                    </div>
-                    <a href="/facilitator" className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--accent-muted)] border border-[var(--accent-muted)] text-[var(--accent)] font-mono text-xs uppercase tracking-wider hover:bg-[var(--accent-muted)] transition-colors">
-                      <Shield className="h-4 w-4" /> Go to Activation Hub <ArrowRight className="h-4 w-4" />
-                    </a>
+                <div className="text-center space-y-6 animate-in fade-in duration-500">
+                  <div className="flex items-center justify-center gap-2 text-[var(--success)]">
+                    <CheckCircle2 className="h-4 w-4" />
+                    <span className="text-xs font-mono font-bold uppercase tracking-[0.2em]">Whitelisted</span>
                   </div>
+                  <p className="text-sm text-[var(--text-secondary)] font-body">
+                    You're approved. Deploy facilitators or get API keys.
+                  </p>
+                  <a
+                    href="/facilitator"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/15 bg-white/5 text-[var(--text-primary)] font-mono text-xs font-bold uppercase tracking-wider hover:bg-white/10 transition-colors"
+                  >
+                    Go to Activation Hub
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </a>
                 </div>
               ) : status === 'pending' || success ? (
-                <div className="bg-[var(--warning-bg)] border border-[var(--warning-border)] rounded-xl p-6 text-center animate-in fade-in zoom-in duration-300">
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="h-12 w-12 rounded-full bg-[var(--warning-bg)] flex items-center justify-center border border-[var(--warning-border)]">
-                      <Shield className="h-6 w-6 text-[var(--warning)]" />
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-[var(--text-primary)] font-bold font-mono text-lg">APPLICATION PENDING</h3>
-                      <p className="text-[var(--text-secondary)] text-sm font-mono">
-                        Your application is under review. You'll receive an email when approved.
-                      </p>
-                    </div>
+                <div className="text-center space-y-6 animate-in fade-in duration-500">
+                  <div className="flex items-center justify-center gap-2 text-[var(--warning)]">
+                    <Shield className="h-4 w-4" />
+                    <span className="text-xs font-mono font-bold uppercase tracking-[0.2em]">Pending Review</span>
                   </div>
+                  <p className="text-sm text-[var(--text-secondary)] font-body">
+                    Your application is under review. You'll receive an email when approved.
+                  </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">

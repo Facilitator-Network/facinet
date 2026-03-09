@@ -1,4 +1,4 @@
-import { Terminal, Server, Network, Sparkles, Code2, Cpu, Shield, Zap, Package } from "lucide-react"
+import { Terminal, Server, Network, Sparkles, Code2, Cpu, Shield, Zap, Package, ExternalLink } from "lucide-react"
 import { ApiKeySection } from "@/components/docs/api-key-section"
 
 export default function DocsPage() {
@@ -19,6 +19,15 @@ export default function DocsPage() {
             npm install facinet-sdk
           </code>
           <span className="text-xs text-[var(--text-tertiary)] font-mono">v0.2.3</span>
+          <a
+            href="https://facinet-starter-kit.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-white/15 bg-white/5 text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-primary)] hover:bg-white/10 transition-colors"
+          >
+            Starter Kit
+            <ExternalLink className="h-3 w-3" />
+          </a>
         </div>
       </div>
 
