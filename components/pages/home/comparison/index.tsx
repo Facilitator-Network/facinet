@@ -2,9 +2,9 @@
 
 /**
  * ComparisonTableSection Component
- * 
+ *
  * Visualizes the difference between "Current Facilitators" and "Facinet".
- * 
+ *
  * JUNIOR DEV NOTE:
  * - We use a helper function `renderCell` inside the component to handle text parsing.
  *   Ideally, this logic should be in a utility file or the data should be structured better,
@@ -29,13 +29,13 @@ interface ComparisonTableSectionProps {
 }
 
 export function ComparisonTableSection({ data }: ComparisonTableSectionProps) {
-  
+
   // Helper to render cell content with icons
   // Takes string like "✅ Safe" and renders a Check icon + "Safe"
   const renderCell = (text: string) => {
     if (text.startsWith("✅")) {
       return (
-        <span className="flex items-center gap-2 text-green-400">
+        <span className="flex items-center gap-2 text-[var(--success)]">
           <Check className="h-4 w-4 shrink-0" />
           <span>{text.replace("✅", "").trim()}</span>
         </span>
@@ -43,44 +43,44 @@ export function ComparisonTableSection({ data }: ComparisonTableSectionProps) {
     }
     if (text.startsWith("❌")) {
       return (
-        <span className="flex items-center gap-2 text-red-400/80">
+        <span className="flex items-center gap-2 text-[var(--error)]">
           <X className="h-4 w-4 shrink-0" />
           <span>{text.replace("❌", "").trim()}</span>
         </span>
       )
     }
-    return <span className="text-white/70">{text}</span>
+    return <span className="text-[var(--text-secondary)]">{text}</span>
   }
 
   return (
-    <section className="py-12 relative bg-transparent border-t border-white/5">
+    <section className="py-12 relative bg-transparent">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-6">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 uppercase tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-bold font-mono text-[var(--text-primary)] mb-4 uppercase tracking-tight">
               {data.title}
             </h2>
-            <p className="text-white/50 max-w-2xl mx-auto font-light">
+            <p className="text-[var(--text-secondary)] max-w-2xl mx-auto font-light font-body">
               {data.description}
             </p>
           </div>
 
           {/* Table Container - Desktop & Tablet */}
-          <div className="hidden md:block rounded-xl border border-white/10 overflow-hidden bg-black/40 backdrop-blur-sm shadow-2xl">
+          <div className="hidden md:block rounded-xl border border-[var(--bg-border)] overflow-hidden bg-[var(--glass-bg)] backdrop-blur-sm shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-white/10 bg-black/20">
+                  <tr className="border-b border-[var(--bg-border)] bg-[var(--glass-bg)]">
                     {data.headers.map((header, i) => (
-                      <th 
-                        key={i} 
+                      <th
+                        key={i}
                         className={cn(
                           "py-3 px-6 font-mono font-bold uppercase tracking-wider text-left",
                           // Conditional width and styling based on column index
-                          i === 0 && "text-white/40 text-xs w-[20%]",
-                          i === 1 && "text-white/40 text-xs w-[40%]",
-                          i === 2 && "text-primary text-sm w-[40%] bg-primary/5 border-l border-primary/20 drop-shadow-[0_0_15px_rgba(0,255,163,0.3)]"
+                          i === 0 && "text-[var(--text-tertiary)] text-xs w-[20%]",
+                          i === 1 && "text-[var(--text-tertiary)] text-xs w-[40%]",
+                          i === 2 && "text-[var(--accent)] text-sm w-[40%] bg-[var(--accent-subtle)] border-l border-[var(--accent-muted)] drop-shadow-[0_0_15px_rgba(0,255,163,0.3)]"
                         )}
                       >
                         {header}
@@ -88,19 +88,19 @@ export function ComparisonTableSection({ data }: ComparisonTableSectionProps) {
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-[var(--bg-border)]">
                   {data.rows.map((row, i) => (
-                    <tr 
-                      key={i} 
-                      className="group transition-colors font-mono text-sm hover:bg-white/[0.02]"
+                    <tr
+                      key={i}
+                      className="group transition-colors font-mono text-sm hover:bg-[var(--bg-raised)]"
                     >
-                      <td className="py-3 px-6 font-medium text-white/50 border-r border-white/5">
+                      <td className="py-3 px-6 font-medium text-[var(--text-secondary)] border-r border-[var(--bg-border)]">
                         {row.feature}
                       </td>
-                      <td className="py-3 px-6 text-white/60">
+                      <td className="py-3 px-6 text-[var(--text-secondary)]">
                         {renderCell(row.current)}
                       </td>
-                      <td className="py-3 px-6 font-bold text-white bg-gradient-to-r from-primary/10 to-transparent border-l border-primary/20 relative">
+                      <td className="py-3 px-6 font-bold text-[var(--text-primary)] bg-gradient-to-r from-[var(--accent-subtle)] to-transparent border-l border-[var(--accent-muted)] relative">
                         <div className="relative z-10">
                             {renderCell(row.facinet)}
                         </div>
@@ -117,25 +117,25 @@ export function ComparisonTableSection({ data }: ComparisonTableSectionProps) {
           {/* Cards Container - Mobile Only */}
           <div className="md:hidden space-y-4">
              {data.rows.map((row, i) => (
-               <div key={i} className="p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm space-y-4">
+               <div key={i} className="p-4 rounded-xl border border-[var(--bg-border)] bg-[var(--glass-subtle-bg)] backdrop-blur-sm space-y-4">
                   {/* Feature Title */}
-                  <div className="text-xs font-mono font-bold text-white/40 uppercase tracking-widest border-b border-white/5 pb-2">
+                  <div className="text-xs font-mono font-bold text-[var(--text-tertiary)] uppercase tracking-widest border-b border-[var(--bg-border)] pb-2">
                     {row.feature}
                   </div>
-                  
+
                   {/* Comparison Grid */}
                   <div className="grid grid-cols-2 gap-4">
                      {/* Current State */}
                      <div className="space-y-1">
-                        <div className="text-[10px] text-white/30 font-mono uppercase">Current</div>
-                        <div className="text-sm text-white/60 font-mono">{renderCell(row.current)}</div>
+                        <div className="text-[10px] text-[var(--text-tertiary)] font-mono uppercase">Current</div>
+                        <div className="text-sm text-[var(--text-secondary)] font-mono">{renderCell(row.current)}</div>
                      </div>
 
                      {/* Facinet State */}
-                     <div className="relative p-3 rounded-lg bg-primary/5 border border-primary/20">
+                     <div className="relative p-3 rounded-lg bg-[var(--accent-subtle)] border border-[var(--accent-muted)]">
                         <div className="absolute top-0 right-0 w-2 h-2 bg-primary/50 rounded-bl-lg"></div>
                         <div className="text-[10px] text-primary/50 font-mono uppercase mb-1">Facinet</div>
-                        <div className="text-sm font-bold text-white font-mono">{renderCell(row.facinet)}</div>
+                        <div className="text-sm font-bold text-[var(--text-primary)] font-mono">{renderCell(row.facinet)}</div>
                      </div>
                   </div>
                </div>

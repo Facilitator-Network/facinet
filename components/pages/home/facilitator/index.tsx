@@ -2,9 +2,9 @@
 
 /**
  * FacilitatorSection Component
- * 
+ *
  * Displays the role of Facilitators in the network.
- * 
+ *
  * JUNIOR DEV NOTE:
  * - We map over arrays (`data.responsibilities.items`) to render repetitive UI elements.
  *   This keeps the JSX clean and reduces code duplication.
@@ -44,56 +44,56 @@ interface FacilitatorSectionProps {
 export function FacilitatorSection({ data }: FacilitatorSectionProps) {
 
   return (
-    <section className="py-24 relative bg-transparent border-t border-white/5">
+    <section className="py-24 relative bg-transparent">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
-        
+
         {/* Top Section: Splitting Text and Graphic */}
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          
+
           {/* Left: Infographic / Network Visual */}
-          <div className="relative h-[250px] sm:h-[320px] w-full rounded-2xl border border-white/10 bg-black/40 backdrop-blur-sm overflow-hidden flex items-center justify-center">
+          <div className="relative h-[250px] sm:h-[320px] w-full rounded-2xl border border-[var(--bg-border)] bg-[var(--glass-bg)] backdrop-blur-sm overflow-hidden flex items-center justify-center">
             {/* Background Grid */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:24px_24px] opacity-50" />
-            
+
             {/* Network Nodes Visualization - Scaled Down on Mobile */}
             <div className="relative z-10 flex items-center gap-4 md:gap-12 transform scale-[0.65] sm:scale-100 origin-center">
-              
+
               {/* Node 1: Client */}
               <div className="flex flex-col items-center gap-3">
-                 <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center relative transition-colors group-hover:border-white/40">
-                    <User className="h-6 w-6 text-white/70" />
-                    <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-white/40 rounded-full border-2 border-black" />
+                 <div className="h-12 w-12 rounded-xl bg-[var(--glass-subtle-bg)] border border-[var(--glass-subtle-border)] flex items-center justify-center relative transition-colors group-hover:border-[var(--bg-border)]">
+                    <User className="h-6 w-6 text-[var(--text-secondary)]" />
+                    <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-[var(--text-tertiary)] rounded-full border-2 border-[var(--bg-void)]" />
                  </div>
-                 <span className="text-xs font-mono text-white/40 uppercase tracking-widest">Client</span>
+                 <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-widest">Client</span>
               </div>
 
               {/* Arrow 1 */}
               <div className="flex flex-col items-center gap-1">
-                 <div className="h-0.5 w-8 md:w-12 bg-gradient-to-r from-white/10 to-white/50" />
-                 <span className="text-[10px] font-mono text-white/30">REQ</span>
+                 <div className="h-0.5 w-8 md:w-12 bg-gradient-to-r from-[var(--bg-border)] to-[var(--text-secondary)]" />
+                 <span className="text-[10px] font-mono text-[var(--text-tertiary)]">REQ</span>
               </div>
 
               {/* Node 2: Facilitator (Center) */}
               <div className="flex flex-col items-center gap-3 relative">
-                 <div className="absolute inset-0 bg-white/10 blur-xl rounded-full" />
-                 <div className="h-16 w-16 rounded-2xl bg-black/80 border border-white/40 flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                    <ShieldCheck className="h-8 w-8 text-white" />
+                 <div className="absolute inset-0 bg-[var(--glass-subtle-bg)] blur-xl rounded-full" />
+                 <div className="h-16 w-16 rounded-2xl bg-[var(--glass-bg)] border border-[var(--accent)] flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                    <ShieldCheck className="h-8 w-8 text-[var(--accent)]" />
                  </div>
-                 <span className="text-xs font-mono text-white font-bold uppercase tracking-widest">Facilitator</span>
+                 <span className="text-xs font-mono text-[var(--text-primary)] font-bold uppercase tracking-widest">Facilitator</span>
               </div>
 
               {/* Arrow 2 */}
               <div className="flex flex-col items-center gap-1">
-                 <div className="h-0.5 w-8 md:w-12 bg-gradient-to-r from-white/50 to-white/10" />
-                 <span className="text-[10px] font-mono text-white/30">SETTLE</span>
+                 <div className="h-0.5 w-8 md:w-12 bg-gradient-to-r from-[var(--text-secondary)] to-[var(--bg-border)]" />
+                 <span className="text-[10px] font-mono text-[var(--text-tertiary)]">SETTLE</span>
               </div>
 
               {/* Node 3: Blockchain */}
               <div className="flex flex-col items-center gap-3">
-                 <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center transition-colors group-hover:border-white/40">
-                    <Link2 className="h-6 w-6 text-white/70" />
+                 <div className="h-12 w-12 rounded-xl bg-[var(--glass-subtle-bg)] border border-[var(--glass-subtle-border)] flex items-center justify-center transition-colors group-hover:border-[var(--bg-border)]">
+                    <Link2 className="h-6 w-6 text-[var(--text-secondary)]" />
                  </div>
-                 <span className="text-xs font-mono text-white/40 uppercase tracking-widest">Chain</span>
+                 <span className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-widest">Chain</span>
               </div>
 
             </div>
@@ -101,10 +101,10 @@ export function FacilitatorSection({ data }: FacilitatorSectionProps) {
 
           {/* Right: Text Content */}
           <div className="space-y-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 uppercase tracking-tight font-mono">
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-6 uppercase tracking-tight font-mono">
               {data.title}
             </h2>
-            <p className="text-lg md:text-xl text-white/60 leading-relaxed font-light font-mono">
+            <p className="text-lg md:text-xl text-[var(--text-secondary)] leading-relaxed font-light font-body">
               {data.description}
             </p>
           </div>
@@ -113,23 +113,23 @@ export function FacilitatorSection({ data }: FacilitatorSectionProps) {
 
         {/* Bottom Section: Points in Glass Boxes */}
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
-          
+
           {/* Column 1: Responsibilities */}
           <div className="space-y-8">
-            <h3 className="text-2xl font-bold text-white mb-6 uppercase tracking-tight font-mono border-b border-white/10 pb-4 inline-block">
+            <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-6 uppercase tracking-tight font-mono">
               {data.responsibilities?.title}
             </h3>
             <div className="space-y-4">
               {data.responsibilities?.items.map((item, index) => {
                  const Icon = ICON_MAP[item.icon] || ShieldCheck
                  return (
-                   <div key={index} className="flex gap-4 p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors group">
-                     <div className="shrink-0 h-10 w-10 rounded-lg bg-black/40 flex items-center justify-center border border-white/10 group-hover:border-white/40 transition-colors">
-                       <Icon className="h-5 w-5 text-white/80" />
+                   <div key={index} className="flex gap-4 p-6 rounded-xl border border-[var(--bg-border)] bg-[var(--glass-subtle-bg)] backdrop-blur-sm hover:bg-[var(--glass-bg)] transition-colors group">
+                     <div className="shrink-0 h-10 w-10 rounded-lg bg-[var(--glass-subtle-bg)] border border-[var(--glass-subtle-border)] flex items-center justify-center group-hover:border-[var(--bg-border)] transition-colors">
+                       <Icon className="h-5 w-5 text-[var(--accent)]" />
                      </div>
                      <div>
-                        <h4 className="text-base font-bold text-white mb-2 uppercase tracking-wide group-hover:text-white transition-colors font-mono">{item.title}</h4>
-                        <p className="text-sm text-white/60 leading-relaxed font-light">{item.description}</p>
+                        <h4 className="text-base font-bold text-[var(--text-primary)] mb-2 uppercase tracking-wide group-hover:text-[var(--text-primary)] transition-colors font-mono">{item.title}</h4>
+                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed font-body">{item.description}</p>
                      </div>
                    </div>
                  )
@@ -139,7 +139,7 @@ export function FacilitatorSection({ data }: FacilitatorSectionProps) {
 
           {/* Column 2: Benefits */}
           <div className="space-y-8">
-            <h3 className="text-2xl font-bold text-white mb-6 uppercase tracking-tight font-mono border-b border-white/10 pb-4 inline-block">
+            <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-6 uppercase tracking-tight font-mono">
               {data.benefits?.title}
             </h3>
             <div className="space-y-4">
@@ -147,13 +147,13 @@ export function FacilitatorSection({ data }: FacilitatorSectionProps) {
                 const benefitIcons = [Zap, Shield, Activity]
                 const Icon = benefitIcons[index % benefitIcons.length]
                 return (
-                  <div key={index} className="flex gap-4 p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors group">
-                    <div className="shrink-0 h-10 w-10 rounded-lg bg-black/40 flex items-center justify-center border border-white/10 group-hover:border-white/40 transition-colors">
-                      <Icon className="h-5 w-5 text-white/70" />
+                  <div key={index} className="flex gap-4 p-6 rounded-xl border border-[var(--bg-border)] bg-[var(--glass-subtle-bg)] backdrop-blur-sm hover:bg-[var(--glass-bg)] transition-colors group">
+                    <div className="shrink-0 h-10 w-10 rounded-lg bg-[var(--glass-subtle-bg)] border border-[var(--glass-subtle-border)] flex items-center justify-center group-hover:border-[var(--bg-border)] transition-colors">
+                      <Icon className="h-5 w-5 text-[var(--accent)]" />
                     </div>
                     <div>
-                      <h4 className="text-base font-bold text-white mb-2 uppercase tracking-wide group-hover:text-white transition-colors font-mono">{item.title}</h4>
-                      <p className="text-sm text-white/60 leading-relaxed font-light">{item.description}</p>
+                      <h4 className="text-base font-bold text-[var(--text-primary)] mb-2 uppercase tracking-wide group-hover:text-[var(--text-primary)] transition-colors font-mono">{item.title}</h4>
+                      <p className="text-sm text-[var(--text-secondary)] leading-relaxed font-body">{item.description}</p>
                     </div>
                   </div>
                 )

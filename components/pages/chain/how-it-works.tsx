@@ -36,49 +36,49 @@ export function HowItWorksSection() {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-           <h2 className="text-3xl md:text-5xl font-bold font-mono text-white mb-6 tracking-tight uppercase">
+           <h2 className="text-3xl md:text-5xl font-display font-bold font-mono text-[var(--text-primary)] mb-6 tracking-tight uppercase">
               How It Works
            </h2>
-           <p className="text-white/60 text-lg">
+           <p className="text-[var(--text-tertiary)] font-body text-lg">
               A dual-sided network optimized for trustless security and instant verification.
            </p>
         </div>
 
         {/* Interactive Container */}
         <div 
-          className="max-w-5xl mx-auto bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-sm"
+          className="max-w-5xl mx-auto bg-[var(--glass-subtle-bg)] border border-[var(--bg-border)] rounded-3xl overflow-hidden backdrop-blur-sm"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
            {/* Tab Controls */}
-           <div className="flex border-b border-white/10">
+           <div className="flex border-b border-[var(--bg-border)]">
               <button
                  onClick={() => setActiveTab('facilitator')}
                  className={`flex-1 py-6 text-center font-mono text-sm md:text-base tracking-widest uppercase transition-all duration-300 relative ${
-                    activeTab === 'facilitator' ? 'text-white bg-white/5' : 'text-white/40 hover:text-white hover:bg-white/5'
+                    activeTab === 'facilitator' ? 'text-[var(--text-primary)] bg-[var(--glass-subtle-bg)]' : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--glass-subtle-bg)]'
                  }`}
               >
                  <div className="flex items-center justify-center gap-3">
-                    <Server size={18} className={activeTab === 'facilitator' ? 'text-blue-400' : ''} />
+                    <Server size={18} className={activeTab === 'facilitator' ? 'text-[var(--accent)]' : ''} />
                     Facilitator Node
                  </div>
                  {activeTab === 'facilitator' && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.5)]" />
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--accent)] shadow-[0_0_20px_rgba(59,130,246,0.5)]" />
                  )}
               </button>
               
               <button
                  onClick={() => setActiveTab('client')}
                  className={`flex-1 py-6 text-center font-mono text-sm md:text-base tracking-widest uppercase transition-all duration-300 relative ${
-                    activeTab === 'client' ? 'text-white bg-white/5' : 'text-white/40 hover:text-white hover:bg-white/5'
+                    activeTab === 'client' ? 'text-[var(--text-primary)] bg-[var(--glass-subtle-bg)]' : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--glass-subtle-bg)]'
                  }`}
               >
                  <div className="flex items-center justify-center gap-3">
-                    <Smartphone size={18} className={activeTab === 'client' ? 'text-green-400' : ''} />
+                    <Smartphone size={18} className={activeTab === 'client' ? 'text-[var(--success)]' : ''} />
                     Client (User/Vendor)
                  </div>
                  {activeTab === 'client' && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-green-500 shadow-[0_0_20px_rgba(34,197,94,0.5)]" />
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--success)] shadow-[0_0_20px_rgba(34,197,94,0.5)]" />
                  )}
               </button>
            </div>
@@ -92,14 +92,14 @@ export function HowItWorksSection() {
                        
                        {/* Step 1: Run Node */}
                        <div className="flex flex-col items-center gap-4 text-center group">
-                          <div className="w-20 h-20 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center relative z-10 group-hover:bg-blue-500/20 transition-colors">
-                             <Server className="text-blue-400 h-10 w-10" />
+                          <div className="w-20 h-20 rounded-2xl bg-[var(--accent-subtle)] border border-[var(--accent-muted)] flex items-center justify-center relative z-10 group-hover:bg-[var(--accent-subtle)] transition-colors">
+                             <Server className="text-[var(--accent)] h-10 w-10" />
                              {/* Pulse effect */}
-                             <div className="absolute inset-0 bg-blue-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                             <div className="absolute inset-0 bg-[var(--accent-subtle)] rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                           <div>
-                             <h4 className="text-white font-bold font-mono">Run Node</h4>
-                             <p className="text-white/40 text-xs mt-1 max-w-[120px]">Install CLI & connect to L1 RPCs</p>
+                             <h4 className="text-[var(--text-primary)] font-bold font-mono">Run Node</h4>
+                             <p className="text-[var(--text-tertiary)] text-xs mt-1 max-w-[120px]">Install CLI & connect to L1 RPCs</p>
                           </div>
                        </div>
 
@@ -108,17 +108,17 @@ export function HowItWorksSection() {
                           <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white to-transparent w-24" />
                           <div className="text-[10px] font-mono uppercase">Listens</div>
                        </div>
-                       <ArrowRight className="md:hidden text-white/20 rotate-90 md:rotate-0" />
+                       <ArrowRight className="md:hidden text-[var(--text-tertiary)] rotate-90 md:rotate-0" />
 
                        {/* Step 2: Consensus */}
                        <div className="flex flex-col items-center gap-4 text-center group">
-                          <div className="w-20 h-20 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center relative z-10 group-hover:bg-purple-500/20 transition-colors">
-                             <Cpu className="text-purple-400 h-10 w-10" />
-                             <div className="absolute inset-0 bg-purple-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="w-20 h-20 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center relative z-10 group-hover:bg-purple-500/15 transition-colors">
+                             <Cpu className="text-purple-400/90 h-10 w-10" />
+                             <div className="absolute inset-0 bg-purple-500/15 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                           <div>
-                             <h4 className="text-white font-bold font-mono">Consensus</h4>
-                             <p className="text-white/40 text-xs mt-1 max-w-[120px]">Validate events & agree on truth</p>
+                             <h4 className="text-[var(--text-primary)] font-bold font-mono">Consensus</h4>
+                             <p className="text-[var(--text-tertiary)] text-xs mt-1 max-w-[120px]">Validate events & agree on truth</p>
                           </div>
                        </div>
 
@@ -127,17 +127,17 @@ export function HowItWorksSection() {
                           <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white to-transparent w-24" />
                           <div className="text-[10px] font-mono uppercase">Earns</div>
                        </div>
-                       <ArrowRight className="md:hidden text-white/20 rotate-90 md:rotate-0" />
+                       <ArrowRight className="md:hidden text-[var(--text-tertiary)] rotate-90 md:rotate-0" />
 
                        {/* Step 3: Reward */}
                        <div className="flex flex-col items-center gap-4 text-center group">
-                          <div className="w-20 h-20 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center relative z-10 group-hover:bg-yellow-500/20 transition-colors">
-                             <Zap className="text-yellow-400 h-10 w-10" />
-                             <div className="absolute inset-0 bg-yellow-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="w-20 h-20 rounded-2xl bg-[var(--warning-bg)] border border-[var(--warning-muted)] flex items-center justify-center relative z-10 group-hover:bg-[var(--warning-bg)] transition-colors">
+                             <Zap className="text-[var(--warning)] h-10 w-10" />
+                             <div className="absolute inset-0 bg-[var(--warning-bg)] rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                           <div>
-                             <h4 className="text-white font-bold font-mono">Reward</h4>
-                             <p className="text-white/40 text-xs mt-1 max-w-[120px]">Get paid in USDC for reliability</p>
+                             <h4 className="text-[var(--text-primary)] font-bold font-mono">Reward</h4>
+                             <p className="text-[var(--text-tertiary)] text-xs mt-1 max-w-[120px]">Get paid in USDC for reliability</p>
                           </div>
                        </div>
 
@@ -147,13 +147,13 @@ export function HowItWorksSection() {
                        
                        {/* Step 1: User Action */}
                        <div className="flex flex-col items-center gap-4 text-center group">
-                          <div className="w-20 h-20 rounded-2xl bg-green-500/10 border border-green-500/20 flex items-center justify-center relative z-10 group-hover:bg-green-500/20 transition-colors">
-                             <Smartphone className="text-green-400 h-10 w-10" />
-                             <div className="absolute inset-0 bg-green-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="w-20 h-20 rounded-2xl bg-[var(--success-bg)] border border-[var(--success-muted)] flex items-center justify-center relative z-10 group-hover:bg-[var(--success-bg)] transition-colors">
+                             <Smartphone className="text-[var(--success)] h-10 w-10" />
+                             <div className="absolute inset-0 bg-[var(--success-bg)] rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                           <div>
-                             <h4 className="text-white font-bold font-mono">Request</h4>
-                             <p className="text-white/40 text-xs mt-1 max-w-[120px]">User signs tx or Vendor queries data</p>
+                             <h4 className="text-[var(--text-primary)] font-bold font-mono">Request</h4>
+                             <p className="text-[var(--text-tertiary)] text-xs mt-1 max-w-[120px]">User signs tx or Vendor queries data</p>
                           </div>
                        </div>
 
@@ -162,17 +162,17 @@ export function HowItWorksSection() {
                           <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white to-transparent w-24" />
                           <div className="text-[10px] font-mono uppercase">API Call</div>
                        </div>
-                       <ArrowRight className="md:hidden text-white/20 rotate-90 md:rotate-0" />
+                       <ArrowRight className="md:hidden text-[var(--text-tertiary)] rotate-90 md:rotate-0" />
 
                        {/* Step 2: Facinet Network */}
                        <div className="flex flex-col items-center gap-4 text-center group">
-                          <div className="w-20 h-20 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center relative z-10 group-hover:bg-blue-500/20 transition-colors">
-                             <Globe className="text-blue-400 h-10 w-10" />
-                             <div className="absolute inset-0 bg-blue-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="w-20 h-20 rounded-2xl bg-[var(--accent-subtle)] border border-[var(--accent-muted)] flex items-center justify-center relative z-10 group-hover:bg-[var(--accent-subtle)] transition-colors">
+                             <Globe className="text-[var(--accent)] h-10 w-10" />
+                             <div className="absolute inset-0 bg-[var(--accent-subtle)] rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                           <div>
-                             <h4 className="text-white font-bold font-mono">Index</h4>
-                             <p className="text-white/40 text-xs mt-1 max-w-[120px]">Network retrieves canonical record</p>
+                             <h4 className="text-[var(--text-primary)] font-bold font-mono">Index</h4>
+                             <p className="text-[var(--text-tertiary)] text-xs mt-1 max-w-[120px]">Network retrieves canonical record</p>
                           </div>
                        </div>
 
@@ -181,17 +181,17 @@ export function HowItWorksSection() {
                           <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white to-transparent w-24" />
                           <div className="text-[10px] font-mono uppercase">Returns</div>
                        </div>
-                       <ArrowRight className="md:hidden text-white/20 rotate-90 md:rotate-0" />
+                       <ArrowRight className="md:hidden text-[var(--text-tertiary)] rotate-90 md:rotate-0" />
 
                        {/* Step 3: Verification */}
                        <div className="flex flex-col items-center gap-4 text-center group">
-                          <div className="w-20 h-20 rounded-2xl bg-green-500/10 border border-green-500/20 flex items-center justify-center relative z-10 group-hover:bg-green-500/20 transition-colors">
-                             <ShieldCheck className="text-green-400 h-10 w-10" />
-                             <div className="absolute inset-0 bg-green-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="w-20 h-20 rounded-2xl bg-[var(--success-bg)] border border-[var(--success-muted)] flex items-center justify-center relative z-10 group-hover:bg-[var(--success-bg)] transition-colors">
+                             <ShieldCheck className="text-[var(--success)] h-10 w-10" />
+                             <div className="absolute inset-0 bg-[var(--success-bg)] rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                           <div>
-                             <h4 className="text-white font-bold font-mono">Verified</h4>
-                             <p className="text-white/40 text-xs mt-1 max-w-[120px]">Instant, trustless proof of execution</p>
+                             <h4 className="text-[var(--text-primary)] font-bold font-mono">Verified</h4>
+                             <p className="text-[var(--text-tertiary)] text-xs mt-1 max-w-[120px]">Instant, trustless proof of execution</p>
                           </div>
                        </div>
 
@@ -201,11 +201,11 @@ export function HowItWorksSection() {
            </div>
 
            {/* Footer Status Bar */}
-           <div className="bg-black/40 border-t border-white/5 py-3 px-6 flex justify-between items-center text-[10px] font-mono text-white/20 uppercase tracking-widest">
+           <div className="bg-[var(--glass-bg)] border-t border-[var(--bg-border)] py-3 px-6 flex justify-between items-center text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-widest">
               <div>System: Online</div>
               <div className="flex items-center gap-2">
                  <span>Auto-Cycle: {isHovered ? 'PAUSED' : 'ACTIVE'}</span>
-                 <div className={`w-1.5 h-1.5 rounded-full ${isHovered ? 'bg-yellow-500' : 'bg-green-500 animate-pulse'}`} />
+                 <div className={`w-1.5 h-1.5 rounded-full ${isHovered ? 'bg-[var(--warning)]' : 'bg-[var(--success)] animate-pulse'}`} />
               </div>
            </div>
         </div>

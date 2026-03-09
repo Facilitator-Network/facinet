@@ -5,8 +5,8 @@ import { ArrowDown, Database, Server, Smartphone, Monitor } from "lucide-react"
 
 function Layer({ title, children, className = "" }: { title: string, children: React.ReactNode, className?: string }) {
   return (
-    <div className={`border border-white/20 rounded-lg p-6 relative bg-white/5 ${className}`}>
-      <div className="absolute -top-3 left-4 bg-black px-2 text-xs font-mono text-muted-foreground uppercase tracking-wider">
+    <div className={`border border-[var(--bg-border)] rounded-lg p-6 relative bg-[var(--glass-subtle-bg)] ${className}`}>
+      <div className="absolute -top-3 left-4 bg-[var(--bg-void)] px-2 text-xs font-mono text-muted-foreground uppercase tracking-wider">
         {title}
       </div>
       {children}
@@ -16,7 +16,7 @@ function Layer({ title, children, className = "" }: { title: string, children: R
 
 function Node({ label, icon: Icon, desc }: { label: string, icon?: any, desc?: string }) {
   return (
-    <div className="bg-card border border-white/10 rounded p-3 text-center flex flex-col items-center justify-center min-w-[120px] shadow-sm">
+    <div className="bg-card border border-[var(--bg-border)] rounded p-3 text-center flex flex-col items-center justify-center min-w-[120px] shadow-sm">
       {Icon && <Icon className="h-5 w-5 mb-2 text-primary" />}
       <span className="font-semibold text-sm">{label}</span>
       {desc && <span className="text-[10px] text-muted-foreground mt-1">{desc}</span>}
@@ -46,14 +46,14 @@ export function DetailedArchitectureDiagram() {
       {/* SDK Layer */}
       <Layer title="SDK Layer (npm install facinet)">
         <div className="flex flex-col items-center gap-4">
-          <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded text-blue-300 font-mono text-sm shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+          <div className="p-3 bg-[var(--accent-subtle)] border border-[var(--accent-muted)] rounded text-[var(--accent)] font-mono text-sm shadow-[0_0_15px_rgba(59,130,246,0.1)]">
             Facinet SDK
           </div>
           <div className="flex gap-8 text-xs text-muted-foreground">
-            <div className="text-center p-2 border border-white/10 rounded">
+            <div className="text-center p-2 border border-[var(--bg-border)] rounded">
               Node.js Bundle<br/>(Private Key Signing)
             </div>
-            <div className="text-center p-2 border border-white/10 rounded">
+            <div className="text-center p-2 border border-[var(--bg-border)] rounded">
               Browser Bundle<br/>(MetaMask Integration)
             </div>
           </div>
@@ -67,9 +67,9 @@ export function DetailedArchitectureDiagram() {
         <div className="flex flex-col items-center gap-4">
             <Node label="Next.js API Routes" icon={Server} />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
-                <div className="p-2 bg-white/5 rounded border border-dashed border-white/20">/api/x402/settle</div>
-                <div className="p-2 bg-white/5 rounded border border-dashed border-white/20">/api/facilitator/list</div>
-                <div className="p-2 bg-white/5 rounded border border-dashed border-white/20">/api/payment/status</div>
+                <div className="p-2 bg-[var(--glass-subtle-bg)] rounded border border-dashed border-[var(--bg-border)]">/api/x402/settle</div>
+                <div className="p-2 bg-[var(--glass-subtle-bg)] rounded border border-dashed border-[var(--bg-border)]">/api/facilitator/list</div>
+                <div className="p-2 bg-[var(--glass-subtle-bg)] rounded border border-dashed border-[var(--bg-border)]">/api/payment/status</div>
             </div>
         </div>
       </Layer>
@@ -96,7 +96,7 @@ export function DetailedArchitectureDiagram() {
       {/* Blockchain */}
       <Layer title="Blockchain - Avalanche Fuji">
         <div className="flex flex-col items-center gap-4">
-            <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded text-white font-bold shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+            <div className="p-4 bg-[var(--accent-subtle)] border border-[var(--accent-muted)] rounded text-[var(--text-primary)] font-bold shadow-[0_0_20px_rgba(59,130,246,0.1)]">
                 USDC Contract (ERC-3009)
             </div>
             <div className="text-xs text-muted-foreground p-2 border rounded">
@@ -116,16 +116,16 @@ export function HighLevelArchitectureDiagram() {
                 
                 {/* Client */}
                 <div className="flex flex-col items-center gap-2">
-                    <div className="w-20 h-20 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center">
-                        <Smartphone className="h-8 w-8 text-blue-400" />
+                    <div className="w-20 h-20 rounded-full bg-[var(--accent-subtle)] border-2 border-[var(--accent)] flex items-center justify-center">
+                        <Smartphone className="h-8 w-8 text-[var(--accent)]" />
                     </div>
-                    <span className="font-bold text-lg">Client</span>
+                    <span className="font-display font-bold text-lg">Client</span>
                     <span className="text-xs text-muted-foreground">Signs Request</span>
                 </div>
 
                 {/* Arrow */}
                 <div className="flex-1 h-[2px] w-full bg-gradient-to-r from-blue-500 to-primary relative hidden md:block">
-                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black px-2 text-xs text-muted-foreground whitespace-nowrap">
+                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--bg-void)] px-2 text-xs text-muted-foreground whitespace-nowrap">
                         Generic SDK
                      </div>
                 </div>
@@ -137,13 +137,13 @@ export function HighLevelArchitectureDiagram() {
                         <Server className="h-8 w-8 text-primary mb-1" />
                         <span className="text-[10px] font-mono uppercase">Network</span>
                     </div>
-                    <span className="font-bold text-lg">Facilitator Mesh</span>
+                    <span className="font-display font-bold text-lg">Facilitator Mesh</span>
                     <span className="text-xs text-muted-foreground">Validates & Pays Gas</span>
                 </div>
 
                 {/* Arrow */}
                 <div className="flex-1 h-[2px] w-full bg-gradient-to-r from-primary to-blue-300/30 relative hidden md:block">
-                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black px-2 text-xs text-muted-foreground whitespace-nowrap">
+                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--bg-void)] px-2 text-xs text-muted-foreground whitespace-nowrap">
                         0-Gas Txs
                      </div>
                 </div>
@@ -151,10 +151,10 @@ export function HighLevelArchitectureDiagram() {
 
                 {/* Blockchain */}
                 <div className="flex flex-col items-center gap-2">
-                     <div className="w-20 h-20 rounded-full bg-blue-500/10 border-2 border-blue-500/40 flex items-center justify-center">
-                        <Database className="h-8 w-8 text-blue-400" />
+                     <div className="w-20 h-20 rounded-full bg-[var(--accent-subtle)] border-2 border-[var(--accent-muted)] flex items-center justify-center">
+                        <Database className="h-8 w-8 text-[var(--accent)]" />
                     </div>
-                    <span className="font-bold text-lg">Blockchain</span>
+                    <span className="font-display font-bold text-lg">Blockchain</span>
                     <span className="text-xs text-muted-foreground">Settlement</span>
                 </div>
 

@@ -38,14 +38,14 @@ export function NetworkSelector({ selectedNetwork, onNetworkChange, disabled }: 
 
   return (
     <div className="space-y-3">
-      <label className="text-xs font-mono text-white/40 uppercase tracking-widest">
+      <label className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-widest">
         Select Network
       </label>
       <select
         value={selectedNetwork}
         onChange={(e) => handleNetworkSelect(e.target.value)}
         disabled={disabled || isSwitching}
-        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-primary/50 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-[var(--glass-subtle-bg)] border border-[var(--bg-border)] rounded-lg px-4 py-3 text-[var(--text-primary)] font-mono text-sm focus:outline-none focus:border-[var(--accent-muted)] disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {SUPPORTED_NETWORKS.map((network) => {
           const config = NETWORK_CONFIGS[network];
@@ -60,7 +60,7 @@ export function NetworkSelector({ selectedNetwork, onNetworkChange, disabled }: 
         })}
       </select>
       {isSwitching && (
-        <div className="text-xs text-white/60 font-mono text-center">
+        <div className="text-xs text-[var(--text-tertiary)] font-mono text-center">
           Switching network...
         </div>
       )}

@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Activity, ArrowRight, Users, Zap, Globe, RefreshCw, Clock, ExternalLink } from "lucide-react"
+import { Activity, ArrowRight, Users, Zap, Globe, RefreshCw, Clock, ExternalLink, Search, RadioTower } from "lucide-react"
 import Link from "next/link"
+import { GlassIcon } from "@/components/ui/glass-icon"
 
 // ── Interfaces ──────────────────────────────────────────────────────────────
 
@@ -65,17 +66,17 @@ function relativeTime(timestamp: number): string {
 function getEventBadgeStyle(eventType: string): string {
   switch (eventType) {
     case "facilitator_added":
-      return "text-blue-400 bg-blue-500/10 border-blue-500/20"
+      return "text-[var(--accent)] bg-[var(--accent-subtle)] border-[var(--accent-muted)]"
     case "facilitator_activated":
-      return "text-blue-400/80 bg-blue-500/5 border-blue-500/10"
+      return "text-[var(--accent)] bg-[var(--accent-subtle)] border-[var(--accent-muted)]"
     case "transaction":
-      return "text-blue-400 bg-blue-500/10 border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.1)]"
+      return "text-[var(--accent)] bg-[var(--accent-subtle)] border-[var(--accent-muted)] shadow-[0_0_10px_rgba(59,130,246,0.1)]"
     case "status_changed":
-      return "text-white/60 bg-white/5 border-white/10"
+      return "text-[var(--text-tertiary)] bg-[var(--glass-subtle-bg)] border-[var(--bg-border)]"
     case "contract_execution":
-      return "text-blue-300 bg-blue-500/10 border-blue-500/20"
+      return "text-[var(--accent)] bg-[var(--accent-subtle)] border-[var(--accent-muted)]"
     default:
-      return "text-white/40 bg-white/5 border-white/10"
+      return "text-[var(--text-tertiary)] bg-[var(--glass-subtle-bg)] border-[var(--bg-border)]"
   }
 }
 
@@ -105,21 +106,21 @@ function formatTimestamp(timestamp: number) {
 
 function StatCardSkeleton() {
   return (
-    <div className="rounded-xl border border-white/10 bg-black/40 backdrop-blur-xl p-6 animate-pulse">
-      <div className="h-4 w-20 bg-white/10 rounded mb-4" />
-      <div className="h-10 w-24 bg-white/10 rounded mb-2" />
-      <div className="h-3 w-32 bg-white/5 rounded" />
+    <div className="rounded-xl border border-[var(--bg-border)] bg-[var(--glass-bg)] backdrop-blur-xl p-6 animate-pulse">
+      <div className="h-4 w-20 bg-[var(--glass-subtle-bg)] rounded mb-4" />
+      <div className="h-10 w-24 bg-[var(--glass-subtle-bg)] rounded mb-2" />
+      <div className="h-3 w-32 bg-[var(--glass-subtle-bg)] rounded" />
     </div>
   )
 }
 
 function TableRowSkeleton() {
   return (
-    <div className="px-4 py-4 rounded-lg border border-white/5 animate-pulse">
+    <div className="px-4 py-4 rounded-lg border border-[var(--bg-border)] animate-pulse">
       <div className="flex items-center gap-4">
-        <div className="h-8 w-8 bg-white/10 rounded-full" />
-        <div className="h-4 w-32 bg-white/10 rounded" />
-        <div className="h-4 w-24 bg-white/5 rounded ml-auto" />
+        <div className="h-8 w-8 bg-[var(--glass-subtle-bg)] rounded-full" />
+        <div className="h-4 w-32 bg-[var(--glass-subtle-bg)] rounded" />
+        <div className="h-4 w-24 bg-[var(--glass-subtle-bg)] rounded ml-auto" />
       </div>
     </div>
   )
@@ -143,10 +144,10 @@ function StatCard({
   index: number
 }) {
   const colorMap: Record<string, string> = {
-    green: "text-green-400 bg-green-500/10 border-green-500/20",
-    blue: "text-blue-400 bg-blue-500/10 border-blue-500/20",
-    purple: "text-purple-400 bg-purple-500/10 border-purple-500/20",
-    cyan: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
+    green: "text-[var(--success)] bg-[var(--success-bg)] border-[var(--success-border)]",
+    blue: "text-[var(--accent)] bg-[var(--accent-subtle)] border-[var(--accent-muted)]",
+    purple: "text-[var(--text-secondary)] bg-[var(--glass-subtle-bg)] border-[var(--bg-border)]",
+    cyan: "text-[var(--accent)] bg-[var(--accent-subtle)] border-[var(--accent-muted)]",
   }
   const colors = colorMap[accentColor] || colorMap.green
 
@@ -155,17 +156,17 @@ function StatCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
-      className="rounded-xl border border-white/10 bg-black/40 backdrop-blur-xl p-6 hover:border-white/20 transition-colors"
+      className="rounded-xl border border-[var(--bg-border)] glass backdrop-blur-xl p-6 hover:border-[var(--bg-border)] transition-colors"
     >
       <div className="flex items-center gap-2 mb-4">
         <div className={`p-2 rounded-lg border ${colors}`}>
           <Icon size={16} />
         </div>
-        <span className="text-[10px] font-mono uppercase tracking-widest text-white/40">{label}</span>
+        <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-tertiary)]">{label}</span>
       </div>
-      <div className="text-3xl md:text-4xl font-bold font-mono text-white tracking-tight">{value}</div>
+      <div className="text-3xl md:text-4xl font-bold font-display text-[var(--text-primary)] tracking-tight">{value}</div>
       {sublabel && (
-        <p className="text-xs font-mono text-white/30 mt-2 uppercase tracking-wider">{sublabel}</p>
+        <p className="text-xs font-mono text-[var(--text-tertiary)] mt-2 uppercase tracking-wider">{sublabel}</p>
       )}
     </motion.div>
   )
@@ -258,29 +259,26 @@ export default function ExplorerPage() {
 
         {/* 1. HERO HEADER */}
         <div className="space-y-4 mb-16">
-          <div className="flex items-center gap-3 text-primary mb-4">
-            <div className="h-px w-12 bg-primary" />
-            <span className="text-sm font-mono uppercase tracking-widest text-primary font-bold">Network Explorer</span>
+          <div className="flex items-center gap-3 text-[var(--accent)] mb-4">
+            <div className="h-px w-12 bg-[var(--accent)]" />
+            <span className="text-sm font-mono uppercase tracking-widest text-[var(--accent)] font-bold">Network Explorer</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold font-mono text-white uppercase tracking-tight">
+          <p className="text-xs font-mono uppercase tracking-[0.3em] text-[var(--text-tertiary)]">NETWORK EXPLORER</p>
+          <h1 className="text-4xl md:text-5xl font-bold font-display text-[var(--text-primary)] uppercase tracking-tight">
             X402 Network Explorer
           </h1>
-          <p className="text-xl text-white/50 max-w-none font-light leading-relaxed">
+          <p className="text-xl font-body text-[var(--text-secondary)] max-w-none font-light leading-relaxed">
             Real-time network statistics, facilitator leaderboard, and transaction explorer.
           </p>
         </div>
 
-        <div className="border-t border-white/5 mb-16" />
-
-        <div className="border-t border-white/5 mb-12" />
-
         {/* ── Stats Grid ───────────────────────────────────────────────── */}
         {statsError ? (
-          <div className="rounded-xl border border-red-500/20 bg-red-500/5 backdrop-blur-xl p-8 text-center mb-12">
-            <p className="text-red-400 font-mono text-sm mb-4">{statsError}</p>
+          <div className="rounded-xl border border-[var(--error-bg)] bg-[var(--error-bg)] backdrop-blur-xl p-8 text-center mb-12">
+            <p className="text-[var(--error)] font-mono text-sm mb-4">{statsError}</p>
             <button
               onClick={fetchStats}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 font-mono text-xs uppercase tracking-wider hover:bg-red-500/20 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--error-bg)] border border-[var(--error-bg)] text-[var(--error)] font-mono text-xs uppercase tracking-wider hover:bg-[var(--error)]/20 transition-colors"
             >
               <RefreshCw size={14} />
               Retry
@@ -337,14 +335,14 @@ export default function ExplorerPage() {
         >
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="h-px w-8 bg-primary" />
-              <h2 className="text-lg font-bold font-mono text-white uppercase tracking-wider">
+              <GlassIcon icon={RadioTower} size="sm" />
+              <h2 className="text-lg font-bold font-display text-[var(--text-primary)] uppercase tracking-wider">
                 Facilitator Leaderboard
               </h2>
             </div>
             <button
               onClick={fetchFacilitators}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/40 font-mono text-[10px] uppercase tracking-wider hover:bg-white/10 hover:text-white/60 transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg glass-subtle border border-[var(--bg-border)] text-[var(--text-tertiary)] font-mono text-[10px] uppercase tracking-wider hover:bg-[var(--bg-raised)] hover:text-[var(--text-secondary)] transition-colors"
             >
               <RefreshCw size={12} />
               Refresh
@@ -352,11 +350,11 @@ export default function ExplorerPage() {
           </div>
 
           {facilitatorsError ? (
-            <div className="rounded-xl border border-red-500/20 bg-red-500/5 backdrop-blur-xl p-8 text-center">
-              <p className="text-red-400 font-mono text-sm mb-4">{facilitatorsError}</p>
+            <div className="rounded-xl border border-[var(--error-bg)] bg-[var(--error-bg)] backdrop-blur-xl p-8 text-center">
+              <p className="text-[var(--error)] font-mono text-sm mb-4">{facilitatorsError}</p>
               <button
                 onClick={fetchFacilitators}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 font-mono text-xs uppercase tracking-wider hover:bg-red-500/20 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--error-bg)] border border-[var(--error-bg)] text-[var(--error)] font-mono text-xs uppercase tracking-wider hover:bg-[var(--error)]/20 transition-colors"
               >
                 <RefreshCw size={14} />
                 Retry
@@ -364,7 +362,7 @@ export default function ExplorerPage() {
             </div>
           ) : facilitatorsLoading ? (
             <div className="space-y-2">
-              <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-3 bg-white/5 rounded-t-lg border border-white/10 font-mono text-xs text-white/40 uppercase tracking-wider">
+              <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-3 glass-subtle rounded-t-lg border border-[var(--bg-border)] font-mono text-xs text-[var(--text-tertiary)] uppercase tracking-wider">
                 <div className="col-span-1">Rank</div>
                 <div className="col-span-3">Name</div>
                 <div className="col-span-3">Wallet</div>
@@ -378,7 +376,7 @@ export default function ExplorerPage() {
             </div>
           ) : facilitators.length > 0 ? (
             <div className="space-y-2">
-              <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-3 bg-white/5 rounded-t-lg border border-white/10 font-mono text-xs text-white/40 uppercase tracking-wider">
+              <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-3 glass-subtle rounded-t-lg border border-[var(--bg-border)] font-mono text-xs text-[var(--text-tertiary)] uppercase tracking-wider">
                 <div className="col-span-1">Rank</div>
                 <div className="col-span-3">Name</div>
                 <div className="col-span-3">Wallet</div>
@@ -393,23 +391,23 @@ export default function ExplorerPage() {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.5 + index * 0.05, duration: 0.3 }}
-                    className="hidden md:grid grid-cols-12 gap-4 px-4 py-4 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/[0.02] transition-colors items-center"
+                    className="hidden md:grid grid-cols-12 gap-4 px-4 py-4 rounded-lg border border-[var(--bg-border)] hover:border-[var(--bg-border)] hover:bg-[var(--glass-subtle-bg)] transition-colors items-center"
                   >
-                    <div className="col-span-1 font-mono text-sm text-white/60">#{index + 1}</div>
-                    <div className="col-span-3 font-mono text-sm text-white/90 truncate">{facilitator.name}</div>
-                    <div className="col-span-3 font-mono text-xs text-white/40">{truncateAddress(facilitator.facilitatorWallet)}</div>
+                    <div className="col-span-1 font-mono text-sm text-[var(--text-tertiary)]">#{index + 1}</div>
+                    <div className="col-span-3 font-mono text-sm text-[var(--text-primary)] truncate">{facilitator.name}</div>
+                    <div className="col-span-3 font-mono text-xs text-[var(--text-tertiary)]">{truncateAddress(facilitator.facilitatorWallet)}</div>
                     <div className="col-span-2">
                       <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-mono font-bold uppercase border ${
                         facilitator.status === "active"
-                          ? "text-green-400 bg-green-500/10 border-green-500/20"
-                          : "text-white/30 bg-white/5 border-white/10"
+                          ? "text-[var(--success)] bg-[var(--success-bg)] border-[var(--success-border)]"
+                          : "text-[var(--text-tertiary)] bg-[var(--glass-subtle-bg)] border-[var(--bg-border)]"
                       }`}>
-                        <div className={`w-1.5 h-1.5 rounded-full ${facilitator.status === "active" ? "bg-green-500" : "bg-white/20"}`} />
+                        <div className={`w-1.5 h-1.5 rounded-full ${facilitator.status === "active" ? "bg-[var(--success)]" : "bg-[var(--glass-subtle-bg)]"}`} />
                         {facilitator.status}
                       </span>
                     </div>
-                    <div className="col-span-2 font-mono text-sm text-white/70">{facilitator.totalPayments}</div>
-                    <div className="col-span-1 font-mono text-[10px] text-white/30 uppercase">
+                    <div className="col-span-2 font-mono text-sm text-[var(--text-secondary)]">{facilitator.totalPayments}</div>
+                    <div className="col-span-1 font-mono text-[10px] text-[var(--text-tertiary)] uppercase">
                       {facilitator.network?.replace("avalanche-", "").replace("ethereum-", "").replace("base-", "").replace("polygon-", "") || "fuji"}
                     </div>
                   </motion.div>
@@ -418,41 +416,41 @@ export default function ExplorerPage() {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.5 + index * 0.05, duration: 0.3 }}
-                    className="md:hidden p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm space-y-3"
+                    className="md:hidden p-4 rounded-xl border border-[var(--bg-border)] glass-subtle backdrop-blur-sm space-y-3"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm text-white/40">#{index + 1}</span>
-                        <span className="font-mono text-sm text-white/90">{facilitator.name}</span>
+                        <span className="font-mono text-sm text-[var(--text-tertiary)]">#{index + 1}</span>
+                        <span className="font-mono text-sm text-[var(--text-primary)]">{facilitator.name}</span>
                       </div>
                       <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-mono font-bold uppercase border ${
                         facilitator.status === "active"
-                          ? "text-green-400 bg-green-500/10 border-green-500/20"
-                          : "text-white/30 bg-white/5 border-white/10"
+                          ? "text-[var(--success)] bg-[var(--success-bg)] border-[var(--success-border)]"
+                          : "text-[var(--text-tertiary)] bg-[var(--glass-subtle-bg)] border-[var(--bg-border)]"
                       }`}>
-                        <div className={`w-1.5 h-1.5 rounded-full ${facilitator.status === "active" ? "bg-green-500" : "bg-white/20"}`} />
+                        <div className={`w-1.5 h-1.5 rounded-full ${facilitator.status === "active" ? "bg-[var(--success)]" : "bg-[var(--glass-subtle-bg)]"}`} />
                         {facilitator.status}
                       </span>
                     </div>
                     <div className="space-y-1">
-                      <div className="text-[10px] text-white/30 font-mono uppercase tracking-widest">Wallet</div>
-                      <div className="text-xs text-white/50 font-mono">{truncateAddress(facilitator.facilitatorWallet)}</div>
+                      <div className="text-[10px] text-[var(--text-tertiary)] font-mono uppercase tracking-widest">Wallet</div>
+                      <div className="text-xs text-[var(--text-secondary)] font-mono">{truncateAddress(facilitator.facilitatorWallet)}</div>
                     </div>
-                    <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                      <div className="text-xs text-white/50 font-mono">{facilitator.totalPayments} payments</div>
-                      <div className="text-[10px] text-white/30 font-mono uppercase">{facilitator.network || "avalanche-fuji"}</div>
+                    <div className="flex items-center justify-between pt-2 border-t border-[var(--bg-border)]">
+                      <div className="text-xs text-[var(--text-secondary)] font-mono">{facilitator.totalPayments} payments</div>
+                      <div className="text-[10px] text-[var(--text-tertiary)] font-mono uppercase">{facilitator.network || "avalanche-fuji"}</div>
                     </div>
                   </motion.div>
                 </React.Fragment>
               ))}
             </div>
           ) : (
-            <div className="rounded-xl border border-white/10 bg-black/40 backdrop-blur-xl p-12 text-center">
-              <Users size={32} className="mx-auto text-white/20 mb-4" />
-              <p className="text-white/40 font-mono text-sm mb-2">No facilitators registered yet. Be the first.</p>
+            <div className="rounded-xl border border-[var(--bg-border)] glass backdrop-blur-xl p-12 text-center">
+              <Users size={32} className="mx-auto text-[var(--text-tertiary)] mb-4" />
+              <p className="text-[var(--text-tertiary)] font-mono text-sm mb-2">No facilitators registered yet. Be the first.</p>
               <Link
                 href="/facilitator"
-                className="inline-flex items-center gap-2 px-4 py-2 mt-4 rounded-lg bg-primary/10 border border-primary/20 text-primary font-mono text-xs uppercase tracking-wider hover:bg-primary/20 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 mt-4 rounded-lg bg-[var(--accent-muted)] border border-[var(--accent)]/20 text-[var(--accent)] font-mono text-xs uppercase tracking-wider hover:bg-[var(--accent-muted)] transition-colors"
               >
                 Deploy a Facilitator
                 <ArrowRight size={14} />
@@ -470,14 +468,14 @@ export default function ExplorerPage() {
         >
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="h-px w-8 bg-primary" />
-              <h2 className="text-lg font-bold font-mono text-white uppercase tracking-wider">
+              <GlassIcon icon={Activity} size="sm" />
+              <h2 className="text-lg font-bold font-display text-[var(--text-primary)] uppercase tracking-wider">
                 Recent Activity
               </h2>
             </div>
             <button
               onClick={fetchLogs}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/40 font-mono text-[10px] uppercase tracking-wider hover:bg-white/10 hover:text-white/60 transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg glass-subtle border border-[var(--bg-border)] text-[var(--text-tertiary)] font-mono text-[10px] uppercase tracking-wider hover:bg-[var(--bg-raised)] hover:text-[var(--text-secondary)] transition-colors"
             >
               <RefreshCw size={12} />
               Refresh
@@ -485,11 +483,11 @@ export default function ExplorerPage() {
           </div>
 
           {logsError ? (
-            <div className="rounded-xl border border-red-500/20 bg-red-500/5 backdrop-blur-xl p-8 text-center">
-              <p className="text-red-400 font-mono text-sm mb-4">{logsError}</p>
+            <div className="rounded-xl border border-[var(--error-bg)] bg-[var(--error-bg)] backdrop-blur-xl p-8 text-center">
+              <p className="text-[var(--error)] font-mono text-sm mb-4">{logsError}</p>
               <button
                 onClick={fetchLogs}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 font-mono text-xs uppercase tracking-wider hover:bg-red-500/20 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--error-bg)] border border-[var(--error-bg)] text-[var(--error)] font-mono text-xs uppercase tracking-wider hover:bg-[var(--error)]/20 transition-colors"
               >
                 <RefreshCw size={14} />
                 Retry
@@ -509,18 +507,18 @@ export default function ExplorerPage() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.7 + index * 0.04, duration: 0.3 }}
-                  className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 px-4 py-3 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/[0.02] transition-colors"
+                  className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 px-4 py-3 rounded-lg border border-[var(--bg-border)] hover:border-[var(--bg-border)] hover:bg-[var(--glass-subtle-bg)] transition-colors"
                 >
                   <div className="flex items-center gap-2 md:w-32 shrink-0">
-                    <Clock size={12} className="text-white/20" />
-                    <span className="text-xs text-white/40 font-mono">{relativeTime(log.timestamp)}</span>
+                    <Clock size={12} className="text-[var(--text-tertiary)]" />
+                    <span className="text-xs text-[var(--text-tertiary)] font-mono">{relativeTime(log.timestamp)}</span>
                   </div>
                   <div className="md:w-36 shrink-0">
                     <span className={`inline-flex px-2 py-1 rounded text-[10px] font-mono font-bold uppercase border ${getEventBadgeStyle(log.eventType)}`}>
                       {getEventLabel(log.eventType)}
                     </span>
                   </div>
-                  <div className="flex-1 font-mono text-sm text-white/70 truncate">
+                  <div className="flex-1 font-mono text-sm text-[var(--text-secondary)] truncate">
                     {log.facilitatorName || log.facilitatorId?.slice(0, 16) || "Network"}
                   </div>
                   <div className="shrink-0">
@@ -529,22 +527,22 @@ export default function ExplorerPage() {
                         href={`https://testnet.snowtrace.io/tx/${log.txHash}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 font-mono transition-colors"
+                        className="inline-flex items-center gap-1 text-xs text-[var(--accent)] hover:text-[var(--accent)] font-mono transition-colors"
                       >
                         {truncateAddress(log.txHash)}
                         <ExternalLink size={10} />
                       </a>
                     ) : (
-                      <span className="text-xs text-white/20 font-mono">--</span>
+                      <span className="text-xs text-[var(--text-tertiary)] font-mono">--</span>
                     )}
                   </div>
                 </motion.div>
               ))}
             </div>
           ) : (
-            <div className="rounded-xl border border-white/10 bg-black/40 backdrop-blur-xl p-12 text-center">
-              <Activity size={32} className="mx-auto text-white/20 mb-4" />
-              <p className="text-white/40 font-mono text-sm">No activity yet. Network is waiting for its first transaction.</p>
+            <div className="rounded-xl border border-[var(--bg-border)] glass backdrop-blur-xl p-12 text-center">
+              <Activity size={32} className="mx-auto text-[var(--text-tertiary)] mb-4" />
+              <p className="text-[var(--text-tertiary)] font-mono text-sm font-body">No activity yet. Network is waiting for its first transaction.</p>
             </div>
           )}
         </motion.div>
@@ -554,32 +552,32 @@ export default function ExplorerPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.5 }}
-          className="rounded-xl border border-white/10 bg-black/40 backdrop-blur-xl p-6 md:p-8 mb-12"
+          className="rounded-xl border border-[var(--bg-border)] glass backdrop-blur-xl p-6 md:p-8 mb-12"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="h-px w-8 bg-primary" />
-            <h2 className="text-lg font-bold font-mono text-white uppercase tracking-wider">
+            <GlassIcon icon={Globe} size="sm" />
+            <h2 className="text-lg font-bold font-display text-[var(--text-primary)] uppercase tracking-wider">
               Network Info
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <div className="text-[10px] font-mono text-white/30 uppercase tracking-widest">Settlement Chain</div>
-              <div className="text-sm font-mono text-white/80">Avalanche Fuji (Chain ID: 43113)</div>
+              <div className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-widest">Settlement Chain</div>
+              <div className="text-sm font-mono text-[var(--text-primary)] font-body">Avalanche Fuji (Chain ID: 43113)</div>
             </div>
             <div className="space-y-1">
-              <div className="text-[10px] font-mono text-white/30 uppercase tracking-widest">USDC Contract</div>
-              <div className="text-xs font-mono text-white/60 break-all">0x5425890298aed601595a70AB815c96711a31Bc65</div>
+              <div className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-widest">USDC Contract</div>
+              <div className="text-xs font-mono text-[var(--text-secondary)] break-all">0x5425890298aed601595a70AB815c96711a31Bc65</div>
             </div>
             <div className="space-y-1">
-              <div className="text-[10px] font-mono text-white/30 uppercase tracking-widest">Protocol</div>
-              <div className="text-sm font-mono text-white/80">x402 (HTTP 402 Payment Required)</div>
+              <div className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-widest">Protocol</div>
+              <div className="text-sm font-mono text-[var(--text-primary)] font-body">x402 (HTTP 402 Payment Required)</div>
             </div>
             <div className="space-y-1">
-              <div className="text-[10px] font-mono text-white/30 uppercase tracking-widest">SDK</div>
-              <div className="text-sm font-mono text-white/80">
-                <code className="px-2 py-1 rounded bg-white/5 border border-white/10 text-primary text-xs">
+              <div className="text-[10px] font-mono text-[var(--text-tertiary)] uppercase tracking-widest">SDK</div>
+              <div className="text-sm font-mono text-[var(--text-primary)]">
+                <code className="px-2 py-1 rounded bg-[var(--glass-subtle-bg)] border border-[var(--bg-border)] text-[var(--accent)] text-xs font-mono">
                   npm install facinet-sdk
                 </code>
               </div>
@@ -587,13 +585,11 @@ export default function ExplorerPage() {
           </div>
         </motion.div>
 
-        <div className="border-t border-white/5 mb-12" />
-
         {/* ── Full Explorer Logs ────────────────────────────────────────── */}
         <div className="space-y-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-px w-8 bg-primary" />
-            <h2 className="text-lg font-bold font-mono text-white uppercase tracking-wider">
+            <GlassIcon icon={Search} size="sm" />
+            <h2 className="text-lg font-bold font-display text-[var(--text-primary)] uppercase tracking-wider">
               Explorer Logs
             </h2>
           </div>
@@ -606,8 +602,8 @@ export default function ExplorerPage() {
                 onClick={() => setFilter(filterType)}
                 className={`px-4 py-2 rounded-lg font-mono text-xs uppercase tracking-wider whitespace-nowrap transition-colors ${
                   filter === filterType
-                    ? 'bg-primary text-black'
-                    : 'bg-white/5 border border-white/10 text-white/60 hover:bg-white/10'
+                    ? 'bg-[var(--accent)] text-[var(--bg-void)]'
+                    : 'glass-subtle border border-[var(--bg-border)] text-[var(--text-secondary)] hover:bg-[var(--bg-raised)]'
                 }`}
               >
                 {filterType === 'all' ? 'All Events' : getEventLabel(filterType)}
@@ -617,7 +613,7 @@ export default function ExplorerPage() {
 
           {/* Logs Table */}
           <div className="space-y-4">
-            <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-3 bg-white/5 rounded-t-lg border border-white/10 font-mono text-xs text-white/40 uppercase tracking-wider">
+            <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-3 glass-subtle rounded-t-lg border border-[var(--bg-border)] font-mono text-xs text-[var(--text-tertiary)] uppercase tracking-wider">
               <div className="col-span-2">Time</div>
               <div className="col-span-3">Event Type</div>
               <div className="col-span-3">Facilitator</div>
@@ -627,13 +623,13 @@ export default function ExplorerPage() {
 
             <div className="space-y-2">
               {logsLoading ? (
-                <div className="text-center py-12 text-white/40">Loading logs...</div>
+                <div className="text-center py-12 text-[var(--text-tertiary)]">Loading logs...</div>
               ) : filteredLogs.length > 0 ? (
                 filteredLogs.map((log) => (
                   <React.Fragment key={log.id}>
                     {/* Desktop Row */}
-                    <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-4 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/[0.02] transition-colors items-center">
-                      <div className="col-span-2 text-xs text-white/60 font-mono">
+                    <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-4 rounded-lg border border-[var(--bg-border)] hover:border-[var(--bg-border)] hover:bg-[var(--glass-subtle-bg)] transition-colors items-center">
+                      <div className="col-span-2 text-xs text-[var(--text-secondary)] font-mono">
                         {formatTimestamp(log.timestamp)}
                       </div>
                       <div className="col-span-3">
@@ -641,16 +637,16 @@ export default function ExplorerPage() {
                           {getEventLabel(log.eventType)}
                         </span>
                       </div>
-                      <div className="col-span-3 text-sm text-white/80 font-mono truncate">
+                      <div className="col-span-3 text-sm text-[var(--text-primary)] font-mono truncate">
                         {log.facilitatorName || log.facilitatorId?.slice(0, 12) || 'Network'}
                       </div>
                       <div className="col-span-2">
                         <span className={`inline-flex px-2 py-1 rounded text-[10px] font-mono font-bold uppercase ${
                           log.status === 'success'
-                            ? 'text-green-400 bg-green-500/10'
+                            ? 'text-[var(--success)] bg-[var(--success-bg)]'
                             : log.status === 'failed'
-                            ? 'text-red-400 bg-red-500/10'
-                            : 'text-yellow-400 bg-yellow-500/10'
+                            ? 'text-[var(--error)] bg-[var(--error-bg)]'
+                            : 'text-[var(--warning)] bg-[var(--warning-bg)]'
                         }`}>
                           {log.status}
                         </span>
@@ -661,7 +657,7 @@ export default function ExplorerPage() {
                             href={`https://testnet.snowtrace.io/tx/${log.txHash}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-blue-400 hover:text-blue-300 font-mono flex items-center gap-1 justify-end"
+                            className="text-xs text-[var(--accent)] hover:text-[var(--accent)] font-mono flex items-center gap-1 justify-end"
                           >
                             View TX <ArrowRight size={12} />
                           </a>
@@ -670,30 +666,30 @@ export default function ExplorerPage() {
                     </div>
 
                     {/* Mobile Card */}
-                    <div className="md:hidden p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm space-y-3">
+                    <div className="md:hidden p-4 rounded-xl border border-[var(--bg-border)] glass-subtle backdrop-blur-sm space-y-3">
                        <div className="flex items-center justify-between">
                           <span className={`inline-flex px-2 py-1 rounded text-[10px] font-mono font-bold uppercase border ${getEventBadgeStyle(log.eventType)}`}>
                             {getEventLabel(log.eventType)}
                           </span>
-                          <span className="text-[10px] text-white/40 font-mono">{formatTimestamp(log.timestamp)}</span>
+                          <span className="text-[10px] text-[var(--text-tertiary)] font-mono">{formatTimestamp(log.timestamp)}</span>
                        </div>
 
                        <div className="space-y-1">
-                          <div className="text-[10px] text-white/30 font-mono uppercase tracking-widest">Facilitator</div>
-                          <div className="text-sm text-white/80 font-mono truncate">
+                          <div className="text-[10px] text-[var(--text-tertiary)] font-mono uppercase tracking-widest">Facilitator</div>
+                          <div className="text-sm text-[var(--text-primary)] font-mono truncate">
                              {log.facilitatorName || log.facilitatorId?.slice(0, 12) || 'Network'}
                           </div>
                        </div>
 
-                       <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                       <div className="flex items-center justify-between pt-2 border-t border-[var(--bg-border)]">
                           <div className="flex items-center gap-2">
-                             <div className="text-[10px] text-white/30 font-mono uppercase">Status</div>
+                             <div className="text-[10px] text-[var(--text-tertiary)] font-mono uppercase">Status</div>
                              <span className={`inline-flex px-1.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
                                 log.status === 'success'
-                                  ? 'text-green-400 bg-green-500/10'
+                                  ? 'text-[var(--success)] bg-[var(--success-bg)]'
                                   : log.status === 'failed'
-                                  ? 'text-red-400 bg-red-500/10'
-                                  : 'text-yellow-400 bg-yellow-500/10'
+                                  ? 'text-[var(--error)] bg-[var(--error-bg)]'
+                                  : 'text-[var(--warning)] bg-[var(--warning-bg)]'
                              }`}>
                                {log.status}
                              </span>
@@ -703,7 +699,7 @@ export default function ExplorerPage() {
                               href={`https://testnet.snowtrace.io/tx/${log.txHash}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-[10px] text-blue-400 hover:text-blue-300 font-mono flex items-center gap-1"
+                              className="text-[10px] text-[var(--accent)] hover:text-[var(--accent)] font-mono flex items-center gap-1"
                             >
                               TX <ArrowRight size={10} />
                             </a>
@@ -713,7 +709,7 @@ export default function ExplorerPage() {
                   </React.Fragment>
                 ))
               ) : (
-                <div className="text-center py-12 text-white/40">
+                <div className="text-center py-12 text-[var(--text-tertiary)]">
                   No logs found
                 </div>
               )}

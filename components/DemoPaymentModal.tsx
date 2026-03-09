@@ -231,31 +231,31 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-black border border-white/10 rounded-2xl shadow-2xl my-8 animate-in fade-in zoom-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--glass-bg)] backdrop-blur-md overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-[var(--bg-void)] border border-[var(--bg-border)] rounded-2xl shadow-2xl my-8 animate-in fade-in zoom-in duration-200">
         <div className="max-h-[85vh] overflow-y-auto p-8 space-y-8">
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors z-10"
+            className="absolute top-4 right-4 p-2 rounded-full hover:bg-[var(--glass-bg)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors z-10"
           >
             <X size={20} />
           </button>
 
           {/* Header */}
           <div className="text-center space-y-2">
-            <h2 className="text-3xl font-bold font-mono text-white uppercase tracking-tight">
+            <h2 className="text-3xl font-display font-bold font-mono text-[var(--text-primary)] uppercase tracking-tight">
               x402 Demo Payment
             </h2>
-            <p className="text-white/60 font-light">Experience gasless payments with x402 protocol</p>
+            <p className="text-[var(--text-tertiary)] font-body font-light">Experience gasless payments with x402 protocol</p>
           </div>
 
           {/* Wallet Connection */}
           {!isConnected && (
-            <div className="p-6 rounded-xl border border-primary/20 bg-primary/5 flex items-center justify-between">
+            <div className="p-6 rounded-xl border border-[var(--accent-muted)] bg-[var(--accent-subtle)] flex items-center justify-between">
               <div>
-                <h3 className="text-white font-mono font-bold mb-1">Connect Your Wallet</h3>
-                <p className="text-white/60 text-sm">Connect to continue with demo payment</p>
+                <h3 className="text-[var(--text-primary)] font-mono font-bold mb-1">Connect Your Wallet</h3>
+                <p className="text-[var(--text-tertiary)] font-body text-sm">Connect to continue with demo payment</p>
               </div>
               <ConnectButton />
             </div>
@@ -264,9 +264,9 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
           {/* Step 1: Network Selection — COMMENTED: Multi-network selector removed, hardcoded to Avalanche Fuji */}
           {isConnected && step === 'network' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-300">
-              <div className="p-6 rounded-xl border border-white/10 bg-white/5 space-y-4">
-                <h3 className="font-bold text-white font-mono uppercase tracking-tight">Network</h3>
-                <p className="text-sm text-white/60 font-mono">
+              <div className="p-6 rounded-xl border border-[var(--bg-border)] bg-[var(--glass-subtle-bg)] space-y-4">
+                <h3 className="font-bold text-[var(--text-primary)] font-mono uppercase tracking-tight">Network</h3>
+                <p className="text-sm text-[var(--text-tertiary)] font-mono">
                   Payment will be processed on Avalanche Fuji testnet
                 </p>
               </div>
@@ -279,23 +279,23 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
 
               {/* Network Mismatch Warning */}
               {chain && chain.id !== getNetworkConfig(selectedNetwork).chain.id && (
-                <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                  <p className="text-sm text-yellow-300 font-mono">
+                <div className="p-4 rounded-xl bg-[var(--warning-bg)] border border-[var(--warning-muted)]">
+                  <p className="text-sm text-[var(--warning)] font-mono">
                     ⚠️ Please switch your wallet to {NETWORK_CONFIGS[selectedNetwork].displayName}
                   </p>
                 </div>
               )}
 
               {error && (
-                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                  <p className="text-sm text-red-300 font-mono">❌ {error}</p>
+                <div className="p-4 rounded-xl bg-[var(--error-bg)] border border-[var(--error-muted)]">
+                  <p className="text-sm text-[var(--error)] font-mono">❌ {error}</p>
                 </div>
               )}
 
               <button
                 onClick={handleNetworkSelected}
                 disabled={chain?.id !== getNetworkConfig(selectedNetwork).chain.id}
-                className="w-full bg-white text-black py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full bg-[var(--text-primary)] text-[var(--bg-void)] py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 Continue to Payment →
               </button>
@@ -305,47 +305,47 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
           {/* Step 2: Payment Confirmation */}
           {isConnected && step === 'payment' && (
             <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-300">
-              <div className="p-8 rounded-2xl bg-white/5 border border-white/10 text-center space-y-2">
-                <div className="text-5xl font-bold text-white font-mono tracking-tighter">0.2 USDC</div>
-                <div className="text-xs font-mono text-white/40 uppercase tracking-widest">
+              <div className="p-8 rounded-2xl bg-[var(--glass-subtle-bg)] border border-[var(--bg-border)] text-center space-y-2">
+                <div className="text-5xl font-bold text-[var(--text-primary)] font-mono tracking-tighter">0.2 USDC</div>
+                <div className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-widest">
                   on {NETWORK_CONFIGS[selectedNetwork].displayName}
                 </div>
               </div>
 
-              <div className="p-6 rounded-xl border border-blue-500/20 bg-blue-500/5 space-y-3">
-                <h3 className="font-bold text-blue-300 text-sm uppercase tracking-wide">Payment Breakdown</h3>
+              <div className="p-6 rounded-xl border border-[var(--accent-muted)] bg-[var(--accent-subtle)] space-y-3">
+                <h3 className="font-bold text-[var(--accent)] text-sm uppercase tracking-wide">Payment Breakdown</h3>
                 <div className="space-y-2 text-sm font-mono">
-                  <div className="flex justify-between text-white/60">
+                  <div className="flex justify-between text-[var(--text-tertiary)]">
                     <span>To Facilitator (99.5%):</span>
-                    <span className="text-white">0.199 USDC</span>
+                    <span className="text-[var(--text-primary)]">0.199 USDC</span>
                   </div>
-                  <div className="flex justify-between text-white/60">
+                  <div className="flex justify-between text-[var(--text-tertiary)]">
                     <span>Platform Fee (0.5%):</span>
-                    <span className="text-white">0.001 USDC</span>
+                    <span className="text-[var(--text-primary)]">0.001 USDC</span>
                   </div>
-                  <div className="border-t border-white/10 pt-2 flex justify-between font-bold">
-                    <span className="text-white">Total:</span>
-                    <span className="text-primary">0.2 USDC</span>
+                  <div className="border-t border-[var(--bg-border)] pt-2 flex justify-between font-bold">
+                    <span className="text-[var(--text-primary)]">Total:</span>
+                    <span className="text-[var(--accent)]">0.2 USDC</span>
                   </div>
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                <p className="text-xs text-white/60 font-mono text-center">
+              <div className="p-4 rounded-xl bg-[var(--glass-subtle-bg)] border border-[var(--bg-border)]">
+                <p className="text-xs text-[var(--text-tertiary)] font-mono text-center">
                   You'll sign 2 authorizations. A random facilitator will execute the transfers and pay gas fees.
                 </p>
               </div>
 
               {error && (
-                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                  <p className="text-sm text-red-300 font-mono">❌ {error}</p>
+                <div className="p-4 rounded-xl bg-[var(--error-bg)] border border-[var(--error-muted)]">
+                  <p className="text-sm text-[var(--error)] font-mono">❌ {error}</p>
                 </div>
               )}
 
               <button
                 onClick={handlePayment}
                 disabled={isProcessing}
-                className="w-full bg-white text-black py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full bg-[var(--text-primary)] text-[var(--bg-void)] py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {isProcessing ? 'Processing...' : 'Pay 0.2 USDC via x402'}
               </button>
@@ -356,11 +356,11 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
           {step === 'processing' && (
             <div className="space-y-6 text-center animate-in fade-in zoom-in duration-300">
               <div className="flex justify-center">
-                <Loader2 className="w-16 h-16 text-primary animate-spin" />
+                <Loader2 className="w-16 h-16 text-[var(--accent)] animate-spin" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white mb-2">Processing Payment...</h3>
-                <p className="text-sm text-white/60 font-mono">
+                <h3 className="text-xl font-display font-bold text-[var(--text-primary)] mb-2">Processing Payment...</h3>
+                <p className="text-sm text-[var(--text-tertiary)] font-mono">
                   {selectedFacilitator ? `Facilitator "${selectedFacilitator.name}" is executing the transfers` : 'Selecting facilitator...'}
                 </p>
               </div>
@@ -371,24 +371,24 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
           {step === 'success' && (
             <div className="space-y-6 text-center animate-in fade-in zoom-in duration-300">
               <div className="flex justify-center">
-                <div className="p-4 rounded-full bg-green-500/20 border border-green-500/20">
-                  <CheckCircle2 className="w-16 h-16 text-green-400" />
+                <div className="p-4 rounded-full bg-[var(--success-bg)] border border-[var(--success-muted)]">
+                  <CheckCircle2 className="w-16 h-16 text-[var(--success)]" />
                 </div>
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-white mb-2">Payment Successful!</h3>
-                <p className="text-sm text-white/60 font-mono mb-4">
+                <h3 className="text-2xl font-display font-bold text-[var(--text-primary)] mb-2">Payment Successful!</h3>
+                <p className="text-sm text-[var(--text-tertiary)] font-mono mb-4">
                   Your payment has been processed via x402 protocol
                 </p>
                 {txHash && (
-                  <div className="p-3 rounded-lg bg-black/50 border border-white/10">
-                    <p className="text-xs text-white/40 mb-1">Transaction Hash:</p>
-                    <p className="text-xs text-white/80 font-mono break-all">{txHash}</p>
+                  <div className="p-3 rounded-lg bg-[var(--glass-bg)] border border-[var(--bg-border)]">
+                    <p className="text-xs text-[var(--text-tertiary)] mb-1">Transaction Hash:</p>
+                    <p className="text-xs text-[var(--text-secondary)] font-mono break-all">{txHash}</p>
                   </div>
                 )}
               </div>
-              <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
-                <p className="text-sm text-primary font-mono">
+              <div className="p-4 rounded-xl bg-[var(--accent-subtle)] border border-[var(--accent-muted)]">
+                <p className="text-sm text-[var(--accent)] font-mono">
                   🎯 Redirecting to Apex Hunt in 3 seconds...
                 </p>
               </div>
@@ -399,12 +399,12 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
           {step === 'error' && (
             <div className="space-y-6 text-center animate-in fade-in zoom-in duration-300">
               <div className="flex justify-center">
-                <div className="p-4 rounded-full bg-red-500/20 border border-red-500/20">
-                  <AlertCircle className="w-16 h-16 text-red-400" />
+                <div className="p-4 rounded-full bg-[var(--error-bg)] border border-[var(--error-muted)]">
+                  <AlertCircle className="w-16 h-16 text-[var(--error)]" />
                 </div>
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-white mb-2">Payment Failed</h3>
+                <h3 className="text-2xl font-display font-bold text-[var(--text-primary)] mb-2">Payment Failed</h3>
                 {error && (
                   <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20">
                     <p className="text-sm text-red-300 font-mono">{error}</p>
@@ -413,7 +413,7 @@ export function DemoPaymentModal({ isOpen, onClose }: DemoPaymentModalProps) {
               </div>
               <button
                 onClick={() => setStep('network')}
-                className="w-full bg-white text-black py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-white/90 transition-all"
+                className="w-full bg-[var(--text-primary)] text-[var(--bg-void)] py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:opacity-90 transition-all"
               >
                 Try Again
               </button>

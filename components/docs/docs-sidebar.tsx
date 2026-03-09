@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useDocsSearch } from "@/components/docs/docs-search-context"
 
 interface NavSubItem {
   title: string
@@ -71,21 +72,46 @@ export function DocsSidebar() {
     },
   ]
 
+  const { query } = useDocsSearch()
+
   const toggleSection = (title: string) => {
     setExpandedSections((prev) => (prev.includes(title) ? prev.filter((s) => s !== title) : [...prev, title]))
   }
 
+  const filteredNavigation = useMemo(() => {
+    if (!query.trim()) return navigation
+    const q = query.toLowerCase()
+    return navigation
+      .map((section) => {
+        const sectionMatches = section.title.toLowerCase().includes(q)
+        if (!section.items) return sectionMatches ? section : null
+        const matchedItems = section.items.filter(
+          (item) => item.title.toLowerCase().includes(q)
+        )
+        if (sectionMatches || matchedItems.length > 0) {
+          return { ...section, items: sectionMatches ? section.items : matchedItems }
+        }
+        return null
+      })
+      .filter(Boolean) as NavItem[]
+  }, [query, navigation])
+
+  const isSearching = query.trim().length > 0
+
   return (
-    <div className="hidden lg:block w-64 flex-shrink-0 h-[calc(100vh-10rem)] sticky top-16 overflow-y-auto py-6 pr-4 font-mono text-sm">
+    <div className="hidden lg:block w-64 flex-shrink-0 h-[calc(100vh-10rem)] sticky top-16 overflow-y-auto py-6 pr-4 text-sm">
         <nav className="space-y-6">
-          {navigation.map((section) => {
-            const isExpanded = expandedSections.includes(section.title)
+          {filteredNavigation.length === 0 && (
+            <p className="text-xs text-[var(--text-tertiary)] font-mono px-1">No results for &quot;{query}&quot;</p>
+          )}
+          {filteredNavigation.map((section) => {
+            const isExpanded = isSearching || expandedSections.includes(section.title)
             const isActive = section.href === pathname
 
             if (!section.items) {
                return (
-                <Link key={section.title} href={section.href || "#"} className={cn("block hover:text-white transition-colors", isActive ? "text-primary font-bold" : "text-white/40")}>
-                   <span className="mr-3">{isActive ? ">" : "#"}</span>
+                <Link key={section.title} href={section.href || "#"} className={cn("block font-body text-[0.875rem] hover:text-[var(--text-primary)] transition-colors", isActive ? "text-[var(--accent)] font-medium" : "text-[var(--text-secondary)] font-normal")}>
+                   <span className="mr-3 font-mono">{isActive ? ">" : "#"}</span>
                    {section.title.toUpperCase()}
                 </Link>
                )
@@ -95,19 +121,19 @@ export function DocsSidebar() {
               <div key={section.title}>
                 <button
                   onClick={() => toggleSection(section.title)}
-                  className="w-full text-left hover:text-white transition-colors mb-2 text-white/40 font-bold"
+                  className="w-full text-left hover:text-[var(--text-primary)] transition-colors mb-2 text-[var(--text-tertiary)] font-body text-[0.75rem] font-semibold tracking-[0.06em] uppercase"
                 >
-                  <span className="mr-3 text-primary opacity-50">[{isExpanded ? "-" : "+"}]</span>
+                  <span className="mr-3 text-[var(--accent)] opacity-50 font-mono">[{isExpanded ? "-" : "+"}]</span>
                   {section.title.toUpperCase()}
                 </button>
 
                 {isExpanded && (
-                  <div className="ml-1 space-y-1 border-l border-white/5 pl-4">
+                  <div className="ml-1 space-y-1 border-l border-[var(--bg-border)] pl-4">
                     {section.items.map((item) => {
                       const isItemActive = pathname === item.href
                       return (
-                        <Link key={item.href + item.title} href={item.href} className={cn("block hover:text-white transition-colors py-1", isItemActive ? "text-primary" : "text-white/40")}>
-                          <span className="mr-3 opacity-30">{isItemActive ? "*" : "-"}</span>
+                        <Link key={item.href + item.title} href={item.href} className={cn("block font-body text-[0.875rem] hover:text-[var(--text-primary)] transition-colors py-1", isItemActive ? "text-[var(--accent)] font-medium" : "text-[var(--text-secondary)] font-normal")}>
+                          <span className="mr-3 opacity-30 font-mono">{isItemActive ? "*" : "-"}</span>
                           {item.title}
                         </Link>
                       )

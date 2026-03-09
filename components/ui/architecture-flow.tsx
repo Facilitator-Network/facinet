@@ -42,18 +42,18 @@ export function AnimatedArchitectureFlow({
 }: ArchitectureFlowProps) {
 
   return (
-    <div className="p-8 rounded-3xl bg-black/40 border border-white/10 relative overflow-hidden group">
+    <div className="p-8 rounded-3xl bg-[var(--glass-bg)] border border-[var(--bg-border)] relative overflow-hidden group">
       {/* Circuit Board Background Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
       <div className="absolute inset-0 bg-gradient-radial from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
       
       {title && (
         <div className="relative z-10 mb-8 md:mb-12 text-center md:text-left">
-          <h3 className="text-xl md:text-2xl font-bold font-mono text-white uppercase tracking-tight mb-2 flex items-center gap-3">
+          <h3 className="text-xl md:text-2xl font-display font-bold font-mono text-[var(--text-primary)] uppercase tracking-tight mb-2 flex items-center gap-3">
              <div className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_10px_rgba(255,255,255,0.3)]" />
              {title}
           </h3>
-          {description && <p className="text-white/50 text-sm md:text-base max-w-2xl font-light font-mono">{description}</p>}
+          {description && <p className="text-[var(--text-tertiary)] text-sm md:text-base max-w-2xl font-light font-mono">{description}</p>}
         </div>
       )}
 
@@ -74,31 +74,31 @@ export function AnimatedArchitectureFlow({
                    <div 
                       className={`
                         w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center relative z-20 transition-all duration-500
-                        ${step.type === 'start' ? 'bg-white/10 border-2 border-white text-white shadow-[0_0_20px_rgba(255,255,255,0.2)]' : 
-                          step.type === 'end' ? 'bg-white/10 border-2 border-white/60 text-white/90 shadow-[0_0_20px_rgba(255,255,255,0.15)]' : 
-                          'bg-black/60 border border-white/20 text-white/70 hover:border-white/50 hover:text-white'}
+                        ${step.type === 'start' ? 'bg-[var(--glass-subtle-bg)] border-2 border-[var(--text-primary)] text-[var(--text-primary)] shadow-[0_0_20px_rgba(255,255,255,0.2)]' :
+                          step.type === 'end' ? 'bg-[var(--glass-subtle-bg)] border-2 border-[var(--text-secondary)] text-[var(--text-secondary)] shadow-[0_0_20px_rgba(255,255,255,0.15)]' :
+                          'bg-[var(--glass-bg)] border border-[var(--bg-border)] text-[var(--text-secondary)] hover:border-[var(--text-tertiary)] hover:text-[var(--text-primary)]'}
                       `}
                    >
                       {Icon ? <Icon size={24} strokeWidth={1.5} /> : <div className="w-3 h-3 bg-current rounded-full" />}
                       
                       {/* Status Dot */}
-                      <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-black ${
-                          step.type === 'start' ? 'bg-white' : step.type === 'end' ? 'bg-white/60' : 'bg-white/20'
+                      <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[var(--bg-void)] ${
+                          step.type === 'start' ? 'bg-[var(--text-primary)]' : step.type === 'end' ? 'bg-[var(--text-secondary)]' : 'bg-[var(--text-tertiary)]'
                       }`} />
                    </div>
 
                    {/* Label (Static) */}
                    <div className="text-center space-y-1">
-                      <div className="text-xs md:text-sm font-bold font-mono uppercase text-white tracking-wider">
+                      <div className="text-xs md:text-sm font-bold font-mono uppercase text-[var(--text-primary)] tracking-wider">
                         {step.label}
                       </div>
                       {step.subLabel && (
-                        <div className="text-[10px] font-mono text-white/70 uppercase tracking-widest bg-white/10 px-2 py-0.5 rounded-full inline-block">
+                        <div className="text-[10px] font-mono text-[var(--text-secondary)] uppercase tracking-widest bg-[var(--glass-subtle-bg)] px-2 py-0.5 rounded-full inline-block">
                           {step.subLabel}
                         </div>
                       )}
                       {step.description && (
-                        <p className="text-[10px] text-white/40 leading-tight max-w-[120px] mx-auto hidden md:block mt-2">
+                        <p className="text-[10px] text-[var(--text-tertiary)] leading-tight max-w-[120px] mx-auto hidden md:block mt-2">
                           {step.description}
                         </p>
                       )}
@@ -109,7 +109,7 @@ export function AnimatedArchitectureFlow({
                 {!isLast && (
                   <div className="flex-1 min-w-[40px] md:min-w-[80px] h-[64px] flex items-center justify-center relative -mx-4 z-10">
                     {/* The Wire */}
-                    <div className="w-full h-[2px] bg-white/10 relative overflow-hidden rounded-full">
+                    <div className="w-full h-[2px] bg-[var(--bg-border)] relative overflow-hidden rounded-full">
                        {/* Moving Particle Packet */}
                        <motion.div 
                           animate={{ x: ["-100%", "200%"] }}
@@ -124,7 +124,7 @@ export function AnimatedArchitectureFlow({
                     </div>
                     
                     {/* Arrow Head on wire center (optional, simplifies to just moving packet) */}
-                    <div className="absolute right-0 text-white/10 transform translate-x-1/2">
+                    <div className="absolute right-0 text-[var(--bg-border)] transform translate-x-1/2">
                        <ArrowRight size={12} />
                     </div>
                   </div>

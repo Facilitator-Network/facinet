@@ -1,25 +1,10 @@
 "use client"
 
-/**
- * HeroSection Component
- * 
- * This is the first section users see on the homepage.
- * It uses GSAP (GreenSock Animation Platform) for high-performance entrance animations.
- * 
- * JUNIOR DEV NOTE:
- * - We use `useRef` to target DOM elements for animation without triggering re-renders.
- * - `gsap.context` is crucial in React to strictly scope animations and clean them up
- *   automatically when the component unmounts, preventing memory leaks or double-animations.
- */
-
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { GlowingBorderBtn } from "@/components/ui/glowing-border-btn"
 import { WebGLShader } from "@/components/ui/web-gl-shader"
 import { ArrowRight, Play, LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-// Map string keys to actual Icon components to allow dynamic data loading
 const ICON_MAP: Record<string, LucideIcon> = {
   ArrowRight,
   Play,
@@ -48,19 +33,16 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ data, onGetDemoClick }: HeroSectionProps) {
-  // State for auto-expansion animation
   const [isAutoExpanded, setIsAutoExpanded] = useState(false)
   const [activeOption, setActiveOption] = useState<'get' | 'watch'>('get')
   const [hoveredOption, setHoveredOption] = useState<'get' | 'watch' | null>(null)
 
-  // Determine which option to highlight visually
   const displayOption = hoveredOption || activeOption
 
   useEffect(() => {
-    // Sequence: Wait 500ms -> Expand -> Wait 2s -> Collapse
     const expandTimer = setTimeout(() => setIsAutoExpanded(true), 500)
     const collapseTimer = setTimeout(() => setIsAutoExpanded(false), 2500)
-    
+
     return () => {
       clearTimeout(expandTimer)
       clearTimeout(collapseTimer)
@@ -72,140 +54,150 @@ export function HeroSection({ data, onGetDemoClick }: HeroSectionProps) {
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Background Shader Effect - Keeps the main thread free by using WebGL */}
       <WebGLShader />
-      
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full mt-12 sm:mt-20">
-        <div className="relative border border-[#27272a] p-2 w-full mx-auto max-w-[52rem] z-10 bg-black/40 backdrop-blur-sm rounded-xl">
-          <main className="relative border border-[#27272a] py-8 md:py-12 overflow-hidden rounded-lg flex flex-col items-center text-center">
-            
-            {/* Animated Badge */}
-            {data.badge && (
-              <div className="my-8 flex items-center justify-center gap-2 mb-8">
-                  <span className="relative flex h-3 w-3 items-center justify-center">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-neon-blue opacity-75"></span>
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-neon-blue"></span>
-                  </span>
-                  <p className="text-xs md:text-sm text-neon-blue font-mono uppercase tracking-wider">{data.badge}</p>
-              </div>
-            )}
+        <div className="relative w-full mx-auto max-w-3xl z-10 flex flex-col items-center text-center">
 
-            {/* Main Title with Hover Effect */}
-            <h1 className="mb-4 text-white text-5xl md:text-7xl font-bold tracking-tighter uppercase leading-none select-none">
-              {data.title === "FACINET" ? (
-                <span className="group relative inline-flex items-center justify-center cursor-default">
-                  {/* F A C I */}
-                  <span className={cn(
-                    "transition-all duration-300",
-                    isAutoExpanded 
-                      ? "text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" 
-                      : "group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
-                  )}>
-                    FACI
-                  </span>
-                  
-                  {/* LITATOR */}
-                  <span className={cn(
-                    "overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] whitespace-pre text-blue-400 origin-left",
-                    isAutoExpanded 
-                      ? "max-w-full md:max-w-[4.5em] opacity-100 drop-shadow-[0_0_15px_rgba(96,165,250,0.8)]" 
-                      : "max-w-0 opacity-0 group-hover:max-w-full md:group-hover:max-w-[4.5em] group-hover:opacity-100 group-hover:drop-shadow-[0_0_15px_rgba(96,165,250,0.8)]"
-                  )}>
-                    LITATOR&nbsp;
-                  </span>
-
-                  {/* N E T */}
-                  <span className={cn(
-                    "transition-all duration-300",
-                    isAutoExpanded 
-                      ? "text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" 
-                      : "group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
-                  )}>
-                    NET
-                  </span>
-
-                  {/* WORK */}
-                  <span className={cn(
-                    "overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] text-blue-400 origin-left",
-                    isAutoExpanded 
-                      ? "max-w-full md:max-w-[3.5em] opacity-100 drop-shadow-[0_0_15px_rgba(96,165,250,0.8)]" 
-                      : "max-w-0 opacity-0 group-hover:max-w-full md:group-hover:max-w-[3.5em] group-hover:opacity-100 group-hover:drop-shadow-[0_0_15px_rgba(96,165,250,0.8)]"
-                  )}>
-                    WORK
-                  </span>
-                </span>
-              ) : (
-                <span className="inline-block transition-all duration-300 hover:drop-shadow-[0_0_35px_rgba(255,255,255,0.8)] cursor-default">
-                  {data.title}
-                </span>
-              )}
-            </h1>
-
-            <p className="mb-8 text-lg font-light text-white/60 md:text-xl max-w-2xl mx-auto font-sans leading-relaxed">
-              {data.description}
-            </p>
-            
-            {/* Call to Actions - Three options in one */}
-            <div className="flex flex-col sm:flex-row items-center gap-0 justify-center w-full z-20 pointer-events-auto border border-[#27272a] p-1 rounded-full backdrop-blur-xl bg-black/50 shadow-2xl max-w-fit mx-auto">
-              
-              {/* Demo/Watch Group */}
-              <div className="flex items-center">
-                <button 
-                  onMouseEnter={() => setHoveredOption('get')}
-                  onMouseLeave={() => setHoveredOption(null)}
-                  onClick={() => {
-                    setActiveOption('get')
-                    onGetDemoClick?.()
-                  }}
-                  className={cn(
-                    "px-6 sm:px-8 h-12 rounded-full text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 relative z-10 whitespace-nowrap",
-                    displayOption === 'get' 
-                      ? "text-white bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
-                      : "text-white/50 hover:text-white/80 hover:bg-white/5"
-                  )}
-                >
-                  <PrimaryIcon className="w-4 h-4 shrink-0" />
-                  {data.ctaPrimary.text}
-                </button>
-
-                <button 
-                  onMouseEnter={() => setHoveredOption('watch')}
-                  onMouseLeave={() => setHoveredOption(null)}
-                  onClick={() => setActiveOption('watch')}
-                  className={cn(
-                    "px-6 sm:px-8 h-12 rounded-full text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 relative z-10 whitespace-nowrap",
-                    displayOption === 'watch' 
-                      ? "text-white bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
-                      : "text-white/50 hover:text-white/80 hover:bg-white/5"
-                  )}
-                >
-                  <SecondaryIcon className="w-4 h-4 shrink-0" />
-                  {data.ctaSecondary.text}
-                </button>
-              </div>
-
-              {/* Apply for Whitelisting */}
-              <button
-                onClick={() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-8 h-12 rounded-full text-sm font-bold transition-all duration-500 flex items-center justify-center gap-2 relative z-10 whitespace-nowrap bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black hover:border-white group"
-              >
-                <span className="relative z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] group-hover:drop-shadow-none">
-                  Apply for Whitelisting
-                </span>
-                <span className="absolute -inset-0.5 bg-white/5 rounded-full blur-sm opacity-50 group-hover:opacity-0 transition-opacity" />
-              </button>
-            </div> 
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-8 pt-8 w-full max-w-lg mx-auto border-t border-white/5 mt-8 px-2 sm:px-0">
-              {data.stats.map((stat, index) => (
-                <div key={index} className="space-y-0.5">
-                  <div className="text-sm sm:text-lg md:text-xl font-bold text-white/90">{stat.value}</div>
-                  <div className="text-[10px] sm:text-xs uppercase tracking-wider text-white/40 font-mono break-words">{stat.label}</div>
-                </div>
-              ))}
+          {/* Badge */}
+          {data.badge && (
+            <div className="mb-6 flex items-center gap-2">
+              <span className="relative flex h-2.5 w-2.5 items-center justify-center">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-75"></span>
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--accent)]"></span>
+              </span>
+              <p className="text-[10px] md:text-xs text-[var(--accent)] uppercase tracking-[0.2em] font-mono font-medium">
+                {data.badge}
+              </p>
             </div>
-          </main>
+          )}
+
+          {/* Title */}
+          <h1
+            className="mb-6 text-[var(--text-primary)] text-5xl md:text-7xl font-display tracking-[-0.03em] uppercase leading-[0.9] select-none"
+            style={{ fontWeight: 900 }}
+          >
+            {data.title === "FACINET" ? (
+              <span className="group relative inline-flex items-center justify-center cursor-default">
+                <span className={cn(
+                  "transition-all duration-300",
+                  isAutoExpanded
+                    ? "text-[var(--text-primary)] drop-shadow-[0_0_10px_var(--text-primary)]"
+                    : "group-hover:text-[var(--text-primary)] group-hover:drop-shadow-[0_0_10px_var(--text-primary)]"
+                )}>
+                  FACI
+                </span>
+
+                <span className={cn(
+                  "overflow-hidden whitespace-pre text-[var(--accent)] origin-left transition-[max-width] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
+                  isAutoExpanded
+                    ? "max-w-[4.5em] drop-shadow-[0_0_15px_var(--accent)]"
+                    : "max-w-0 group-hover:max-w-[4.5em] group-hover:drop-shadow-[0_0_15px_var(--accent)]"
+                )}>
+                  LITATOR&nbsp;
+                </span>
+
+                <span className={cn(
+                  "transition-all duration-300",
+                  isAutoExpanded
+                    ? "text-[var(--text-primary)] drop-shadow-[0_0_10px_var(--text-primary)]"
+                    : "group-hover:text-[var(--text-primary)] group-hover:drop-shadow-[0_0_10px_var(--text-primary)]"
+                )}>
+                  NET
+                </span>
+
+                <span className={cn(
+                  "overflow-hidden text-[var(--accent)] origin-left transition-[max-width] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
+                  isAutoExpanded
+                    ? "max-w-[3.5em] drop-shadow-[0_0_15px_var(--accent)]"
+                    : "max-w-0 group-hover:max-w-[3.5em] group-hover:drop-shadow-[0_0_15px_var(--accent)]"
+                )}>
+                  WORK
+                </span>
+              </span>
+            ) : (
+              <span className="inline-block transition-all duration-300 hover:drop-shadow-[0_0_35px_var(--text-primary)] cursor-default">
+                {data.title}
+              </span>
+            )}
+          </h1>
+
+          {/* Description */}
+          <p className="mb-10 font-body text-lg md:text-xl text-[var(--text-secondary)] max-w-[55ch] leading-relaxed">
+            {data.description}
+          </p>
+
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 mb-12">
+            <div
+              className="flex items-center p-1 rounded-full"
+              style={{
+                background: 'var(--glass-heavy-bg)',
+                backdropFilter: 'var(--glass-heavy-blur)',
+                WebkitBackdropFilter: 'var(--glass-heavy-blur)',
+                border: '1px solid var(--bg-border)',
+              }}
+            >
+              <button
+                onMouseEnter={() => setHoveredOption('get')}
+                onMouseLeave={() => setHoveredOption(null)}
+                onClick={() => {
+                  setActiveOption('get')
+                  onGetDemoClick?.()
+                }}
+                className={cn(
+                  "px-5 sm:px-6 h-10 rounded-full font-mono text-xs font-bold tracking-[0.06em] uppercase transition-all duration-300 flex items-center gap-2 whitespace-nowrap",
+                  displayOption === 'get'
+                    ? "text-[var(--text-primary)] bg-[var(--accent-muted)] shadow-[0_0_12px_var(--accent-muted)]"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                )}
+              >
+                <PrimaryIcon className="w-3.5 h-3.5" />
+                {data.ctaPrimary.text}
+              </button>
+
+              <button
+                onMouseEnter={() => setHoveredOption('watch')}
+                onMouseLeave={() => setHoveredOption(null)}
+                onClick={() => setActiveOption('watch')}
+                className={cn(
+                  "px-5 sm:px-6 h-10 rounded-full font-mono text-xs font-bold tracking-[0.06em] uppercase transition-all duration-300 flex items-center gap-2 whitespace-nowrap",
+                  displayOption === 'watch'
+                    ? "text-[var(--text-primary)] bg-[var(--accent-muted)] shadow-[0_0_12px_var(--accent-muted)]"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                )}
+              >
+                <SecondaryIcon className="w-3.5 h-3.5" />
+                {data.ctaSecondary.text}
+              </button>
+            </div>
+
+            <button
+              onClick={() => document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' })}
+              className="h-10 px-6 rounded-full font-mono text-xs font-bold tracking-[0.06em] uppercase transition-all duration-300 flex items-center gap-2 whitespace-nowrap bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] hover:shadow-[0_0_24px_var(--accent-muted)]"
+            >
+              Apply for Whitelisting
+            </button>
+          </div>
+
+          {/* Stats */}
+          <div
+            className="flex items-center divide-x divide-[var(--bg-border)] rounded-2xl px-2 py-4"
+            style={{
+              background: 'var(--glass-bg)',
+              backdropFilter: 'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+              border: '1px solid var(--glass-border)',
+            }}
+          >
+            {data.stats.map((stat, index) => (
+              <div key={index} className="flex flex-col items-center gap-0.5 px-6 sm:px-10">
+                <div className="font-mono text-2xl sm:text-3xl font-bold tabular-nums text-[var(--text-primary)]">{stat.value}</div>
+                <div className="font-mono text-[9px] sm:text-[10px] tracking-[0.15em] uppercase text-[var(--text-secondary)]">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
     </section>

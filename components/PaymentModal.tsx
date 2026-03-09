@@ -94,41 +94,41 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-[var(--glass-bg)] flex items-center justify-center z-50 p-4"
           onClick={onClose}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white border-4 border-black p-8 max-w-md w-full"
+            className="bg-[var(--bg-void)] border border-[var(--bg-border)] rounded-2xl p-8 max-w-md w-full"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
             <button
               onClick={onClose}
-              className="float-right text-2xl font-bold hover:text-gray-600"
+              className="float-right text-2xl font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
             >
               ×
             </button>
 
             <div className="clear-both">
               {/* x402 Badge */}
-              <div className="inline-block px-3 py-1 bg-black text-white text-xs font-bold mb-4">
+              <div className="inline-block px-3 py-1 bg-[var(--glass-subtle-bg)] border border-[var(--bg-border)] rounded text-[var(--text-primary)] text-xs font-mono font-bold mb-4">
                 x402 PROTOCOL
               </div>
 
-              <h2 className="text-3xl font-bold mb-4">Payment Required</h2>
+              <h2 className="text-3xl font-display font-bold mb-4 text-[var(--text-primary)]">Payment Required</h2>
 
               <div className="mb-6">
-                <p className="text-lg mb-2">To access the Builder Hub, you need to pay:</p>
-                <div className="text-4xl font-bold mb-2">{PAYMENT_AMOUNT} USDC</div>
-                <p className="text-sm text-gray-600">on Avalanche Fuji Testnet</p>
+                <p className="text-lg mb-2 font-body text-[var(--text-secondary)]">To access the Builder Hub, you need to pay:</p>
+                <div className="text-4xl font-bold mb-2 text-[var(--text-primary)]">{PAYMENT_AMOUNT} USDC</div>
+                <p className="text-sm text-[var(--text-tertiary)]">on Avalanche Fuji Testnet</p>
               </div>
 
               {/* Balance Display */}
               {address && usdcBalance && (
-                <div className="mb-6 p-4 border-2 border-black">
+                <div className="mb-6 p-4 border border-[var(--bg-border)] rounded-lg">
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Your USDC Balance:</span>
                     <span className="font-bold text-lg">
@@ -140,8 +140,8 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
 
               {/* Insufficient Balance Warning */}
               {address && !hasEnoughUSDC && (
-                <div className="mb-4 p-4 bg-gray-100 border-2 border-black">
-                  <p className="text-sm font-medium">
+                <div className="mb-4 p-4 bg-[var(--warning-bg)] border border-[var(--warning-muted)] rounded-lg">
+                  <p className="text-sm font-medium text-[var(--warning)]">
                     ⚠️ Insufficient USDC balance. Please swap AVAX for USDC first.
                   </p>
                 </div>
@@ -149,8 +149,8 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
 
               {/* Error Message */}
               {errorMessage && (
-                <div className="mb-4 p-4 bg-red-100 border-2 border-red-500">
-                  <p className="text-sm font-medium text-red-700">
+                <div className="mb-4 p-4 bg-[var(--error-bg)] border border-[var(--error-muted)] rounded-lg">
+                  <p className="text-sm font-medium text-[var(--error)]">
                     Error: {errorMessage}
                   </p>
                 </div>
@@ -160,7 +160,7 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
               <button
                 onClick={handlePayment}
                 disabled={!address || !hasEnoughUSDC || isPending || isConfirming || paymentStatus === 'success'}
-                className="w-full py-4 bg-black text-white font-bold hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors mb-4"
+                className="w-full py-4 bg-[var(--text-primary)] text-[var(--bg-void)] font-bold font-mono rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mb-4"
               >
                 {!address ? 'Connect Wallet First'
                   : !hasEnoughUSDC ? 'Insufficient USDC'
@@ -176,15 +176,15 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-black text-white text-center"
+                  className="p-4 bg-[var(--success-bg)] border border-[var(--success-muted)] rounded-lg text-center"
                 >
-                  <p className="font-bold mb-2">✓ Payment Successful!</p>
-                  <p className="text-sm mb-3">Redirecting to Builder Hub...</p>
+                  <p className="font-bold mb-2 text-[var(--success)]">✓ Payment Successful!</p>
+                  <p className="text-sm mb-3 text-[var(--text-secondary)]">Redirecting to Builder Hub...</p>
                   <a
                     href={`https://testnet.snowtrace.io/tx/${hash}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs underline hover:text-gray-300 transition-colors"
+                    className="text-xs underline text-[var(--accent)] hover:opacity-80 transition-colors"
                   >
                     View transaction on Snowtrace →
                   </a>
@@ -192,7 +192,7 @@ export function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
               )}
 
               {/* Info */}
-              <p className="text-xs text-gray-500 text-center">
+              <p className="text-xs text-[var(--text-tertiary)] text-center font-mono">
                 Powered by x402 payment protocol on Avalanche
               </p>
             </div>

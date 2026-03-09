@@ -1,40 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Card } from "@/components/ui/card"
 import { Activity, Coins, Globe, TrendingUp } from "lucide-react"
-
-// COMMENTED: Hardcoded fake stats data removed
-// const stats = [
-//   {
-//     icon: Activity,
-//     label: "Active Facilitators",
-//     value: "1,247",
-//     change: "+12%",
-//     trend: "up",
-//   },
-//   {
-//     icon: Globe,
-//     label: "Network Regions",
-//     value: "42",
-//     change: "+3",
-//     trend: "up",
-//   },
-//   {
-//     icon: Coins,
-//     label: "Total Staked",
-//     value: "12.5M",
-//     change: "+8%",
-//     trend: "up",
-//   },
-//   {
-//     icon: TrendingUp,
-//     label: "Avg. Rewards/Day",
-//     value: "450",
-//     change: "+15%",
-//     trend: "up",
-//   },
-// ]
 
 export function FacilitatorStats() {
   const [stats, setStats] = useState([
@@ -71,19 +38,22 @@ export function FacilitatorStats() {
       {stats.map((stat, index) => {
         const Icon = stat.icon
         return (
-          <Card key={index} className="p-6 bg-card border-border/40 hover:border-primary/40 transition-colors">
+          <div
+            key={index}
+            className="glass-subtle p-6 rounded-[var(--radius-xl)] hover:border-[var(--accent-muted)] transition-all"
+          >
             <div className="flex items-start justify-between">
               <div className="space-y-3">
-                <div className="p-2 rounded-lg bg-primary/10 w-fit">
-                  <Icon className="h-5 w-5 text-primary" />
+                <div className="glass-icon glass-icon-md">
+                  <Icon className="h-5 w-5" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+                  <div className="stat-number">{stat.value}</div>
+                  <div className="stat-label mt-1">{stat.label}</div>
                 </div>
               </div>
             </div>
-          </Card>
+          </div>
         )
       })}
     </div>

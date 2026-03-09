@@ -8,7 +8,7 @@ export function RunFacilitatorSection() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-foreground mb-2">
+        <h2 className="text-3xl font-display font-bold text-foreground mb-2">
           <span className="text-gradient">Run</span> a Facilitator
         </h2>
         <p className="text-muted-foreground leading-relaxed">
@@ -76,7 +76,7 @@ export function RunFacilitatorSection() {
             </TabsList>
 
             <TabsContent value="bash" className="space-y-4">
-              <Card className="p-4 bg-black/50 border-border/40">
+              <Card className="p-4 bg-[var(--glass-bg)] border-border/40">
                 <div className="flex items-start gap-3">
                   <Terminal className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                   <pre className="text-sm text-primary/90 font-mono overflow-x-auto">
@@ -99,7 +99,7 @@ npm run start`}</code>
             </TabsContent>
 
             <TabsContent value="docker" className="space-y-4">
-              <Card className="p-4 bg-black/50 border-border/40">
+              <Card className="p-4 bg-[var(--glass-bg)] border-border/40">
                 <div className="flex items-start gap-3">
                   <Terminal className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                   <pre className="text-sm text-primary/90 font-mono overflow-x-auto">
@@ -119,7 +119,7 @@ docker run -d \\
             </TabsContent>
 
             <TabsContent value="nodejs" className="space-y-4">
-              <Card className="p-4 bg-black/50 border-border/40">
+              <Card className="p-4 bg-[var(--glass-bg)] border-border/40">
                 <div className="flex items-start gap-3">
                   <Terminal className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                   <pre className="text-sm text-primary/90 font-mono overflow-x-auto">

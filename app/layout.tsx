@@ -1,27 +1,35 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google"
+import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Providers } from "@/components/Providers"
 import { BackgroundLayout } from "@/components/BackgroundLayout"
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const motterTektura = localFont({
+  src: "../public/fonts/Motter Tektura Normal.ttf",
+  variable: "--font-motter",
+  display: "swap",
 })
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jb-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
 })
 
 export const metadata: Metadata = {
   title: "Facinet - Distributed Facilitator Network",
   description: "The infrastructure layer for the autonomous agent economy.",
   generator: "v0.app",
-
 }
 
 export const viewport = {
@@ -40,9 +48,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
+      <body className={`${motterTektura.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased`}>
         <Providers>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark" storageKey="facinet-theme">
             <div className="relative min-h-screen flex flex-col">
               <BackgroundLayout />
               <HeroAsciiWrapper>

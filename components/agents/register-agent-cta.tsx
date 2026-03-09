@@ -7,7 +7,7 @@ import { Plus, FileCode, Shield, Rocket } from "lucide-react"
 export function RegisterAgentCTA() {
   return (
     <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-foreground">
+      <h2 className="text-3xl font-display font-bold text-foreground">
         <span className="text-gradient">Register</span> Your Agent
       </h2>
 
@@ -62,7 +62,7 @@ export function RegisterAgentCTA() {
             </Button>
           </div>
 
-          <Card className="p-6 bg-black/30 border-border/40">
+          <Card className="p-6 bg-[var(--glass-bg)] border-border/40">
             <div className="space-y-4">
               <div className="text-sm font-semibold text-foreground">Example Agent Interface</div>
               <pre className="text-xs text-primary/90 font-mono overflow-x-auto leading-relaxed">

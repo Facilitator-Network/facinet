@@ -42,7 +42,7 @@ export function AgentsList() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-foreground">Registered Agents</h2>
+        <h2 className="text-2xl font-display font-bold text-foreground">Registered Agents</h2>
         <Badge variant="secondary" className="text-xs">
           {agents.length} Total
         </Badge>
@@ -90,7 +90,7 @@ export function AgentsList() {
 
               <div className="pt-4 border-t border-border/40">
                 <div className="text-xs text-muted-foreground mb-2">API Endpoint</div>
-                <code className="text-xs bg-black/30 px-2 py-1 rounded text-primary/90 block overflow-x-auto">
+                <code className="text-xs bg-[var(--glass-bg)] px-2 py-1 rounded text-[var(--accent)] font-mono block overflow-x-auto">
                   {agent.apiEndpoint}
                 </code>
               </div>

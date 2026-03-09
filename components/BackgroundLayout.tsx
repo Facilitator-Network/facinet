@@ -6,27 +6,25 @@ import ColorBends from '@/components/ui/ColorBends';
 export function BackgroundLayout() {
   const pathname = usePathname();
 
-  // Show ColorBends on all pages EXCEPT home ('/') and docs ('/docs/*')
   const showColorBends = pathname !== '/' && !pathname.startsWith('/docs');
-  console.log('BackgroundLayout:', { pathname, showColorBends });
 
-  // 1. Docs: Plain Black (No shader, no stars)
+  // Docs: Solid background
   if (pathname?.startsWith('/docs')) {
-    return <div className="fixed inset-0 bg-black z-[-1]" />;
+    return <div className="fixed inset-0 bg-[var(--bg-void)] z-[-1]" />;
   }
 
-  // 2. Default Pages: ColorBends Shader
+  // Default Pages: ColorBends Shader
   if (showColorBends) {
     return (
-      <div 
-        style={{ 
-          position: 'fixed', 
-          top: 0, 
-          left: 0, 
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
           right: 0,
           bottom: 0,
-          width: '100%', 
-          height: '100%', 
+          width: '100%',
+          height: '100%',
           zIndex: -1,
           pointerEvents: 'none',
           filter: 'blur(80px)',
@@ -35,12 +33,12 @@ export function BackgroundLayout() {
       >
         <ColorBends
           colors={[
-            "#0000FF", "#0066FF", // Blue variants
-            "#000000", // Black (Separator)
-            "#00AAFF", "#00FFFF", // Cyan variants
-            "#000000", // Black (Separator)
-            "#0033FF", "#0088FF", // More blue variants
-            "#000000"  // Black (Separator)
+            "#0000FF", "#0066FF",
+            "#000000",
+            "#00AAFF", "#00FFFF",
+            "#000000",
+            "#0033FF", "#0088FF",
+            "#000000"
           ]}
           rotation={0}
           autoRotate={0}
@@ -57,8 +55,17 @@ export function BackgroundLayout() {
     );
   }
 
-  // Fallback / Default Background (e.g. Stars for Home)
+  // Home: Subtle accent glow instead of rainbow gradient
   return (
-    <div className="fixed inset-0 w-full h-full stars-bg z-0 pointer-events-none"></div>
+    <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+      <div className="absolute inset-0 bg-[var(--bg-void)]" />
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: 'radial-gradient(ellipse at 50% 80%, oklch(65% 0.2 250 / 4%), transparent 50%)',
+        }}
+      />
+      <div className="absolute inset-0 stars-bg" />
+    </div>
   );
 }

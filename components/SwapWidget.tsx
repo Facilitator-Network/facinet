@@ -85,17 +85,17 @@ export function SwapWidget() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-md mx-auto p-6 border-2 border-black bg-white shadow-lg"
+      className="w-full max-w-md mx-auto p-6 border border-[var(--bg-border)] bg-[var(--bg-void)] rounded-2xl shadow-lg"
     >
-      <h3 className="text-2xl font-bold mb-2">Swap AVAX for USDC</h3>
-      <p className="text-sm mb-4 text-gray-600">
+      <h3 className="text-2xl font-display font-bold mb-2 text-[var(--text-primary)]">Swap AVAX for USDC</h3>
+      <p className="text-sm mb-4 text-[var(--text-tertiary)] font-body">
         Get USDC on Avalanche Fuji Testnet
       </p>
 
       {/* Testnet liquidity notice */}
-      <div className="mb-4 p-4 bg-blue-50 border-2 border-blue-400 text-blue-900">
+      <div className="mb-4 p-4 bg-[var(--accent-subtle)] border border-[var(--accent-muted)] rounded-lg text-[var(--accent)]">
         <p className="text-sm font-semibold mb-2">💡 Testnet Notice</p>
-        <p className="text-xs leading-relaxed">
+        <p className="text-xs leading-relaxed font-body">
           Trader Joe pools on Fuji testnet may have limited liquidity. If the swap fails,
           you can get testnet USDC directly from faucets or by bridging from other testnets.
           Try small amounts (0.1 AVAX) first.
@@ -107,11 +107,11 @@ export function SwapWidget() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mb-4 p-3 bg-gray-50 border-2 border-gray-200"
+          className="mb-4 p-3 bg-[var(--glass-subtle-bg)] border border-[var(--bg-border)] rounded-lg"
         >
           <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-gray-700">Your USDC Balance:</span>
-            <span className="text-lg font-bold text-gray-900">
+            <span className="text-sm font-medium text-[var(--text-secondary)]">Your USDC Balance:</span>
+            <span className="text-lg font-bold text-[var(--text-primary)]">
               {parseFloat(formatUnits(usdcBalance.value, 6)).toFixed(2)} USDC
             </span>
           </div>
@@ -120,12 +120,12 @@ export function SwapWidget() {
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-2">From</label>
-          <div className="border-2 border-black p-3">
+          <label className="block text-sm font-medium mb-2 text-[var(--text-secondary)]">From</label>
+          <div className="border border-[var(--bg-border)] rounded-lg p-3">
             <div className="flex justify-between items-center mb-2">
-              <span className="font-bold">AVAX</span>
+              <span className="font-bold text-[var(--text-primary)]">AVAX</span>
               {avaxBalance && (
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-[var(--text-tertiary)]">
                   Balance: {parseFloat(formatUnits(avaxBalance.value, 18)).toFixed(4)}
                 </span>
               )}
@@ -143,18 +143,18 @@ export function SwapWidget() {
         </div>
 
         <div className="flex justify-center">
-          <div className="w-10 h-10 border-2 border-black bg-white flex items-center justify-center font-bold">
+          <div className="w-10 h-10 border border-[var(--bg-border)] bg-[var(--glass-subtle-bg)] rounded-lg flex items-center justify-center font-bold text-[var(--text-secondary)]">
             ↓
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">To (estimated)</label>
-          <div className="border-2 border-black p-3 bg-gray-50">
+          <label className="block text-sm font-medium mb-2 text-[var(--text-secondary)]">To (estimated)</label>
+          <div className="border border-[var(--bg-border)] rounded-lg p-3 bg-[var(--glass-subtle-bg)]">
             <div className="flex justify-between items-center mb-2">
-              <span className="font-bold">USDC</span>
+              <span className="font-bold text-[var(--text-primary)]">USDC</span>
             </div>
-            <div className="text-2xl font-bold text-gray-700">
+            <div className="text-2xl font-bold text-[var(--text-secondary)]">
               {amount ? `~${estimatedUSDC.toFixed(2)}` : '0.0'}
             </div>
           </div>
@@ -163,7 +163,7 @@ export function SwapWidget() {
         <button
           onClick={handleSwap}
           disabled={!address || !amount || parseFloat(amount) <= 0 || isPending || isConfirming}
-          className="w-full py-4 bg-black text-white font-bold hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
+          className="w-full py-4 bg-[var(--text-primary)] text-[var(--bg-void)] font-bold font-mono rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
         >
           {isPending ? 'Confirming in wallet...' : isConfirming ? 'Swapping...' : isSuccess ? '✓ Swap Successful!' : 'Swap Now'}
         </button>
@@ -175,12 +175,12 @@ export function SwapWidget() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="p-4 bg-red-50 border-2 border-red-500 text-red-700"
+              className="p-4 bg-[var(--error-bg)] border border-[var(--error-muted)] rounded-lg text-[var(--error)]"
             >
               <p className="text-sm font-medium">
                 ⚠️ {error || writeError?.message || 'Transaction failed. Please try again.'}
               </p>
-              <p className="text-xs mt-2 text-red-600">
+              <p className="text-xs mt-2 text-[var(--error)]">
                 Make sure you have enough AVAX for gas fees and that the Trader Joe pool has liquidity.
               </p>
             </motion.div>
@@ -194,15 +194,15 @@ export function SwapWidget() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="p-4 bg-black text-white"
+              className="p-4 bg-[var(--success-bg)] border border-[var(--success-muted)] rounded-lg"
             >
-              <p className="font-bold mb-2 text-center">✓ Swap Completed!</p>
-              <p className="text-sm text-center mb-3">USDC should appear in your wallet shortly</p>
+              <p className="font-bold mb-2 text-center text-[var(--success)]">✓ Swap Completed!</p>
+              <p className="text-sm text-center mb-3 text-[var(--text-secondary)]">USDC should appear in your wallet shortly</p>
               <a
                 href={`https://testnet.snowtrace.io/tx/${hash}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-center text-sm underline hover:text-gray-300 transition-colors"
+                className="block text-center text-sm underline text-[var(--accent)] hover:opacity-80 transition-colors"
               >
                 View on Snowtrace →
               </a>
@@ -211,16 +211,16 @@ export function SwapWidget() {
         </AnimatePresence>
 
         <div className="space-y-2">
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-[var(--text-tertiary)] text-center font-mono">
             Using Trader Joe on Avalanche Fuji Testnet
           </p>
-          <p className="text-xs text-gray-400 text-center">
+          <p className="text-xs text-[var(--text-tertiary)] text-center">
             Need testnet AVAX? Visit the{' '}
             <a
               href="https://core.app/tools/testnet-faucet/"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline hover:text-gray-600"
+              className="underline text-[var(--accent)] hover:opacity-80"
             >
               Fuji Faucet
             </a>

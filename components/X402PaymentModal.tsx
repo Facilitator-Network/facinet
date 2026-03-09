@@ -332,21 +332,21 @@ export function X402PaymentModal({ isOpen, onClose, onSuccess, facilitatorId, fa
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-[var(--glass-bg)] backdrop-blur-md flex items-center justify-center z-50 p-4"
           onClick={onClose}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="relative w-full max-w-lg bg-black border border-white/10 rounded-2xl shadow-2xl p-8 space-y-6"
+            className="relative w-full max-w-lg bg-[var(--bg-void)] border border-[var(--bg-border)] rounded-2xl shadow-2xl p-8 space-y-6"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
             <button
               onClick={onClose}
               disabled={isProcessing}
-              className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors disabled:opacity-50"
+              className="absolute top-4 right-4 p-2 rounded-full hover:bg-[var(--glass-bg)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors disabled:opacity-50"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M15 5L5 15M5 5l10 10" />
@@ -356,13 +356,13 @@ export function X402PaymentModal({ isOpen, onClose, onSuccess, facilitatorId, fa
             <div className="space-y-6">
               {/* Header */}
               <div className="text-center space-y-2">
-                <div className="inline-block px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] font-mono font-bold uppercase tracking-widest text-white/80">
+                <div className="inline-block px-3 py-1 rounded-full bg-[var(--glass-subtle-bg)] border border-[var(--bg-border)] text-[10px] font-mono font-bold uppercase tracking-widest text-[var(--text-secondary)]">
                   x402 Protocol (ERC-3009)
                 </div>
-                <h2 className="text-2xl font-bold text-white font-mono uppercase tracking-tight">
+                <h2 className="text-2xl font-display font-bold text-[var(--text-primary)] font-mono uppercase tracking-tight">
                   {onSuccess ? 'Facilitator Registration Fee' : 'Payment Required'}
                 </h2>
-                <p className="text-white/60 font-light text-sm">
+                <p className="text-[var(--text-tertiary)] font-body font-light text-sm">
                   {onSuccess
                     ? 'Register your facilitator on x402:'
                     : 'To access the Builder Hub, pay via x402:'}
@@ -371,27 +371,27 @@ export function X402PaymentModal({ isOpen, onClose, onSuccess, facilitatorId, fa
 
               {/* Network Mismatch Warning */}
               {chain && chain.id !== networkConfig.chain.id && (
-                <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                  <p className="text-sm text-yellow-300 font-mono">
+                <div className="p-4 rounded-xl bg-[var(--warning-bg)] border border-[var(--warning-muted)]">
+                  <p className="text-sm text-[var(--warning)] font-mono">
                     ⚠️ Please switch your wallet to {networkConfig.displayName}
                   </p>
                 </div>
               )}
 
               {/* Amount */}
-              <div className="p-8 rounded-2xl bg-white/5 border border-white/10 text-center space-y-2">
-                <div className="text-5xl font-bold text-white font-mono tracking-tighter">{x402Config.PAYMENT_AMOUNT} USDC</div>
-                <div className="text-xs font-mono text-white/40 uppercase tracking-widest">on {networkConfig.displayName}</div>
+              <div className="p-8 rounded-2xl bg-[var(--glass-subtle-bg)] border border-[var(--bg-border)] text-center space-y-2">
+                <div className="text-5xl font-bold text-[var(--text-primary)] font-mono tracking-tighter">{x402Config.PAYMENT_AMOUNT} USDC</div>
+                <div className="text-xs font-mono text-[var(--text-tertiary)] uppercase tracking-widest">on {networkConfig.displayName}</div>
               </div>
 
               {/* Randomly Selected Facilitator */}
               {!onSuccess && (facilitatorName || customFacilitator) && (
-                <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
+                <div className="p-4 rounded-xl bg-[var(--success-bg)] border border-[var(--success-muted)]">
                   <div className="flex items-center gap-3">
                     <span className="text-lg">🎲</span>
                     <div>
-                      <p className="text-[10px] font-bold text-green-400 mb-1 uppercase tracking-wider">Randomly Selected Facilitator</p>
-                      <p className="font-bold text-green-300 font-mono">
+                      <p className="text-[10px] font-bold text-[var(--success)] mb-1 uppercase tracking-wider">Randomly Selected Facilitator</p>
+                      <p className="font-bold text-[var(--success)] font-mono">
                         {facilitatorName || customFacilitator?.name || 'Custom Facilitator'}
                       </p>
                     </div>
@@ -401,9 +401,9 @@ export function X402PaymentModal({ isOpen, onClose, onSuccess, facilitatorId, fa
 
               {/* Balance Display */}
               {address && usdcBalance && (
-                <div className="flex justify-between items-center p-4 rounded-lg bg-black/50 border border-white/10 font-mono text-sm">
-                  <span className="text-white/60">Your USDC Balance:</span>
-                  <span className="text-white font-bold">
+                <div className="flex justify-between items-center p-4 rounded-lg bg-[var(--glass-bg)] border border-[var(--bg-border)] font-mono text-sm">
+                  <span className="text-[var(--text-tertiary)]">Your USDC Balance:</span>
+                  <span className="text-[var(--text-primary)] font-bold">
                     {parseFloat(formatUnits(usdcBalance.value, 6)).toFixed(2)} USDC
                   </span>
                 </div>
@@ -412,7 +412,7 @@ export function X402PaymentModal({ isOpen, onClose, onSuccess, facilitatorId, fa
               {/* Insufficient Balance Warning */}
               {address && !hasEnoughUSDC && (
                 <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                  <p className="text-sm font-medium text-yellow-300">
+                  <p className="text-sm font-medium text-[var(--warning)]">
                     ⚠️ Insufficient USDC balance. Please swap AVAX for USDC first.
                   </p>
                 </div>
@@ -425,9 +425,9 @@ export function X402PaymentModal({ isOpen, onClose, onSuccess, facilitatorId, fa
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="p-4 rounded-xl bg-red-500/10 border border-red-500/20"
+                    className="p-4 rounded-xl bg-[var(--error-bg)] border border-[var(--error-muted)]"
                   >
-                    <p className="text-sm font-medium text-red-300">
+                    <p className="text-sm font-medium text-[var(--error)]">
                       ❌ {errorMessage}
                     </p>
                   </motion.div>
@@ -438,7 +438,7 @@ export function X402PaymentModal({ isOpen, onClose, onSuccess, facilitatorId, fa
               <button
                 onClick={handleX402Payment}
                 disabled={!address || !hasEnoughUSDC || isProcessing || paymentStatus === 'success' || (chain && chain.id !== networkConfig.chain.id)}
-                className="w-full bg-white text-black py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full bg-[var(--text-primary)] text-[var(--bg-void)] py-4 rounded-lg font-mono font-bold uppercase tracking-wider hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {!address ? 'Connect Wallet First'
                   : chain && chain.id !== networkConfig.chain.id ? `Switch to ${networkConfig.displayName}`
@@ -453,14 +453,14 @@ export function X402PaymentModal({ isOpen, onClose, onSuccess, facilitatorId, fa
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="p-4 rounded-xl bg-white/5 border border-white/10"
+                    className="p-4 rounded-xl bg-[var(--glass-subtle-bg)] border border-[var(--bg-border)]"
                   >
-                    <p className="text-xs font-semibold mb-2 text-white/60 font-mono uppercase tracking-widest">Transaction Hash:</p>
+                    <p className="text-xs font-semibold mb-2 text-[var(--text-tertiary)] font-mono uppercase tracking-widest">Transaction Hash:</p>
                     <a
                       href={`https://testnet.snowtrace.io/tx/${txHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-mono break-all text-blue-400 hover:text-blue-300 underline"
+                      className="text-xs font-mono break-all text-[var(--accent)] hover:opacity-80 underline"
                     >
                       {txHash}
                     </a>
@@ -474,11 +474,11 @@ export function X402PaymentModal({ isOpen, onClose, onSuccess, facilitatorId, fa
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-6 rounded-xl bg-green-500/10 border border-green-500/20 text-center space-y-2"
+                    className="p-6 rounded-xl bg-[var(--success-bg)] border border-[var(--success-muted)] text-center space-y-2"
                   >
-                    <p className="font-bold text-green-400 font-mono">✓ Payment Verified via x402!</p>
-                    <p className="text-sm text-green-300/80">Transaction confirmed on-chain</p>
-                    <p className="text-xs text-white/40 font-mono">
+                    <p className="font-bold text-[var(--success)] font-mono">✓ Payment Verified via x402!</p>
+                    <p className="text-sm text-[var(--success)]">Transaction confirmed on-chain</p>
+                    <p className="text-xs text-[var(--text-tertiary)] font-mono">
                       {onSuccess
                         ? 'Creating your facilitator...'
                         : 'Redirecting to Builder Hub...'}
@@ -488,7 +488,7 @@ export function X402PaymentModal({ isOpen, onClose, onSuccess, facilitatorId, fa
               </AnimatePresence>
 
               {/* Info */}
-              <p className="text-center text-[10px] text-white/20 font-mono uppercase tracking-widest">
+              <p className="text-center text-[10px] text-[var(--text-tertiary)] font-mono uppercase tracking-widest">
                 Using x402 facilitator on {network}
               </p>
             </div>

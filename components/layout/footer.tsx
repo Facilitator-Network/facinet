@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { Github, Twitter, Send, Mail, LucideIcon } from "lucide-react"
 
-// Map icons
 const ICON_MAP: Record<string, LucideIcon> = {
   Twitter,
   Github,
@@ -22,11 +21,10 @@ interface FooterProps {
 export function Footer({ data }: FooterProps) {
   return (
     <footer className="relative pb-6 pt-0 px-4 flex justify-center">
-      {/* Floating Glass Container - Wider, Rectangular with circular edges */}
-      <div className="w-full max-w-7xl bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl py-6 px-8 flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xl">
-        
-        {/* Left: Copyright at corner */}
-        <div className="text-white/30 text-xs font-mono order-3 md:order-1">
+      <div className="w-full max-w-7xl glass rounded-xl py-6 px-8 flex flex-col md:flex-row items-center justify-between gap-4" style={{ boxShadow: 'var(--glass-shadow)' }}>
+
+        {/* Left: Copyright */}
+        <div className="text-[var(--text-tertiary)] text-xs font-body order-3 md:order-1">
           {data.copyright}
         </div>
 
@@ -35,10 +33,10 @@ export function Footer({ data }: FooterProps) {
           {data.socials.map((social) => {
             const Icon = ICON_MAP[social.icon] || Github
             return (
-              <Link 
-                key={social.label} 
+              <Link
+                key={social.label}
                 href={social.href}
-                className="text-white/60 hover:text-white hover:scale-110 transition-all duration-300"
+                className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:scale-110 transition-all duration-300"
                 title={social.label}
               >
                 <Icon className="w-5 h-5" />
@@ -49,12 +47,12 @@ export function Footer({ data }: FooterProps) {
 
         {/* Right: Contact Us */}
         <div className="order-2 md:order-3">
-          <Link 
+          <Link
             href={data.contact.href}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 transition-all group"
+            className="flex items-center gap-2 px-4 py-2 rounded-full glass-subtle hover:bg-[var(--accent-subtle)] transition-all group"
           >
-            <Mail className="w-4 h-4 text-white/60 group-hover:text-white transition-colors" />
-            <span className="text-xs font-mono font-medium text-white/60 group-hover:text-white transition-colors">
+            <Mail className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors" />
+            <span className="text-xs font-body font-medium text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">
               {data.contact.label}
             </span>
           </Link>
