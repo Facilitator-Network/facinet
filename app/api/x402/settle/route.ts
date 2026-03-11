@@ -78,7 +78,8 @@ export async function POST(request: NextRequest) {
     const sig = signature.slice(2);
     const r = '0x' + sig.slice(0, 64);
     const s = '0x' + sig.slice(64, 128);
-    const v = parseInt(sig.slice(128, 130), 16);
+    let v = parseInt(sig.slice(128, 130), 16);
+    if (v < 27) v += 27;
 
     const contract = new Contract(usdcContract.address, ERC3009_ABI, wallet);
 
