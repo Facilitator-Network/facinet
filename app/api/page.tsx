@@ -812,7 +812,7 @@ export default function DemoPage() {
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </a>
               <a
-                href="https://github.com"
+                href="https://github.com/Facilitator-Network/Facinet-SDK"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center gap-2 border border-[var(--bg-border)] text-[var(--text-secondary)] px-6 py-3 rounded-[var(--radius-lg)] font-mono text-sm uppercase tracking-wider hover:bg-[var(--bg-raised)] hover:text-[var(--text-primary)] transition-all"
