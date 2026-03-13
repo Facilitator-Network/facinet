@@ -1,315 +1,299 @@
-# x402 Facilitator Network on Avalanche
+# Facinet
 
-A decentralized payment facilitator network powered by the x402 protocol on Avalanche. Users can create and run their own facilitators to process ERC-3009 USDC payments, earning fees while contributing to a permissionless payment infrastructure.
+**The decentralized gasless payment infrastructure for every chain.**
 
-## 🌐 What is This?
+Facinet is a permissionless facilitator network built on the x402 protocol. It enables gasless USDC payments and arbitrary smart contract execution across 7 blockchain networks. Users sign authorizations off-chain; facilitators execute on-chain and pay gas. Anyone can become a facilitator.
 
-This project enables anyone to become a **payment facilitator** in the x402 network:
-- Create your own facilitator with a one-time 1 USDC registration
-- Fund it with AVAX for gas fees
-- Your facilitator processes payments and appears in the network dropdown
-- Earn transaction fees while supporting decentralized payments
-
-## ✨ Key Features
-
-### For Facilitator Operators
-- 🚀 **One-Click Facilitator Creation** - Generate and register facilitators in minutes
-- 🔐 **Secure Key Management** - Encrypted private keys with user password + system master key
-- 💰 **Automatic Status Tracking** - Real-time monitoring of AVAX balance and facilitator status
-- 📊 **Dashboard** - View facilitator status, wallet address, balance, and payments processed
-- ⚡ **ERC-3009 Compatible** - Process gasless USDC transfers on Avalanche
-
-### For Payment Users
-- 💳 **Choose Your Facilitator** - Select from available facilitators in the network
-- 🎨 **Clean UI** - Modern black & white design with smooth animations
-- 🔄 **AVAX to USDC Swap** - Integrated swap widget for easy token conversion
-- 🌈 **Wallet Connect** - Easy connection with RainbowKit
-
-## 📂 Project Structure
-
-For a detailed map of the codebase, see [CODE_MAP.md](./CODE_MAP.md).
-
-- **`app/`**: Next.js 14 App Router pages and API routes.
-- **`components/`**: React UI components (Shadcn UI + custom).
-- **`lib/`**: Core utilities, x402 protocol logic, and crypto helpers.
-- **`contracts/`**: Solidity smart contracts for facilitator registry.
-- **`hooks/`**: Custom React hooks.
-
-## 🏗️ Architecture
-
-### Facilitator Creation Flow
-```
-1. User connects wallet
-2. Fills facilitator form (name, wallet, payment recipient)
-3. Generates new facilitator wallet
-4. Encrypts private key with password
-5. Pays 1 USDC registration fee via x402
-6. Facilitator registered in Redis
-7. User funds facilitator wallet with AVAX (0.1+ AVAX)
-8. Facilitator becomes ACTIVE and appears in dropdown
-```
-
-### Payment Processing Flow
-```
-1. User selects facilitator from dropdown
-2. Signs ERC-3009 authorization for 1 USDC
-3. Selected facilitator executes transaction (pays gas)
-4. USDC transferred to merchant
-5. Facilitator earns fee
-```
-
-## 🛠️ Tech Stack
-
-### Frontend
-- **Next.js 14+** - React framework with App Router
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first styling
-- **Framer Motion** - Smooth animations
-- **wagmi + viem** - Web3 interactions
-- **RainbowKit** - Wallet connection
-
-### Backend
-- **Next.js API Routes** - Serverless functions
-- **Upstash Redis** - Facilitator data storage
-- **ethers.js** - Blockchain interactions
-- **ERC-3009** - Gasless USDC transfers
-
-### Blockchain
-- **Avalanche Fuji Testnet** - Fast, low-cost test environment
-- **USDC Contract** - ERC-3009 compatible stablecoin
-- **x402 Protocol** - HTTP 402 payment standard
-
-## 📋 Prerequisites
-
-Before you begin, ensure you have:
-
-1. **Node.js 18+** installed
-2. **Avalanche Fuji Testnet** funds:
-   - Get AVAX from [Avalanche Faucet](https://core.app/tools/testnet-faucet/)
-   - You'll need AVAX for gas fees and swapping to USDC
-3. **WalletConnect Project ID**:
-   - Get one free at [WalletConnect Cloud](https://cloud.walletconnect.com/)
-4. **Upstash Redis** (for production):
-   - Create account at [Upstash](https://upstash.com/)
-   - Get REST URL and Token
-5. **MetaMask** or any Web3 wallet
-
-## 🚀 Setup Instructions
-
-### 1. Clone and Install
-
-```bash
-git clone <your-repo-url>
-cd x402
-npm install
-```
-
-### 2. Configure Environment Variables
-
-Create `.env.local` file:
-
-```env
-# ==========================================
-# FRONTEND (Browser)
-# ==========================================
-
-# WalletConnect Project ID (Required)
-# Get yours at: https://cloud.walletconnect.com/
-NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id_here
-
-# Payment Configuration
-NEXT_PUBLIC_PAYMENT_RECIPIENT=0xYourWalletAddress
-NEXT_PUBLIC_PAYMENT_AMOUNT=1
-NEXT_PUBLIC_NETWORK=avalanche-fuji
-
-# USDC Token Address on Avalanche Fuji
-NEXT_PUBLIC_USDC_ADDRESS=0x5425890298aed601595a70AB815c96711a31Bc65
-
-# ==========================================
-# BACKEND (API Routes)
-# ==========================================
-
-# Default Facilitator Private Key (for fallback payments)
-# This wallet needs AVAX for gas fees
-DEFAULT_FACILITATOR_PRIVATE_KEY=your_private_key_here
-
-# Upstash Redis (Required for production)
-UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
-UPSTASH_REDIS_REST_TOKEN=your_redis_token
-
-# System Master Key (for encrypting facilitator private keys)
-# Generate a secure random string
-SYSTEM_MASTER_KEY=your_secure_random_string_here
-
-# Optional: RPC URL (defaults to public Avalanche Fuji RPC)
-RPC_URL_AVALANCHE_FUJI=https://api.avax-test.network/ext/bc/C/rpc
-```
-
-### 3. Generate Secure Keys
-
-**For SYSTEM_MASTER_KEY**, generate a secure random string:
-
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-```
-
-Copy the output and use it as your `SYSTEM_MASTER_KEY`.
-
-### 4. Run Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### 5. Deploy to Production
-
-#### Deploy to Vercel
-
-1. Push code to GitHub
-2. Import project on [Vercel](https://vercel.com)
-3. Add all environment variables from `.env.local`
-4. Deploy
-
-**Important**: Make sure these are set in Vercel:
-- `UPSTASH_REDIS_REST_URL`
-- `UPSTASH_REDIS_REST_TOKEN`
-- `SYSTEM_MASTER_KEY`
-- `DEFAULT_FACILITATOR_PRIVATE_KEY`
-
-## 📖 How to Use
-
-### Creating a Facilitator
-
-1. **Navigate to Facilitator Hub**
-   - Click "Create Facilitator" from homepage
-
-2. **Fill Facilitator Details**
-   - Enter facilitator name (e.g., "My Facilitator")
-   - Click "Generate Wallet" - creates new wallet address
-
-3. **Secure Your Private Key**
-   - **IMPORTANT**: Save the private key shown
-   - You'll need it to fund with AVAX later
-   - Encrypt it with a strong password
-
-4. **Enter Payment Recipient**
-   - Your wallet address where USDC payments go
-
-5. **Pay Registration Fee**
-   - Click "Pay Facilitator Registration Fee (1 USDC)"
-   - Approve transaction in wallet
-   - Wait for confirmation
-
-6. **Fund with AVAX**
-   - Import facilitator wallet to MetaMask (use saved private key)
-   - Send at least 0.1 AVAX to facilitator wallet
-   - Get testnet AVAX: [Avalanche Faucet](https://core.app/tools/testnet-faucet/)
-
-7. **Facilitator Activated**
-   - Status changes to "ACTIVE"
-   - Appears in payment dropdown on homepage
-   - Ready to process payments!
-
-### Making Payments (As User)
-
-1. **Get USDC**
-   - Swap AVAX to USDC using integrated swap widget
-   - Or get USDC directly from faucet
-
-2. **Select Facilitator**
-   - Choose from available facilitators in dropdown
-   - Each facilitator processes payments independently
-
-3. **Make Payment**
-   - Click "Launch App"
-   - Sign ERC-3009 authorization (no gas needed from you!)
-   - Selected facilitator executes transaction
-   - Access granted to builder hub
-
-## 🔑 Facilitator Dashboard
-
-Once your facilitator is created, the dashboard shows:
-
-### Status Cards
-- **STATUS**: ACTIVE (green) or INACTIVE (yellow)
-- **FACILITATOR WALLET**: Your facilitator's address
-- **AVAX BALANCE**: Current gas balance
-- **PAYMENTS PROCESSED**: Total transactions
-
-### Activation Requirements
-- **Minimum Balance**: 0.1 AVAX required
-- **Status Updates**: Automatic when balance changes
-- **Refresh Button**: Manually check latest status
-
-## 🔒 Security Features
-
-### Private Key Encryption
-- **User Password**: First layer of encryption
-- **System Master Key**: Second layer for backend operations
-- **Never Stored Plain**: All keys encrypted at rest in Redis
-
-### Payment Security
-- **ERC-3009**: User signs authorization, facilitator executes
-- **No Direct Key Exposure**: Frontend never sees unencrypted keys
-- **On-Chain Verification**: All payments verified on Avalanche
-
-## 📊 Contract Addresses (Avalanche Fuji)
-
-- **USDC**: `0x5425890298aed601595a70AB815c96711a31Bc65`
-- **WAVAX**: `0xd00ae08403B9bbb9124bB305C09058E32C39A48c`
-- **Trader Joe Router**: `0xd7f655E3376cE2D7A2b08fF01Eb3B1023191A901`
-
-## 🐛 Troubleshooting
-
-### Facilitator Creation Issues
-
-**"Failed to register facilitator"**
-- Check you have 1 USDC in wallet
-- Ensure connected to Avalanche Fuji
-- Verify payment recipient address is valid
-
-
-## 📚 Resources
-
-- [x402 Protocol Documentation](https://github.com/x402-rs/x402-rs)
-- [ERC-3009 Specification](https://eips.ethereum.org/EIPS/eip-3009)
-- [Avalanche Documentation](https://docs.avax.network/)
-- [Avalanche Fuji Explorer](https://testnet.snowtrace.io/)
-- [Upstash Redis Documentation](https://docs.upstash.com/redis)
-
-## ⚠️ Important Notes
-
-**Testnet Only**: This project uses Avalanche Fuji testnet. Do not use real funds.
-
-**Demo Purpose**: This is a demonstration of decentralized payment facilitators. For production use, implement:
-- Rate limiting
-- Advanced monitoring
-- Automated gas management
-- Comprehensive error handling
-- Security audits
-
-**Private Keys**: Never commit private keys to version control. Always use environment variables and keep them secure.
-
-**Gas Management**: Monitor facilitator AVAX balances. Facilitators become inactive when gas runs out.
-
-## 📄 License
-
-MIT
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 💬 Support
-
-For issues and questions:
-- Open a GitHub issue
-- Check the troubleshooting section above
+**Live at**: [facilitator.network](https://facilitator.network)
+**SDK**: [npmjs.com/package/facinet-sdk](https://www.npmjs.com/package/facinet-sdk)
 
 ---
 
-**Built with ❤️ using x402 protocol on Avalanche**
+## How It Works
 
-*Enabling anyone to become a payment facilitator in a decentralized network*
+```
+User signs ERC-3009 authorization (off-chain, no gas)
+        ↓
+Facinet selects a facilitator from the network
+        ↓
+Facilitator submits tx on-chain (pays gas in AVAX/ETH/MATIC)
+        ↓
+USDC transferred to recipient — user paid $0 gas
+```
+
+Facilitators are independent operators with their own wallets. Each facilitator is registered on-chain with an ERC-8004 identity NFT and earns fees for processing transactions.
+
+---
+
+## Features
+
+### Gasless Payments
+Users sign ERC-3009 `TransferWithAuthorization` off-chain. No gas needed from the user — the facilitator pays all gas fees.
+
+### Multi-Chain Support
+7 testnets supported out of the box:
+
+| Network | Chain ID | Gas Token |
+|---------|----------|-----------|
+| Avalanche Fuji | 43113 | AVAX |
+| Ethereum Sepolia | 11155111 | ETH |
+| Base Sepolia | 84532 | ETH |
+| Polygon Amoy | 80002 | MATIC |
+| Arbitrum Sepolia | 421614 | ETH |
+| Optimism Sepolia | 11155420 | ETH |
+| Monad Testnet | 10143 | MON |
+
+### Decentralized Facilitator Network
+Anyone can create a facilitator. Each facilitator has its own wallet, processes payments independently, and appears in the public network for SDK/API consumers to use.
+
+### Gasless API Keys
+Purchase an API key (10 USDC) and get 1,000 gasless contract execution calls. No wallet setup required for your backend — just an API key and a POST request.
+
+### On-Chain Identity & Reputation (ERC-8004)
+Every facilitator gets an ERC-721 identity NFT on-chain. Users can leave feedback (scores 0-100 with tags), building a transparent reputation system.
+
+### Parallel Transaction Support
+Redis-based nonce manager enables 1,000+ concurrent transactions without nonce collisions. Each facilitator wallet gets unique sequential nonces via atomic Redis INCR across serverless instances.
+
+### Whitelist System
+Controlled access for facilitator creation and API key purchases. Apply through the platform, get approved by an admin, then create facilitators or buy API keys.
+
+---
+
+## SDK
+
+Install:
+
+```bash
+npm install facinet
+```
+
+### Make a Gasless Payment
+
+```typescript
+import { Facinet } from 'facinet';
+
+const facinet = new Facinet({ network: 'avalanche-fuji' });
+
+const result = await facinet.pay({
+  amount: '1',
+  recipient: '0xMerchantAddress',
+  payerAddress: '0xCustomerAddress',
+});
+
+console.log('TX:', result.txHash);
+```
+
+### Execute Any Smart Contract (Gasless)
+
+```typescript
+const result = await facinet.executeContract({
+  contractAddress: '0xRegistryAddress',
+  functionName: 'register',
+  functionArgs: ['https://example.com/agent'],
+  abi: registryABI,
+});
+```
+
+### List Facilitators
+
+```typescript
+const facilitators = await facinet.getFacilitators();
+const random = await facinet.selectRandomFacilitator();
+```
+
+### Static Quick Pay
+
+```typescript
+await Facinet.quickPay({
+  amount: '1',
+  recipient: '0xMerchant',
+  privateKey: process.env.PRIVATE_KEY,
+  network: 'base-sepolia',
+});
+```
+
+### Express.js Paywall Middleware
+
+```typescript
+import { Facinet } from 'facinet';
+import express from 'express';
+
+const app = express();
+
+app.get('/premium', Facinet.paywall({
+  amount: '0.10',
+  recipient: '0xYourAddress',
+}), (req, res) => {
+  res.json({ content: 'Premium content' });
+});
+```
+
+### CLI
+
+```bash
+facinet pay --amount 1 --to 0x... --network base-sepolia
+facinet facilitator list --network ethereum-sepolia
+facinet facilitator status <facilitatorId>
+facinet facilitator balance <facilitatorId>
+```
+
+Full SDK documentation: [npmjs.com/package/facinet-sdk](https://www.npmjs.com/package/facinet-sdk)
+
+---
+
+## Public API
+
+Base URL: `https://facilitator.network`
+
+### Gasless Contract Execution
+
+```
+POST /api/v1/execute
+Header: X-API-Key: fk_xxxxxxxxxxxx
+
+{
+  "network": "avalanche-fuji",
+  "contractAddress": "0x...",
+  "functionName": "register",
+  "functionArgs": ["https://example.com"],
+  "abi": [...]
+}
+```
+
+Returns:
+
+```json
+{
+  "success": true,
+  "txHash": "0x...",
+  "gasUsed": "125000",
+  "callsRemaining": 999
+}
+```
+
+### API Key Management
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/keys/purchase` | POST | Buy an API key (10 USDC, 1000 calls) |
+| `/api/keys/status?key=fk_xxx` | GET | Check remaining calls |
+| `/api/keys/status?wallet=0x...` | GET | List all keys for a wallet |
+
+### Payment Settlement
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/x402/settle` | POST | Settle ERC-3009 payment via facilitator |
+| `/api/x402/settle-custom` | POST | Settle with specific facilitator + network |
+| `/api/x402/execute-contract` | POST | Execute arbitrary contract call via facilitator |
+| `/api/x402/verify` | POST | Verify a payment header |
+
+### Facilitator Operations
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/facilitator/list` | GET | List active facilitators (filter by `network`, `chainId`) |
+| `/api/facilitator/random?network=...` | GET | Get a random active facilitator |
+| `/api/facilitator/search?name=...` | GET | Search facilitators by name |
+| `/api/facilitator/{id}` | GET | Get facilitator details |
+| `/api/facilitator/balance?address=...&network=...` | GET | Check native token balance |
+| `/api/facilitator/check-and-activate` | POST | Check balance and auto-update status |
+| `/api/facilitator/create` | POST | Create a new facilitator (whitelist required) |
+| `/api/facilitator/delete` | POST | Delete a facilitator (creator or admin) |
+| `/api/facilitator/reputation?facilitatorId=...` | GET | Get reputation score |
+| `/api/facilitator/feedback` | POST | Submit on-chain feedback (ERC-8004) |
+
+### Whitelist
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/whitelist/apply` | POST | Apply for whitelist (name, email, wallet) |
+| `/api/whitelist/check?wallet=0x...` | GET | Check whitelist status |
+
+### Explorer & Analytics
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/explorer/recent?limit=50` | GET | Recent network activity |
+| `/api/explorer/logs` | GET | Query logs (filter by `eventType`, `facilitatorId`, `status`) |
+| `/api/explorer/transaction/{txHash}` | GET | Transaction details |
+| `/api/explorer/facilitator/{id}/history` | GET | Facilitator event history |
+| `/api/stats/network` | GET | Network-wide statistics |
+
+### Payment Verification
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/payment/status` | POST | Verify ERC-3009 payment proof |
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│                   Frontend                       │
+│  Next.js 16 · React 19 · Tailwind · RainbowKit  │
+│  wagmi + viem · Framer Motion · GSAP · Three.js  │
+└──────────────────────┬──────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────┐
+│              Next.js API Routes                   │
+│  Vercel Serverless · Auto-scaling                 │
+│  ┌──────────┐ ┌──────────┐ ┌──────────────────┐ │
+│  │ x402     │ │ Facilit. │ │ Gasless API Keys │ │
+│  │ Protocol │ │ CRUD     │ │ /api/v1/execute  │ │
+│  └────┬─────┘ └────┬─────┘ └───────┬──────────┘ │
+│       │             │               │             │
+│  ┌────▼─────────────▼───────────────▼──────────┐ │
+│  │         Redis Nonce Manager                  │ │
+│  │  Atomic INCR · Per-wallet · Parallel TX      │ │
+│  └──────────────────┬──────────────────────────┘ │
+└─────────────────────┼────────────────────────────┘
+                      │
+┌─────────────────────▼────────────────────────────┐
+│              Upstash Redis                        │
+│  Facilitator data · Nonce counters · API keys     │
+│  Whitelist · Explorer logs · Session state        │
+└──────────────────────────────────────────────────┘
+                      │
+┌─────────────────────▼────────────────────────────┐
+│           7 Blockchain Networks                   │
+│  ERC-3009 USDC · ERC-8004 Identity · ERC-8004    │
+│  Reputation · Facilitator Registry NFTs           │
+└──────────────────────────────────────────────────┘
+```
+
+### Key Flows
+
+**Facilitator Creation:**
+Connect wallet → Apply for whitelist → Get approved → Create facilitator (name, wallet, recipient) → Pay 1 USDC registration → Fund with native gas token → Facilitator goes ACTIVE
+
+**Payment via SDK:**
+`facinet.pay()` → SDK fetches active facilitators for network → Selects random one → User signs ERC-3009 auth → SDK posts to `/api/x402/settle-custom` → Nonce manager assigns unique nonce → Facilitator wallet executes `transferWithAuthorization` on-chain → USDC moves, user paid $0 gas
+
+**Gasless API Key:**
+Purchase key (10 USDC) → Get `fk_xxxx` key → POST to `/api/v1/execute` with `X-API-Key` header → Auto-selects facilitator → Executes contract call → Deducts 1 call from key balance
+
+---
+
+## Security
+
+- **Dual-layer key encryption**: Facilitator private keys encrypted with AES-256-GCM using both user password and system master key (PBKDF2, 100k iterations)
+- **Keys never stored in plaintext**: Encrypted at rest in Redis, decrypted only at settlement time in serverless function memory
+- **ERC-3009**: Users sign authorizations off-chain — private keys never leave the wallet
+- **Whitelist gating**: Facilitator creation and API key purchases require admin approval
+- **Admin endpoints**: Protected with `X-Admin-Secret` header
+- **API key rate limiting**: 1,000 calls per key, tracked per-key in Redis
+- **Nonce isolation**: Each facilitator wallet has independent nonce tracking — no cross-wallet interference
+
+---
+
+## License
+
+MIT
+
+---
+
+**Built on Avalanche. Powering gasless payments for every chain.**
