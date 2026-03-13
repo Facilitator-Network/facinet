@@ -54,3 +54,5 @@ next-env.d.ts
 facinet-sdk/
 /facinet-sdk/
 **/facinet-sdk/
+
+CODE_MAP.md

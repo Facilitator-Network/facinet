@@ -4,6 +4,8 @@
  * Settles an ERC-3009 payment using a facilitator from the network.
  * The facilitator pays gas to execute transferWithAuthorization on-chain.
  *
+ * Uses Redis-based nonce manager for parallel transaction support.
+ *
  * Body:
  * {
  *   facilitatorId: string,
@@ -22,10 +24,13 @@ import { decryptPrivateKey } from '@/lib/facilitator-crypto';
 import { getNetworkConfig } from '@/lib/networks';
 import { getUSDCContract } from '@/lib/contracts';
 import { logEvent } from '@/lib/explorer-logging';
+import { getNextNonce, reportTxSuccess, reportTxFailure } from '@/lib/nonce-manager';
 
 const ERC3009_ABI = [
   'function transferWithAuthorization(address from, address to, uint256 value, uint256 validAfter, uint256 validBefore, bytes32 nonce, uint8 v, bytes32 r, bytes32 s) external',
 ];
+
+const MAX_RETRIES = 2;
 
 export async function POST(request: NextRequest) {
   try {
@@ -88,47 +93,84 @@ export async function POST(request: NextRequest) {
     console.log(`  Network: ${networkConfig.displayName}, USDC: ${usdcContract.address}`);
     console.log(`  Facilitator wallet: ${wallet.address}`);
 
-    const tx = await contract.transferWithAuthorization(
-      from,
-      to,
-      value,
-      validAfter,
-      validBefore,
-      nonce,
-      v,
-      r,
-      s,
+    // Retry loop for nonce conflicts
+    let lastError: any;
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        // Get unique nonce from Redis-based nonce manager
+        const txNonce = await getNextNonce(wallet.address, provider);
+
+        console.log(`[settle] [Attempt ${attempt + 1}] Using nonce ${txNonce}`);
+
+        const tx = await contract.transferWithAuthorization(
+          from,
+          to,
+          value,
+          validAfter,
+          validBefore,
+          nonce,
+          v,
+          r,
+          s,
+          { nonce: txNonce }
+        );
+
+        console.log(`[settle] TX submitted: ${tx.hash}`);
+        const receipt = await tx.wait();
+        console.log(`[settle] TX confirmed: ${tx.hash}`);
+
+        // Report success
+        await reportTxSuccess(wallet.address);
+
+        // Log the event
+        const gasSpent = receipt
+          ? (BigInt(receipt.gasUsed) * BigInt(receipt.gasPrice || 0)).toString()
+          : '0';
+
+        await logEvent({
+          eventType: 'transaction',
+          facilitatorId: facilitator.id,
+          facilitatorName: facilitator.name,
+          txHash: tx.hash,
+          chainId: networkConfig.chain.id,
+          chainName: networkConfig.displayName,
+          amount: value,
+          gasSpent,
+          status: 'success',
+        });
+
+        return NextResponse.json({
+          success: true,
+          txHash: tx.hash,
+          tx: tx.hash,
+          facilitatorWallet: wallet.address,
+          network,
+          networkId: networkConfig.chain.id,
+        });
+      } catch (error: any) {
+        lastError = error;
+
+        const wasNonceError = await reportTxFailure(wallet.address, provider, error);
+
+        if (wasNonceError && attempt < MAX_RETRIES) {
+          console.log(`[settle] Retrying (attempt ${attempt + 2}/${MAX_RETRIES + 1}) after nonce resync...`);
+          continue;
+        }
+
+        break;
+      }
+    }
+
+    // All retries exhausted
+    console.error('[settle] Error:', lastError);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to settle payment',
+        message: lastError?.message || 'Unknown error',
+      },
+      { status: 500 }
     );
-
-    console.log(`[settle] TX submitted: ${tx.hash}`);
-    const receipt = await tx.wait();
-    console.log(`[settle] TX confirmed: ${tx.hash}`);
-
-    // Log the event
-    const gasSpent = receipt
-      ? (BigInt(receipt.gasUsed) * BigInt(receipt.gasPrice || 0)).toString()
-      : '0';
-
-    await logEvent({
-      eventType: 'transaction',
-      facilitatorId: facilitator.id,
-      facilitatorName: facilitator.name,
-      txHash: tx.hash,
-      chainId: networkConfig.chain.id,
-      chainName: networkConfig.displayName,
-      amount: value,
-      gasSpent,
-      status: 'success',
-    });
-
-    return NextResponse.json({
-      success: true,
-      txHash: tx.hash,
-      tx: tx.hash,
-      facilitatorWallet: wallet.address,
-      network,
-      networkId: networkConfig.chain.id,
-    });
   } catch (error: any) {
     console.error('[settle] Error:', error);
     return NextResponse.json(
