@@ -1,0 +1,21 @@
+# CODEOWNERS — required reviewers for sensitive paths.
+# Order matters: later patterns win over earlier ones.
+# Replace @XavierOP877 with team handles if you onboard collaborators.
+
+# Default: everything in the repo needs the project owner's review.
+*                                @XavierOP877
+
+# Exclude facinet-sdk entirely. Tracked separately, may move out of repo.
+/facinet-sdk/
+
+# High-risk surfaces — extra scrutiny.
+/app/api/                        @XavierOP877
+/lib/                            @XavierOP877
+/contracts/                      @XavierOP877
+/.github/                        @XavierOP877
+/.env.example                    @XavierOP877
+/vercel.json                     @XavierOP877
+/Dockerfile                      @XavierOP877
+/fly.toml                        @XavierOP877
+/railway.json                    @XavierOP877
+/docs/runbooks/                  @XavierOP877

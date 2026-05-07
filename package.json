@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "TURBOPACK=0 next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "echo \"Lint not yet configured. Next 16 removed 'next lint'; ESLint setup planned as a follow-up.\" && exit 0",
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"No tests yet — Vitest setup planned in Sprint 1.\" && exit 0"
   },
   "keywords": [],
   "author": "",
