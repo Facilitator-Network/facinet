@@ -12,6 +12,7 @@ import { decryptPrivateKey } from '@/lib/facilitator-crypto';
 import { Wallet, JsonRpcProvider, Contract } from 'ethers';
 import { getNetworkConfig } from '@/lib/networks';
 import { logEvent } from '@/lib/explorer-logging';
+import { submitWithNonceRetry } from '@/lib/tx-submit';
 
 // ERC-3009 ABI for transferWithAuthorization
 const ERC3009_ABI = [
@@ -125,23 +126,27 @@ export async function POST(request: NextRequest) {
       console.log('  To:', to);
       console.log('  Value:', value);
 
-      // Execute transaction
-      const tx = await contract.transferWithAuthorization(
-        from,
-        to,
-        value,
-        validAfter,
-        validBefore,
-        nonce,
-        v,
-        r,
-        s
+      // Each transfer gets its own managed nonce so concurrent batch
+      // requests on the same facilitator wallet don't collide.
+      const { tx, receipt } = await submitWithNonceRetry(
+        wallet,
+        provider,
+        (txNonce) =>
+          contract.transferWithAuthorization(
+            from,
+            to,
+            value,
+            validAfter,
+            validBefore,
+            nonce,
+            v,
+            r,
+            s,
+            { nonce: txNonce }
+          ),
+        { label: `settle-batch[${i + 1}/${authorizations.length}]` }
       );
 
-      console.log(`⏳ Transfer ${i + 1} submitted:`, tx.hash);
-
-      // Wait for confirmation
-      const receipt = await tx.wait();
       console.log(`✅ Transfer ${i + 1} confirmed:`, tx.hash);
 
       txHashes.push(tx.hash);

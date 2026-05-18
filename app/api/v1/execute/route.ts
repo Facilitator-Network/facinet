@@ -24,6 +24,7 @@ import { getActiveFacilitators, getFacilitator, recordPayment } from '@/lib/faci
 import { decryptPrivateKey } from '@/lib/facilitator-crypto';
 import { getNetworkConfig, isNetworkSupported } from '@/lib/networks';
 import { logEvent } from '@/lib/explorer-logging';
+import { submitWithNonceRetry } from '@/lib/tx-submit';
 import { Wallet, JsonRpcProvider, Contract, Interface } from 'ethers';
 
 const corsHeaders = {
@@ -138,19 +139,17 @@ export async function POST(request: NextRequest) {
     const contractInterface = new Interface(abi);
     const contract = new Contract(contractAddress, abi, wallet);
 
-    let tx;
+    // Gas estimation is a read-only preflight. Failures here are almost
+    // always a bad/reverting call (permanent), so fail fast — switching
+    // facilitators wouldn't help.
+    let gasEstimate: bigint;
     try {
       if (!contractInterface.getFunction(functionName)) {
         throw new Error(`Function ${functionName} not found in provided ABI`);
       }
 
-      const gasEstimate = await contract[functionName].estimateGas(...functionArgs, {
+      gasEstimate = await contract[functionName].estimateGas(...functionArgs, {
         value: value !== '0' ? value : undefined,
-      });
-
-      tx = await contract[functionName](...functionArgs, {
-        value: value !== '0' ? value : undefined,
-        gasLimit: gasEstimate + (gasEstimate / BigInt(10)),
       });
     } catch (error: any) {
       return NextResponse.json(
@@ -163,17 +162,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 6. Wait for confirmation
+    // 6. Submit through the Redis nonce manager (was unmanaged — concurrent
+    //    /v1/execute calls on the same facilitator collided) and wait for
+    //    confirmation with a timeout.
+    let tx;
     let receipt;
     try {
-      receipt = await tx.wait();
+      const result = await submitWithNonceRetry(
+        wallet,
+        provider,
+        (txNonce) =>
+          contract[functionName](...functionArgs, {
+            value: value !== '0' ? value : undefined,
+            gasLimit: gasEstimate + gasEstimate / BigInt(10),
+            nonce: txNonce,
+          }),
+        { label: 'v1/execute' }
+      );
+      tx = result.tx;
+      receipt = result.receipt;
     } catch (error: any) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Transaction submitted but failed on-chain',
-          txHash: tx.hash,
-          message: error.message || 'Transaction reverted',
+          error: 'Transaction submission or confirmation failed',
+          txHash: error?.tx?.hash,
+          message: error?.message || 'Unknown error',
+          reason: error?.reason || undefined,
         },
         { status: 500, headers: corsHeaders }
       );

@@ -7,9 +7,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { Wallet, JsonRpcProvider } from 'ethers';
+import { Wallet, JsonRpcProvider, Contract } from 'ethers';
 import { getNetworkConfig } from '@/lib/networks';
 import { getUSDCContract } from '@/lib/contracts';
+import { submitWithNonceRetry } from '@/lib/tx-submit';
 
 // ERC-3009 ABI for transferWithAuthorization
 const ERC3009_ABI = [
@@ -66,11 +67,7 @@ export async function POST(request: NextRequest) {
     if (v < 27) v += 27;
 
     // Create contract instance with network-specific USDC address
-    const contract = new (require('ethers').Contract)(
-      usdcContract.address,
-      ERC3009_ABI,
-      wallet
-    );
+    const contract = new Contract(usdcContract.address, ERC3009_ABI, wallet);
 
     console.log('📡 Executing transferWithAuthorization...');
     console.log('  From:', from);
@@ -79,24 +76,26 @@ export async function POST(request: NextRequest) {
     console.log('  USDC Contract:', usdcContract.address);
     console.log('  Facilitator (gas payer):', wallet.address);
 
-    // Execute transaction
-    const tx = await contract.transferWithAuthorization(
-      from,
-      to,
-      value,
-      validAfter,
-      validBefore,
-      nonce,
-      v,
-      r,
-      s
+    // Submit through the Redis nonce manager so concurrent settle-default
+    // calls on the same default wallet don't collide.
+    const { tx } = await submitWithNonceRetry(
+      wallet,
+      provider,
+      (txNonce) =>
+        contract.transferWithAuthorization(
+          from,
+          to,
+          value,
+          validAfter,
+          validBefore,
+          nonce,
+          v,
+          r,
+          s,
+          { nonce: txNonce }
+        ),
+      { label: 'settle-default' }
     );
-
-    console.log('⏳ Transaction submitted:', tx.hash);
-
-    // Wait for confirmation
-    await tx.wait();
-    console.log('✅ Transaction confirmed:', tx.hash);
 
     return NextResponse.json({
       success: true,
