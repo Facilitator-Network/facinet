@@ -6,7 +6,11 @@
  * @param {object} body - The request body
  * @param {string} body.name - Name of the facilitator
  * @param {string} body.encryptedPrivateKey - Private key encrypted with user password
- * @param {string} body.privateKey - Plain private key (will be encrypted with system key)
+ * @param {string} body.sealedPrivateKey - Private key sealed with the server's
+ *        RSA intake public key (see /api/facilitator/intake-key). Preferred.
+ * @param {string} [body.privateKey] - DEPRECATED plaintext key. Accepted only
+ *        as a transitional fallback for stale frontends; logged and slated
+ *        for removal.
  * @param {string} body.facilitatorWallet - Wallet address of the facilitator
  * @param {string} body.paymentRecipient - Address to receive payments
  * @param {string} body.createdBy - Address of the user creating the facilitator
@@ -35,7 +39,8 @@ export async function POST(request: NextRequest) {
     const {
       name,
       encryptedPrivateKey,
-      privateKey, // Plain private key for system encryption
+      sealedPrivateKey, // Preferred: RSA-OAEP sealed with the intake public key
+      privateKey, // DEPRECATED plaintext fallback for stale frontends
       facilitatorWallet,
       paymentRecipient,
       createdBy,
@@ -82,8 +87,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Validate required fields
-    if (!name || !encryptedPrivateKey || !privateKey || !facilitatorWallet || !paymentRecipient || !createdBy || !registrationTxHash || !network || !chainId) {
+    // Validate required fields. The raw key may arrive sealed (preferred)
+    // or, transitionally, as plaintext from a not-yet-updated frontend.
+    const hasKeyMaterial = !!sealedPrivateKey || !!privateKey;
+    if (!name || !encryptedPrivateKey || !hasKeyMaterial || !facilitatorWallet || !paymentRecipient || !createdBy || !registrationTxHash || !network || !chainId) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -108,9 +115,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Encrypt private key with system master key
+    // Resolve the raw private key WITHOUT it ever being logged or stored.
+    // Preferred path: client sealed it with our RSA intake public key.
+    // Fallback path: legacy plaintext from a stale frontend (deprecated).
+    let rawPrivateKey: string;
+    if (sealedPrivateKey) {
+      try {
+        const { unsealPrivateKey } = await import('@/lib/key-intake');
+        rawPrivateKey = unsealPrivateKey(sealedPrivateKey);
+      } catch (err) {
+        console.error('❌ Failed to unseal facilitator key:', (err as Error).message);
+        return NextResponse.json(
+          { error: 'Could not unseal private key. Refresh and try again.' },
+          { status: 400 }
+        );
+      }
+    } else {
+      // DEPRECATED: plaintext key in request body. Kept only so an
+      // in-flight/stale frontend deploy doesn't hard-break during rollout.
+      // Remove once the UI is confirmed sealing (tracked in Week 1.1).
+      console.warn(
+        '⚠️ DEPRECATED: facilitator created with plaintext privateKey in body. ' +
+        'Frontend should use /api/facilitator/intake-key + sealedPrivateKey.'
+      );
+      rawPrivateKey = privateKey;
+    }
+
+    // Encrypt private key with system master key, then drop the plaintext.
     const { encryptPrivateKey } = await import('@/lib/facilitator-crypto');
-    const systemEncryptedKey = encryptPrivateKey(privateKey, masterKey);
+    const systemEncryptedKey = encryptPrivateKey(rawPrivateKey, masterKey);
+    rawPrivateKey = '';
 
     // Validate name
     if (name.length < 3 || name.length > 50) {

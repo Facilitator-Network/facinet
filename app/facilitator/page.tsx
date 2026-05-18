@@ -19,6 +19,7 @@ import {
   createX402ExactPayload,
 } from "@/lib/erc3009"
 import { createPaymentRequirements } from "@/lib/x402"
+import { sealPrivateKey } from "@/lib/seal-key"
 
 interface Facilitator {
   id: string
@@ -624,17 +625,35 @@ export default function FacilitatorPage() {
         chainId: networkConfig.chain.id,             // Chain ID
       }
 
-      const body = reuseExistingAccount
-        ? {
-            ...baseBody,
-            password, // Password used to encrypt the original facilitator key
-          }
-        : {
-            ...baseBody,
-            encryptedPrivateKey: encryptedKey,          // User's password-encrypted private key (for backup/export)
-            privateKey: generatedWallet.privateKey,     // Plain private key (backend will encrypt with SYSTEM_MASTER_KEY)
-            facilitatorWallet: generatedWallet.address, // The generated wallet address (new facilitator account)
-          }
+      let body: Record<string, unknown>
+      if (reuseExistingAccount) {
+        body = {
+          ...baseBody,
+          password, // Password used to encrypt the original facilitator key
+        }
+      } else {
+        // Seal the private key with the server's RSA intake public key so
+        // the plaintext never leaves this browser. Server unseals it in
+        // memory and re-encrypts with SYSTEM_MASTER_KEY.
+        let sealedPrivateKey: string
+        try {
+          sealedPrivateKey = await sealPrivateKey(generatedWallet.privateKey)
+        } catch (e) {
+          console.error('Failed to seal private key:', e)
+          alert(
+            e instanceof Error
+              ? e.message
+              : 'Could not securely package your key. Please try again.'
+          )
+          return
+        }
+        body = {
+          ...baseBody,
+          encryptedPrivateKey: encryptedKey,          // User's password-encrypted key (for backup/export)
+          sealedPrivateKey,                           // RSA-sealed for the backend (plaintext never sent)
+          facilitatorWallet: generatedWallet.address, // The generated wallet address (new facilitator account)
+        }
+      }
 
       const response = await fetch(endpoint, {
         method: 'POST',
